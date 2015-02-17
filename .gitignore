@@ -1,0 +1,6 @@
+*.sdf
+SP4/Debug/
+SP4/Release/
+SP4/ipch/
+SP4/AiStateProject/Debug/
+SP4/AiStateProject/Release/
