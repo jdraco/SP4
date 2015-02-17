@@ -67,7 +67,7 @@ void CPlayerInfo::Render(void) {
 		if (GetAnimationCounter() != 1)
 			SetAnimationCounter(1);
 	}
-	cout << Pos.x << " , " << Pos.y << endl; 
+	//cout << Pos.x << " , " << Pos.y << endl; 
 
 	glPushMatrix();
 	glTranslatef(Pos.x, Pos.y, 1);
@@ -167,6 +167,7 @@ void CPlayerInfo::ConstrainHero( int leftBorder, int rightBorder,
 	int screenWidth, int mapWidth,
 	int screenHeight, int mapHeight)
 {
+	
 	static int maxOffset_x = mapWidth - screenWidth;
 	int maxOffset_y = mapHeight - screenHeight;
 	
@@ -218,10 +219,15 @@ void CPlayerInfo::keyboardUpdate()
 
 
 	//Constrain Hero to middle of screen (unless he reaches the border)
+	/*
 	ConstrainHero((const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), (const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), 
 					(const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER), (const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER),
 					1.0f, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y, 
 					SCREEN_WIDTH, MAP_SCREEN_WIDTH, SCREEN_HEIGHT, MAP_SCREEN_HEIGHT);
+					*/
+	ConstrainPlayer((const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), (const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), 
+					(const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER), (const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER),
+					1.0f, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y);
 
 	//Vector3D Pos = Vector3D(hero_x,hero_y,0);
 	//Check Collision to toggle effect
@@ -487,4 +493,163 @@ int CPlayerInfo::getCurrAmmo()
 void CPlayerInfo::setCurrAmmo(int ammo)
 {
 	weapon->setCurrAmmo(ammo);
+}
+
+void CPlayerInfo::ConstrainPlayer(const int leftBorder, const int rightBorder, 
+							  const int topBorder, const int bottomBorder, 
+							  float timeDiff,
+							  int& mapOffset_x, int& mapOffset_y)
+{
+	//Map's Scrolling Speed
+	int ScrollSpeed = (int)(MAP_SCROLL_SPEED * timeDiff);
+
+	cout << mapOffset_y << endl;
+
+	if (Pos.x < leftBorder)
+	{
+		mapOffset_x -= ScrollSpeed;
+		/*
+		//Scroll Enemies with Map
+		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
+		{
+			CEnemy *CurrentEnemy = *it;
+
+			if (CurrentEnemy->active && mapOffset_x > 0)
+			{
+				CurrentEnemy->setPosX(CurrentEnemy->getPos().x+ScrollSpeed);
+
+				//Scroll Way Points
+				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
+					CurrentEnemy->Path->WayPointList[i].x += ScrollSpeed;
+			}
+		}
+
+		//Scroll Skills with Map
+		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
+		{
+			if ((*it)->active && mapOffset_x > 0)
+				(*it)->SetPosX((*it)->GetPos().x+ScrollSpeed);
+		}
+		*/	
+		//Set Limit
+		if (mapOffset_x < 0)
+			mapOffset_x = 0;
+
+		//Player will be at the middle of the screen
+		if (mapOffset_x != 0)
+			Pos.x = (float)leftBorder;
+		else if (Pos.x < TILE_SIZE*3)
+			Pos.x = TILE_SIZE*3;
+	}
+
+	else if (Pos.x > rightBorder)
+	{
+		mapOffset_x += ScrollSpeed;
+		/*
+		//Scroll Enemies with Map
+		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
+		{
+			CEnemy *CurrentEnemy = *it;
+
+			if (CurrentEnemy->active && mapOffset_x < RESOLUTION_WIDTH)
+			{
+				CurrentEnemy->setPosX(CurrentEnemy->getPos().x-ScrollSpeed);
+
+				//Scroll Way Points
+				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
+					CurrentEnemy->Path->WayPointList[i].x -= ScrollSpeed;
+			}
+		}	
+
+		//Scroll Skills with Map
+		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
+		{
+			if ((*it)->active && mapOffset_x < RESOLUTION_WIDTH)
+				(*it)->SetPosX((*it)->GetPos().x-ScrollSpeed);
+		}
+		*/
+		//Set Limit
+		if (mapOffset_x > RESOLUTION_WIDTH)
+			mapOffset_x = RESOLUTION_WIDTH;
+
+		//Player will be at the middle of the screen
+		if (mapOffset_x < 999)
+			Pos.x = (float)rightBorder;
+		else if (Pos.x > RESOLUTION_WIDTH-TILE_SIZE*11)
+			Pos.x = RESOLUTION_WIDTH-TILE_SIZE*11;
+	}
+
+	if (Pos.y < topBorder)
+	{
+		mapOffset_y -= ScrollSpeed;
+		/*
+		//Scroll Enemies with Map
+		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
+		{
+			CEnemy *CurrentEnemy = *it;
+
+			if (CurrentEnemy->active && mapOffset_y > 0)
+			{
+				CurrentEnemy->setPosY(CurrentEnemy->getPos().y+ScrollSpeed);
+
+				//Scroll Way Points
+				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
+					CurrentEnemy->Path->WayPointList[i].y += ScrollSpeed;
+			}
+		}
+
+		//Scroll Skills with Map
+		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
+		{
+			if ((*it)->active && mapOffset_y > 0)
+				(*it)->SetPosY((*it)->GetPos().y+ScrollSpeed);
+		}
+		*/
+		//Set Limit
+		if (mapOffset_y < 0)
+			mapOffset_y = 0;
+
+		//Player will be at the middle of the screen
+		if (mapOffset_y != 0)
+			Pos.y = (float)topBorder;
+		else if (Pos.y < TILE_SIZE*4)
+			Pos.y = TILE_SIZE*4;
+	}
+
+	else if (Pos.y > bottomBorder)
+	{
+		mapOffset_y += ScrollSpeed;
+		/*
+		//Scroll Enemies with Map
+		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
+		{
+			CEnemy *CurrentEnemy = *it;
+
+			if (CurrentEnemy->active && mapOffset_y < RESOLUTION_HEIGHT*2.15)
+			{
+				CurrentEnemy->setPosY(CurrentEnemy->getPos().y-ScrollSpeed);
+
+				//Scroll Way Points
+				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
+					CurrentEnemy->Path->WayPointList[i].y -= ScrollSpeed;
+			}
+		}
+
+		//Scroll Skills with Map
+		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
+		{
+			if ((*it)->active && mapOffset_y < RESOLUTION_HEIGHT*2.15)
+				(*it)->SetPosY((*it)->GetPos().y-ScrollSpeed);
+		}
+		*/
+		//Set Limit
+		if (mapOffset_y > RESOLUTION_HEIGHT*2.15)
+			mapOffset_y = (int)(RESOLUTION_HEIGHT*2.15);
+
+		//Player will be at the middle of the screen
+		if (mapOffset_y < 1715) //1750
+			Pos.y = (float)bottomBorder;
+		else if (Pos.y > RESOLUTION_HEIGHT*2.15-TILE_SIZE*3)
+			Pos.y = RESOLUTION_HEIGHT*2.15-TILE_SIZE*3;
+	}
 }

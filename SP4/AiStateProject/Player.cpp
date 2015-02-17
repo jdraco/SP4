@@ -27,12 +27,6 @@ void CPlayer::keyboardUpdate()
 	//Delta Time
 	float dt = CGameTime::GetDelta();
 
-
-	//Constrain Hero to middle of screen (unless he reaches the border)
-	ConstrainPlayer((const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), (const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), 
-					(const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER), (const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER),
-					1.0f, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y);
-
 	//Check Collision to toggle effect
 	theGlobal->CheckCollision(Pos, theGlobal->theMap, 
 					theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y);
@@ -179,10 +173,10 @@ void CPlayer::keyboardUpdate()
 bool CPlayer::Update(void){
 	keyboardUpdate();
 	return true;
-
 }
 	
 void CPlayer::Render(){
+
 	if (!jump)
 	{
 		//Player Sprite
@@ -233,6 +227,8 @@ void CPlayer::ConstrainPlayer(const int leftBorder, const int rightBorder,
 {
 	//Map's Scrolling Speed
 	int ScrollSpeed = (int)(MAP_SCROLL_SPEED * timeDiff);
+
+	cout << mapOffset_y << endl;
 
 	if (Pos.x < leftBorder)
 	{

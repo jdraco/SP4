@@ -77,6 +77,11 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM)
 {
+	//Constrain Hero to middle of screen (unless he reaches the border)
+	thePlayer->ConstrainPlayer((const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), (const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), 
+					(const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER), (const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER),
+					1.0f, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y);
+
 	theGlobal->theMap->Update();
 
 	theGlobal->InGameTime->Update();
