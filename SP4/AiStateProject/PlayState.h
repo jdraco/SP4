@@ -80,4 +80,10 @@ private:
 	void RenderHud();
 
 	void drawString();
+
+	//makes players at the center point, and scrolls the other stuff
+	void ConstrainPlayer(const int leftBorder, const int rightBorder, 
+							  const int topBorder, const int bottomBorder, 
+							  float timeDiff,
+							  int& mapOffset_x, int& mapOffset_y);
 };

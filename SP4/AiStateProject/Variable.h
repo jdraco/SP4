@@ -86,7 +86,12 @@ public:
 	//Get/Set function
 	void SetPos(Vector3D tempPos);
 	Vector3D GetPos(void);
-	
+	// Set position x of the player
+	void SetPos_x(float pos_x);
+	// Set position y of the player
+	void SetPos_y(float pos_y);
+
+
 	int GetHealth(void);
 	void SetHealth(int h);
 	

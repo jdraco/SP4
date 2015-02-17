@@ -45,6 +45,17 @@ Vector3D CVariable::GetPos(void){
 	return Pos;
 }
 
+// Set position x of the player
+void CVariable::SetPos_x(float pos_x)
+{
+	Pos.x = pos_x;
+}
+// Set position y of the player
+void CVariable::SetPos_y(float pos_y)
+{
+	Pos.y = pos_y;
+}
+
 int CVariable::GetHealth(){
 	return Health;
 }

@@ -111,27 +111,6 @@ void CPlayerInfo::Render(void) {
 	weapon->Renderweap();//sss
 }
 
-// Set position x of the player
-void CPlayerInfo::SetPos_x(int pos_x)
-{
-	Pos.x = pos_x;
-}
-// Set position y of the player
-void CPlayerInfo::SetPos_y(int pos_y)
-{
-	Pos.y = pos_y;
-}
-
-// Get position x of the player
-int CPlayerInfo::GetPos_x(void)
-{
-	return Pos.x;
-}
-// Get position y of the player
-int CPlayerInfo::GetPos_y(void)
-{
-	return Pos.y;
-}
 
 // Set Animation Invert status of the player
 void CPlayerInfo::SetAnimationInvert(bool heroAnimationInvert)
@@ -159,58 +138,6 @@ int CPlayerInfo::GetAnimationCounter(void)
 {
 		return heroAnimationCounter;
 }
-// Constrain the position of the Hero to within the border
-void CPlayerInfo::ConstrainHero( int leftBorder, int rightBorder, 
-	int topBorder, int bottomBorder, 
-	float timeDiff,
-	int& mapOffset_x, int& mapOffset_y,
-	int screenWidth, int mapWidth,
-	int screenHeight, int mapHeight)
-{
-	
-	static int maxOffset_x = mapWidth - screenWidth;
-	int maxOffset_y = mapHeight - screenHeight;
-	
-	if (mapOffset_x <= 0)
-		leftBorder = 0;
-	else if (mapOffset_x >= maxOffset_x)
-		rightBorder = screenWidth;
-
-	if (mapOffset_y <= 0)
-		topBorder = 0;
-	else if (mapOffset_y >= maxOffset_y)
-		bottomBorder = screenHeight;
-
-	if (Pos.x < leftBorder)
-	{
-		Pos.x = leftBorder;
-		mapOffset_x = mapOffset_x - (int) (5.0f * timeDiff);
-		if (mapOffset_x < 0)
-			mapOffset_x = 0;
-	}
-	else if (Pos.x > rightBorder)
-	{
-		Pos.x = rightBorder;
-		mapOffset_x = mapOffset_x + (int) (5.0f * timeDiff);
-		if (mapOffset_x > maxOffset_x)
-			mapOffset_x = maxOffset_x;
-	}
-
-	if (Pos.y < topBorder)
-	{
-		Pos.y = topBorder;
-		mapOffset_y = mapOffset_y - (int) (5.0f * timeDiff);
-		if (mapOffset_y < 0)
-			mapOffset_y = 0;
-	}
-	else if (Pos.y > bottomBorder)
-	{
-		Pos.y = bottomBorder;
-		mapOffset_y = mapOffset_y + (int) (5.0f * timeDiff);
-		if (mapOffset_y > maxOffset_y)
-			mapOffset_y = maxOffset_y;
-	}
-}
 
 void CPlayerInfo::keyboardUpdate()
 {
@@ -225,9 +152,11 @@ void CPlayerInfo::keyboardUpdate()
 					1.0f, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y, 
 					SCREEN_WIDTH, MAP_SCREEN_WIDTH, SCREEN_HEIGHT, MAP_SCREEN_HEIGHT);
 					*/
+	/*
 	ConstrainPlayer((const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), (const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), 
 					(const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER), (const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER),
 					1.0f, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y);
+	*/
 
 	//Vector3D Pos = Vector3D(hero_x,hero_y,0);
 	//Check Collision to toggle effect
@@ -326,7 +255,7 @@ void CPlayerInfo::keyboardUpdate()
 			if (!theGlobal->Collided(posL, false, false, true, false, 
 				theGlobal->theMap, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y))
 			{
-				SetPos_x( GetPos_x() - (int) (5.0f *  1.0f) );
+				SetPos_x( GetPos().x - (int) (5.0f *  1.0f) );
 				bMoving = true;
 			}
 		//}
@@ -357,7 +286,7 @@ void CPlayerInfo::keyboardUpdate()
 			if (!theGlobal->Collided(posR, false, false, false, true, 
 				theGlobal->theMap, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y))
 			{
-				SetPos_x( GetPos_x() + (int) (5.0f *  1.0f) );
+				SetPos_x( GetPos().x + (int) (5.0f *  1.0f) );
 				bMoving = true;
 			}
 		//}
@@ -495,161 +424,3 @@ void CPlayerInfo::setCurrAmmo(int ammo)
 	weapon->setCurrAmmo(ammo);
 }
 
-void CPlayerInfo::ConstrainPlayer(const int leftBorder, const int rightBorder, 
-							  const int topBorder, const int bottomBorder, 
-							  float timeDiff,
-							  int& mapOffset_x, int& mapOffset_y)
-{
-	//Map's Scrolling Speed
-	int ScrollSpeed = (int)(MAP_SCROLL_SPEED * timeDiff);
-
-	cout << mapOffset_y << endl;
-
-	if (Pos.x < leftBorder)
-	{
-		mapOffset_x -= ScrollSpeed;
-		/*
-		//Scroll Enemies with Map
-		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
-		{
-			CEnemy *CurrentEnemy = *it;
-
-			if (CurrentEnemy->active && mapOffset_x > 0)
-			{
-				CurrentEnemy->setPosX(CurrentEnemy->getPos().x+ScrollSpeed);
-
-				//Scroll Way Points
-				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
-					CurrentEnemy->Path->WayPointList[i].x += ScrollSpeed;
-			}
-		}
-
-		//Scroll Skills with Map
-		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
-		{
-			if ((*it)->active && mapOffset_x > 0)
-				(*it)->SetPosX((*it)->GetPos().x+ScrollSpeed);
-		}
-		*/	
-		//Set Limit
-		if (mapOffset_x < 0)
-			mapOffset_x = 0;
-
-		//Player will be at the middle of the screen
-		if (mapOffset_x != 0)
-			Pos.x = (float)leftBorder;
-		else if (Pos.x < TILE_SIZE*3)
-			Pos.x = TILE_SIZE*3;
-	}
-
-	else if (Pos.x > rightBorder)
-	{
-		mapOffset_x += ScrollSpeed;
-		/*
-		//Scroll Enemies with Map
-		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
-		{
-			CEnemy *CurrentEnemy = *it;
-
-			if (CurrentEnemy->active && mapOffset_x < RESOLUTION_WIDTH)
-			{
-				CurrentEnemy->setPosX(CurrentEnemy->getPos().x-ScrollSpeed);
-
-				//Scroll Way Points
-				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
-					CurrentEnemy->Path->WayPointList[i].x -= ScrollSpeed;
-			}
-		}	
-
-		//Scroll Skills with Map
-		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
-		{
-			if ((*it)->active && mapOffset_x < RESOLUTION_WIDTH)
-				(*it)->SetPosX((*it)->GetPos().x-ScrollSpeed);
-		}
-		*/
-		//Set Limit
-		if (mapOffset_x > RESOLUTION_WIDTH)
-			mapOffset_x = RESOLUTION_WIDTH;
-
-		//Player will be at the middle of the screen
-		if (mapOffset_x < 999)
-			Pos.x = (float)rightBorder;
-		else if (Pos.x > RESOLUTION_WIDTH-TILE_SIZE*11)
-			Pos.x = RESOLUTION_WIDTH-TILE_SIZE*11;
-	}
-
-	if (Pos.y < topBorder)
-	{
-		mapOffset_y -= ScrollSpeed;
-		/*
-		//Scroll Enemies with Map
-		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
-		{
-			CEnemy *CurrentEnemy = *it;
-
-			if (CurrentEnemy->active && mapOffset_y > 0)
-			{
-				CurrentEnemy->setPosY(CurrentEnemy->getPos().y+ScrollSpeed);
-
-				//Scroll Way Points
-				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
-					CurrentEnemy->Path->WayPointList[i].y += ScrollSpeed;
-			}
-		}
-
-		//Scroll Skills with Map
-		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
-		{
-			if ((*it)->active && mapOffset_y > 0)
-				(*it)->SetPosY((*it)->GetPos().y+ScrollSpeed);
-		}
-		*/
-		//Set Limit
-		if (mapOffset_y < 0)
-			mapOffset_y = 0;
-
-		//Player will be at the middle of the screen
-		if (mapOffset_y != 0)
-			Pos.y = (float)topBorder;
-		else if (Pos.y < TILE_SIZE*4)
-			Pos.y = TILE_SIZE*4;
-	}
-
-	else if (Pos.y > bottomBorder)
-	{
-		mapOffset_y += ScrollSpeed;
-		/*
-		//Scroll Enemies with Map
-		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
-		{
-			CEnemy *CurrentEnemy = *it;
-
-			if (CurrentEnemy->active && mapOffset_y < RESOLUTION_HEIGHT*2.15)
-			{
-				CurrentEnemy->setPosY(CurrentEnemy->getPos().y-ScrollSpeed);
-
-				//Scroll Way Points
-				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
-					CurrentEnemy->Path->WayPointList[i].y -= ScrollSpeed;
-			}
-		}
-
-		//Scroll Skills with Map
-		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
-		{
-			if ((*it)->active && mapOffset_y < RESOLUTION_HEIGHT*2.15)
-				(*it)->SetPosY((*it)->GetPos().y-ScrollSpeed);
-		}
-		*/
-		//Set Limit
-		if (mapOffset_y > RESOLUTION_HEIGHT*2.15)
-			mapOffset_y = (int)(RESOLUTION_HEIGHT*2.15);
-
-		//Player will be at the middle of the screen
-		if (mapOffset_y < 1715) //1750
-			Pos.y = (float)bottomBorder;
-		else if (Pos.y > RESOLUTION_HEIGHT*2.15-TILE_SIZE*3)
-			Pos.y = RESOLUTION_HEIGHT*2.15-TILE_SIZE*3;
-	}
-}

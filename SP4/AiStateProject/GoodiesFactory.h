@@ -4,7 +4,6 @@
 #include "Goodies.h"
 
 #include "PlayerInfo.h"
-#include "Enemy.h"
 #include "Shots.h"
 
 class CGoodiesFactory

@@ -33,16 +33,11 @@ public:
 	void Render(void);
 	// Initialise this class instance
 	void Init(void);
-	// Set position x of the player
-	void SetPos_x(int pos_x);
-	// Set position y of the player
-	void SetPos_y(int pos_y);
+
 	// Set Jumpspeed of the player
 	void SetJumpspeed(int jumpspeed);
-	// Get position x of the player
-	int GetPos_x(void);
-	// Get position y of the player
-	int GetPos_y(void);
+
+
 	// Set Animation Invert status of the player
 	void SetAnimationInvert(bool heroAnimationInvert);
 	// Get Animation Invert status of the player
@@ -51,7 +46,10 @@ public:
 	void SetAnimationCounter(int heroAnimationCounter);
 	// Get Animation Counter of the player
 	int GetAnimationCounter(void);
+	
+	/*
 	// Constrain the position of the Hero to within the border
+
 	void ConstrainHero( int leftBorder, int rightBorder, 
 		int topBorder, int bottomBorder, 
 		float timeDiff,
@@ -65,7 +63,7 @@ public:
 							  const int topBorder, const int bottomBorder, 
 							  float timeDiff,
 							  int& mapOffset_x, int& mapOffset_y);
-
+		*/
 	void save();
 	void load();
 
