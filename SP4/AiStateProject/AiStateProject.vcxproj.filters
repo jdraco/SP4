@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Helper">
+      <UniqueIdentifier>{1d1383a4-bedc-45b6-915e-8d3d62d7fd62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Helper">
+      <UniqueIdentifier>{7f448086-4e83-48a2-86c3-bb82ec4792d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Object">
+      <UniqueIdentifier>{c3669325-4485-48ba-9d11-dd8acf174401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game Object">
+      <UniqueIdentifier>{4c7389bd-7d71-40b1-a7df-edf50eca4a5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Basic">
+      <UniqueIdentifier>{ae44eeae-6137-49ba-a56b-2e093297cfcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Basic">
+      <UniqueIdentifier>{eefbbc77-b646-4e92-8a12-574c774313a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ScenceGraph">
+      <UniqueIdentifier>{4e724b66-865e-4527-b86e-f28ef287c7b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ObjLoader">
+      <UniqueIdentifier>{65908028-a5ac-40d6-972d-ae5b4a491f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\SpartialPartioning">
+      <UniqueIdentifier>{3ca149d9-9648-4877-aabf-61a541228c3b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameTime.cpp">
+      <Filter>Source Files\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GoodiesFactory.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="myapplication.cpp">
+      <Filter>Source Files\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Variable.cpp">
+      <Filter>Source Files\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomGenerator.cpp">
+      <Filter>Source Files\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Shots.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Source Files\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Goodies.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph\Instance.cpp">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph\Matrix4x4.cpp">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph\Model.cpp">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph\Node.cpp">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph\Transform.cpp">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjLoader\ObjLoader.c">
+      <Filter>Resource Files\ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjLoader\tgaLoader.c">
+      <Filter>Resource Files\ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraph\Group.cpp">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="SpatialPartition\Grid.cpp">
+      <Filter>Resource Files\SpartialPartioning</Filter>
+    </ClCompile>
+    <ClCompile Include="SpatialPartition\SpatialPartition.cpp">
+      <Filter>Resource Files\SpartialPartioning</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectModel.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaReading.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInfo.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="vector3D.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="GoodiesFactory.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="myapplication.h">
+      <Filter>Header Files\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Variable.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomGenerator.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Shots.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Goodies.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph\Instance.h">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph\Matrix4x4.h">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph\Model.h">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph\Node.h">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph\Transform.h">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjLoader\ObjLoader.h">
+      <Filter>Resource Files\ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjLoader\tgaLoader.h">
+      <Filter>Resource Files\ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraph\Group.h">
+      <Filter>Resource Files\ScenceGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="Function.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="SpatialPartition\Grid.h">
+      <Filter>Resource Files\SpartialPartioning</Filter>
+    </ClInclude>
+    <ClInclude Include="SpatialPartition\SpatialPartition.h">
+      <Filter>Resource Files\SpartialPartioning</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectModel.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaReading.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInfo.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

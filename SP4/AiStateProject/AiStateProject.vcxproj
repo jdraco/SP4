@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{506B6321-8A03-49C2-9882-150A95984181}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>AiStateProject</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>freeglut.lib;winmm.lib;lua5.1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="GameStateManager.cpp" />
+    <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="Goodies.cpp" />
+    <ClCompile Include="GoodiesFactory.cpp" />
+    <ClCompile Include="LuaReading.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="myapplication.cpp" />
+    <ClCompile Include="ObjectModel.cpp" />
+    <ClCompile Include="ObjLoader\ObjLoader.c" />
+    <ClCompile Include="ObjLoader\tgaLoader.c" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerInfo.cpp" />
+    <ClCompile Include="PlayState.cpp" />
+    <ClCompile Include="RandomGenerator.cpp" />
+    <ClCompile Include="SceneGraph\Group.cpp" />
+    <ClCompile Include="SceneGraph\Instance.cpp" />
+    <ClCompile Include="SceneGraph\Matrix4x4.cpp" />
+    <ClCompile Include="SceneGraph\Model.cpp" />
+    <ClCompile Include="SceneGraph\Node.cpp" />
+    <ClCompile Include="SceneGraph\Transform.cpp" />
+    <ClCompile Include="Shots.cpp" />
+    <ClCompile Include="SpatialPartition\Grid.cpp" />
+    <ClCompile Include="SpatialPartition\SpatialPartition.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Variable.cpp" />
+    <ClCompile Include="Weapon.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Frustum.h" />
+    <ClInclude Include="Function.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateManager.h" />
+    <ClInclude Include="GameTime.h" />
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="Goodies.h" />
+    <ClInclude Include="GoodiesFactory.h" />
+    <ClInclude Include="LuaReading.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MenuState.h" />
+    <ClInclude Include="myapplication.h" />
+    <ClInclude Include="ObjectModel.h" />
+    <ClInclude Include="ObjLoader\ObjLoader.h" />
+    <ClInclude Include="ObjLoader\tgaLoader.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerInfo.h" />
+    <ClInclude Include="PlayState.h" />
+    <ClInclude Include="RandomGenerator.h" />
+    <ClInclude Include="SceneGraph\Group.h" />
+    <ClInclude Include="SceneGraph\Instance.h" />
+    <ClInclude Include="SceneGraph\Matrix4x4.h" />
+    <ClInclude Include="SceneGraph\Model.h" />
+    <ClInclude Include="SceneGraph\Node.h" />
+    <ClInclude Include="SceneGraph\Transform.h" />
+    <ClInclude Include="Shots.h" />
+    <ClInclude Include="SpatialPartition\Grid.h" />
+    <ClInclude Include="SpatialPartition\SpatialPartition.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Variable.h" />
+    <ClInclude Include="vector3D.h" />
+    <ClInclude Include="Weapon.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
