@@ -5,6 +5,7 @@ using namespace std;
 
 CWeapon::CWeapon(void)
 {
+	theGlobal = CGlobal::getInstance();
 }
 CWeapon::~CWeapon(void)
 {
@@ -14,14 +15,15 @@ void CWeapon::Init(void)
 {
 	state = "default";
 	m_iTileSize = TILE_SIZE;
-	weap_x = 200;
-	weap_y = 310; 
+	Pos = Vector3D(200,310,0);
 	facingup = false;
 	facingdown = true; 
 	weapAnimationCounter = 0;
 	weapAnimationInvert = false;
 	//HP = 100;
 	attack = false;
+	currEquipped = "NIL";
+	currEqAmmo = 0;
 }
 /****************************************************************************************************
 Draw the weap
@@ -35,7 +37,7 @@ void CWeapon::Renderweap(void) {
 	}
 
 	glPushMatrix();
-	glTranslatef(weap_x, weap_y, 0);
+	glTranslatef(Pos.x,Pos.y, 0);
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -74,23 +76,23 @@ void CWeapon::Renderweap(void) {
 // Set position x of the player
 void CWeapon::SetPos_x(int pos_x)
 {
-	weap_x = pos_x;
+	Pos.x = pos_x;
 }
 // Set position y of the player
 void CWeapon::SetPos_y(int pos_y)
 {
-	weap_y = pos_y;
+	Pos.y = pos_y;
 }
 
 // Get position x of the player
 int CWeapon::GetPos_x(void)
 {
-	return weap_x;
+	return Pos.x;
 }
 // Get position y of the player
 int CWeapon::GetPos_y(void)
 {
-	return weap_y;
+	return Pos.y;
 }
 
 // Set Animation Invert status of the player

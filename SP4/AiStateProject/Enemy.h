@@ -20,7 +20,11 @@ public:
 	void Render();
 
 	//For the states
-
+	int hp;
+	
+	int strength;
+	float Rresist;
+	float Mresist;
 
 	 void SetItem(ITEM_ID item_id , int SetItem);
 	 int GetItem(ITEM_ID item_id);

@@ -2,12 +2,13 @@
 #include <iostream>
 #include "Variable.h"
 #include <string>
+#include "Function.h"
 
 #define INVENTORY_SIZE 5
 
 using namespace std;
 
-class CWeapon
+class CWeapon : public CVariable
 {
 public:
 
@@ -75,4 +76,6 @@ private:
 	int currEqAmmo;
 
 	bool attack;
+
+	//CGlobal* theGlobal;
 };

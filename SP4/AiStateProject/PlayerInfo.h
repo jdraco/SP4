@@ -1,9 +1,7 @@
 #pragma once
 #include <iostream>
-#include "Function.h"
 #include "Weapon.h"
 #include <string>
-#include "Variable.h"
 
 #define INVENTORY_SIZE 5
 
@@ -122,7 +120,7 @@ private:
 	int m_iTileSize;
 
 	// Hero's information
-	int hero_x, hero_y, jumpspeed;
+	int jumpspeed;
 	bool heroAnimationInvert;
 	int heroAnimationCounter;
 

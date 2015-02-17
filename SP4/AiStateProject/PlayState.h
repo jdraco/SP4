@@ -1,5 +1,6 @@
 #pragma once
 #include "Map.h"
+#include "weaponManager.h"
 #include "Camera.h"
 #include "GameState.h"
 #include "GoodiesFactory.h"
@@ -54,6 +55,8 @@ private:
 	};
 
 	CPlayerInfo *thePlayer;
+
+	CweaponManager *weapManager;
 
 	Camera* theCamera;
 	// Group

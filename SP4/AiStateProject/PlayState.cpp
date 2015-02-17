@@ -14,6 +14,7 @@ void CPlayState::Init()
 	
 	thePlayer = CPlayerInfo::getInstance();
 	thePlayer->Init();
+	weapManager->InitDB();
 
 	theCamera = Camera::getInstance();
 
@@ -85,6 +86,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	theGlobal->theMap->Update();
 
 	theGlobal->InGameTime->Update();
+
 	/*
 	if(theGlobal->InGameTime->GetCurrent() < lastTime-3){ 
 		int A = theGlobal->RG.getImmediateResult(0,theGlobal->theMain.size()-1);

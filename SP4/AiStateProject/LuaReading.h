@@ -6,6 +6,9 @@ extern "C" {
 #include "lua/lualib.h"
 #include "lua/lauxlib.h"
 }
+#include <iostream>
+
+using namespace std;
 
 class LuaReading
 {
@@ -41,5 +44,8 @@ public:
 
 	int luaGetIndex(float objpos, float size, float translate );
 	int luaPlusPlus(int x);
+
+	//int GetIntFromLua(const char* LuaFile , const char* Variable  );
+	//string GetStringFromLua(const char* LuaFile , const char* Variable  );
 };
 
