@@ -2,7 +2,7 @@
 #define VECTOR3D_H
 
 #include <math.h>
-#include "SceneGraph\Matrix4x4.h"
+#include "Matrix4x4.h"
 
 class Vector3D
 {

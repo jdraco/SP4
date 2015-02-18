@@ -3,7 +3,6 @@
 #include "Camera.h"
 #include "GameState.h"
 #include "GoodiesFactory.h"
-#include "SpatialPartition\SpatialPartition.h"
 
 
 class CPlayer;
@@ -56,13 +55,6 @@ private:
 	CPlayerInfo *thePlayer;
 
 	Camera* theCamera;
-	// Group
-	CGroup *theRoot;
-
-	//vector<CGroup*> GroupList;
-
-	//SpatialPartitioning
-	CSpatialPartition* theSP;
 
 	//global variable class
 	CGlobal* theGlobal;
@@ -72,7 +64,6 @@ private:
 	void LoadLevel(short level);
 	short currentMap;
 
-	vector<CObjectModel*> theObjectModel;
 	//save last time
 	float lastTime;
 	int cubeCount;

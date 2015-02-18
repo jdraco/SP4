@@ -36,42 +36,12 @@ public:
 
 	// Set Jumpspeed of the player
 	void SetJumpspeed(int jumpspeed);
-
-
-	// Set Animation Invert status of the player
-	void SetAnimationInvert(bool heroAnimationInvert);
-	// Get Animation Invert status of the player
-	bool GetAnimationInvert(void);
-	// Set Animation Counter of the player
-	void SetAnimationCounter(int heroAnimationCounter);
-	// Get Animation Counter of the player
-	int GetAnimationCounter(void);
 	
-	/*
-	// Constrain the position of the Hero to within the border
-
-	void ConstrainHero( int leftBorder, int rightBorder, 
-		int topBorder, int bottomBorder, 
-		float timeDiff,
-		int& mapOffset_x, int& mapOffset_y,
-		int screenWidth, int mapWidth,
-		int screenHeight, int mapHeight);
-
-		void UpdateSubGroupChildren(CFrustum *theFrustum);
-
-	void ConstrainPlayer(const int leftBorder, const int rightBorder, 
-							  const int topBorder, const int bottomBorder, 
-							  float timeDiff,
-							  int& mapOffset_x, int& mapOffset_y);
-		*/
 	void save();
 	void load();
 
 	// Ian
-	bool facingup;
-	bool facingdown;
-	bool isMoving;
-	bool isShooting;
+
 
 	int damage;
 	int skillLevel;
@@ -117,12 +87,11 @@ private:
 	static CPlayerInfo*
 		_instance;
 
-	int m_iTileSize;
+
 
 	// Hero's information
-	int hero_x, hero_y, jumpspeed;
-	bool heroAnimationInvert;
-	int heroAnimationCounter;
+	int hero_x, hero_y ;
+
 
 	// Character State - ian
 	string state;

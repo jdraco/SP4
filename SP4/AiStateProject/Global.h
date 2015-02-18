@@ -8,12 +8,6 @@
 #include "Define.h"
 #include "RandomGenerator.h"
 
-// Scene Graph
-#include "SceneGraph/Group.h"
-#include "ObjLoader/ObjLoader.h"
-// Frustum
-#include "Frustum.h"
-
 //Camera
 #include "Camera.h"
 
@@ -36,8 +30,6 @@ public:
 	CGameTime* InGameTime;
 	//random generator
 	CRandomGenerator RG;
-	//main group
-	vector<CGroup*> theMain;
 	
 	//game map
 	CMap* theMap;

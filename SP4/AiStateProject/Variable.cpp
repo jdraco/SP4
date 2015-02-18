@@ -5,8 +5,17 @@ CVariable::CVariable(void)
 		,Vel(0,0,0)
 		,Dir(1,0,0)
 		,active(true)
+		,moveSpeed(1)
 {
 	theGlobal = CGlobal::getInstance();
+
+	jumpspeed = 0;
+	facingup = false;
+	facingdown = true;
+	isMoving = false;
+	AnimationCounter = 0;
+	AnimationInvert = false;
+	isShooting = false;
 }
 
 CVariable::~CVariable(void)
@@ -14,7 +23,7 @@ CVariable::~CVariable(void)
 
 }
 
-
+/*
 void CVariable::Init (bool active ,Vector3D Pos , Vector3D Color, Vector3D Scale , int Health , OBJECT_STATE State ,
 				Vector3D Vel )
 {
@@ -31,6 +40,7 @@ void CVariable::Init (bool active ,Vector3D Pos , Vector3D Color, Vector3D Scale
 	this->Min = Pos-Scale;
 	this->Max = Pos+Scale;
 }
+*/
 
 
 int CVariable::CalculateDistance(Vector3D tempPos){
@@ -56,13 +66,6 @@ void CVariable::SetPos_y(float pos_y)
 	Pos.y = pos_y;
 }
 
-int CVariable::GetHealth(){
-	return Health;
-}
-
-void CVariable::SetHealth(int h){
-	Health = h;
-}
 
 int CVariable::GetDelay(){
 	return delay;
@@ -84,6 +87,34 @@ void CGoodies::SetmyKeys(bool myKeys[255]){
 */
 void CVariable::SetTarget(CGoodies *tempTarget){
 	Target = tempTarget;
+}
+
+
+// Set Animation Counter of the player
+void CVariable::SetAnimationCounter(int heroAnimationCounter)
+{
+	int time = glutGet(GLUT_ELAPSED_TIME);
+	static int ctime = glutGet(GLUT_ELAPSED_TIME);
+	if (time - ctime > 50)
+	{
+		this->AnimationCounter = heroAnimationCounter;
+		ctime = time;
+	}
+}
+// Get Animation Counter of the player
+int CVariable::GetAnimationCounter(void)
+{
+		return AnimationCounter;
+}
+
+void CVariable::SetAnimationInvert(bool heroAnimationInvert)
+{
+	AnimationInvert = heroAnimationInvert;
+}
+	
+bool CVariable::GetAnimationInvert(void)
+{
+	return AnimationInvert;
 }
 
 

@@ -58,6 +58,13 @@ typedef struct
 
 }Region;
 
+
+typedef struct {
+	float current,
+		max;
+	int	no;
+}STATE;
+
 inline std::string GetStringFromLua(const char* LuaFile , const char* Variable  );
 inline int GetIntFromLua(const char* LuaFile , const char* Variable  );
 

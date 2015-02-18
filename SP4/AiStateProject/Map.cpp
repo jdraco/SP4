@@ -1,5 +1,5 @@
 #include "Map.h"
-#include "Player.h"
+#include "PlayerInfo.h"
 
 CMap* CMap::instance = NULL;
 
@@ -639,8 +639,8 @@ void CMap::RenderMiniMap(CMap* map) {
 	int miniOffset_x = xStart+tileOffset_x;
 	glColor3f(1,0,0);
 
-	float xTranslate = (((CPlayer::getInstance()->GetPos().x-LEFT_BORDER)/32)+tileOffset_x-miniOffset_x)*2;
-	float yTranslate = (((CPlayer::getInstance()->GetPos().y-BOTTOM_BORDER)/32)+tileOffset_y-miniOffset_y)*2;
+	float xTranslate = (((CPlayerInfo::getInstance()->GetPos().x-LEFT_BORDER)/32)+tileOffset_x-miniOffset_x)*2;
+	float yTranslate = (((CPlayerInfo::getInstance()->GetPos().y-BOTTOM_BORDER)/32)+tileOffset_y-miniOffset_y)*2;
 
 	glColor3f(0,0.6f,1);
 	glPushMatrix();

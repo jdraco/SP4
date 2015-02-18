@@ -38,13 +38,7 @@ void CPlayerInfo::Init(void)
 	Pos = Vector3D(200,310,0);
 	//hero_x = 200;
 	//hero_y = 310;
-	jumpspeed = 0;
-	facingup = false;
-	facingdown = true;
-	isMoving = false;
-	heroAnimationCounter = 0;
-	heroAnimationInvert = false;
-	isShooting = false;
+
 
 	damage = 1;
 	skillLevel = 1;
@@ -67,7 +61,6 @@ void CPlayerInfo::Render(void) {
 		if (GetAnimationCounter() != 1)
 			SetAnimationCounter(1);
 	}
-	//cout << Pos.x << " , " << Pos.y << endl; 
 
 	glPushMatrix();
 	glTranslatef(Pos.x, Pos.y, 1);
@@ -82,26 +75,26 @@ void CPlayerInfo::Render(void) {
 	else if (facingup == false && facingdown == true)
 		glBindTexture( GL_TEXTURE_2D, Texture[3].texID );
 	glBegin(GL_QUADS);
-	if (heroAnimationInvert == true)
+	if (AnimationInvert == true)
 	{
-		glTexCoord2f(0.25 * heroAnimationCounter,1); 
+		glTexCoord2f(0.25 * AnimationCounter,1); 
 		glVertex2f(0,0);
-		glTexCoord2f(0.25 * heroAnimationCounter,0); 
+		glTexCoord2f(0.25 * AnimationCounter,0); 
 		glVertex2f(0,m_iTileSize);
-		glTexCoord2f(0.25 * heroAnimationCounter + 0.25,0); 
+		glTexCoord2f(0.25 * AnimationCounter + 0.25,0); 
 		glVertex2f(m_iTileSize,m_iTileSize);
-		glTexCoord2f(0.25 * heroAnimationCounter + 0.25,1); 
+		glTexCoord2f(0.25 * AnimationCounter + 0.25,1); 
 		glVertex2f(m_iTileSize,0);
 	}
 	else
 	{
-		glTexCoord2f(0.25 * heroAnimationCounter + 0.25,1); 
+		glTexCoord2f(0.25 * AnimationCounter + 0.25,1); 
 		glVertex2f(0,0);
-		glTexCoord2f(0.25 * heroAnimationCounter + 0.25,0); 
+		glTexCoord2f(0.25 * AnimationCounter + 0.25,0); 
 		glVertex2f(0,m_iTileSize);
-		glTexCoord2f(0.25 * heroAnimationCounter,0); 
+		glTexCoord2f(0.25 * AnimationCounter,0); 
 		glVertex2f(m_iTileSize,m_iTileSize);
-		glTexCoord2f(0.25 * heroAnimationCounter,1); 
+		glTexCoord2f(0.25 * AnimationCounter,1); 
 		glVertex2f(m_iTileSize,0);
 	}
 	glEnd();
@@ -111,33 +104,6 @@ void CPlayerInfo::Render(void) {
 	weapon->Renderweap();//sss
 }
 
-
-// Set Animation Invert status of the player
-void CPlayerInfo::SetAnimationInvert(bool heroAnimationInvert)
-{
-	this->heroAnimationInvert = heroAnimationInvert;
-}
-// Get Animation Invert status of the player
-bool CPlayerInfo::GetAnimationInvert(void)
-{
-	return heroAnimationInvert;
-}
-// Set Animation Counter of the player
-void CPlayerInfo::SetAnimationCounter(int heroAnimationCounter)
-{
-	int time = glutGet(GLUT_ELAPSED_TIME);
-	static int ctime = glutGet(GLUT_ELAPSED_TIME);
-	if (time - ctime > 50)
-	{
-		this->heroAnimationCounter = heroAnimationCounter;
-		ctime = time;
-	}
-}
-// Get Animation Counter of the player
-int CPlayerInfo::GetAnimationCounter(void)
-{
-		return heroAnimationCounter;
-}
 
 void CPlayerInfo::keyboardUpdate()
 {
@@ -269,7 +235,6 @@ void CPlayerInfo::keyboardUpdate()
 	//Move Right
 	if ((theGlobal->myKeys['d'] || theGlobal->myKeys['D']))
 	{
-		cout << "lol" << endl;
 		//Alter Player Direction
 		playerDir.x = 1;
 		SetAnimationInvert( false );
@@ -319,8 +284,6 @@ void CPlayerInfo::keyboardUpdate()
 	//if (playerDir.GetMagnitude() != 0)
 		//Dir = playerDir;
 }
-
-
 
 bool CPlayerInfo::Update(){
 	keyboardUpdate();

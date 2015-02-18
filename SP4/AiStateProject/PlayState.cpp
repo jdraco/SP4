@@ -190,8 +190,6 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 	//Map's Scrolling Speed
 	int ScrollSpeed = (int)(MAP_SCROLL_SPEED * timeDiff);
 
-	cout << mapOffset_y << endl;
-
 	if (thePlayer->GetPos().x < leftBorder)
 	{
 		mapOffset_x -= ScrollSpeed;

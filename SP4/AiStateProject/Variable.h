@@ -23,9 +23,25 @@ protected:
 	Vector3D Max;
 
 	//Game logic
-	int Health;
+	
+	STATE Health;
 	int delay;
 	CGlobal* theGlobal;
+	
+	//Image Logic
+	int m_iTileSize;
+	
+	bool AnimationInvert;
+	int AnimationCounter;
+
+	//Movement logic
+	int jumpspeed;
+	int moveSpeed;
+	bool facingup;
+	bool facingdown;
+	bool isMoving;
+	bool isShooting;
+
 
 	CGoodies* Target;
 		
@@ -86,14 +102,23 @@ public:
 	//Get/Set function
 	void SetPos(Vector3D tempPos);
 	Vector3D GetPos(void);
-	// Set position x of the player
 	void SetPos_x(float pos_x);
-	// Set position y of the player
 	void SetPos_y(float pos_y);
+	
 
+	//Image 
+	// Set Animation Counter of the player
+	void SetAnimationCounter(int heroAnimationCounter);
+	int GetAnimationCounter(void);
 
-	int GetHealth(void);
-	void SetHealth(int h);
+	void SetAnimationInvert(bool heroAnimationInvert);
+	bool GetAnimationInvert(void);
+
+	
+	//Health
+	void setCurrentHealth(float health){Health.current = health;};
+	STATE getHealth(){return Health;};
+	int getNoOfHealth(){return Health.no;};
 	
 	int GetDelay(void);
 
@@ -106,9 +131,10 @@ public:
 	//aim target
 	void SetTarget(CGoodies *tempTarget);
 
+	/*
 	void Init (bool active ,Vector3D Pos , Vector3D Color, Vector3D Scale = 1.0f, int Health = 0, OBJECT_STATE State = IDLE ,
 				Vector3D Vel = 0.0f );
-
+	*/
 	void DrawBox(Vector3D Size , Vector3D Color = 1.0f); // For box object and if rendering of collision box if needed
 };
 
