@@ -1,9 +1,7 @@
 #pragma once
 #include <iostream>
-#include "Function.h"
 #include "Weapon.h"
 #include <string>
-#include "Variable.h"
 
 #define INVENTORY_SIZE 5
 
@@ -90,8 +88,14 @@ private:
 
 
 	// Hero's information
+<<<<<<< HEAD
 	int hero_x, hero_y ;
 
+=======
+	int jumpspeed;
+	bool heroAnimationInvert;
+	int heroAnimationCounter;
+>>>>>>> 1c5b2c89043c90f9c5db30baa62fce6c27b9acf7
 
 	// Character State - ian
 	string state;

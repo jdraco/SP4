@@ -101,7 +101,12 @@ void CPlayerInfo::Render(void) {
 	glDisable( GL_BLEND );
 	glDisable( GL_TEXTURE_2D );
 	glPopMatrix();
-	weapon->Renderweap();//sss
+	if(weapon->getCurrEquipped() != "NIL")
+	{
+		weapon->SetPos_x(Pos.x);
+		weapon->SetPos_y(Pos.y);
+		weapon->Renderweap();
+	}
 }
 
 
@@ -311,8 +316,8 @@ void CPlayerInfo::save()
 
 	outFile.open("SaveData.txt");
 
-	outFile << hero_x << endl 
-		<< hero_y << endl;
+	outFile << Pos.x << endl 
+		<< Pos.y << endl;
 	cout << endl;
 
 	outFile.close();

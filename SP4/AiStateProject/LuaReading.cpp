@@ -1,5 +1,6 @@
 #include "LuaReading.h"
-#include <iostream>
+
+
 LuaReading* LuaReading::s_pInstance = NULL;
 
 int GetIntFromLua(const char* LuaFile , const char* Variable  )
@@ -27,7 +28,7 @@ int GetIntFromLua(const char* LuaFile , const char* Variable  )
 	return 0;
 }
 
-std::string GetStringFromLua(const char* LuaFile , const char* Variable  )
+string GetStringFromLua(const char* LuaFile , const char* Variable  )
 {
 	static int s=-1;
 	lua_State *L = lua_open();
