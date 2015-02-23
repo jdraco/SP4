@@ -85,6 +85,8 @@ public:
 
 	void setCurrAmmo(int ammo);
 
+	Bullet * GetBullet(int bullet);//calls GetBullet from weapon.cpp
+	int GetBulletListSize();//Get bullet list size
 protected:
 	CPlayerInfo(void);
 	~CPlayerInfo(void);

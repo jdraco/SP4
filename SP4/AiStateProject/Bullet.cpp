@@ -102,6 +102,9 @@ bool Bullet::Update(void)
 	Pos.x+=Vel.x * Dir.x;
 	Pos.y+=Vel.y * Dir.y;
 	dtravelled+= sqrtf((Vel.x * Dir.x)*(Vel.x * Dir.x)+(Vel.y * Dir.y)*(Vel.y * Dir.y));
+	//ConstrainPlayer((const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), (const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), 
+	//				(const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER), (const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER),
+	//				1.0f, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y);
 	if(range < 100 && AnimationCounter < 5)
 		AnimationCounter++;
 }
@@ -114,3 +117,7 @@ void Bullet::SetPos(Vector3D pos)
 { Pos = pos;}
 Vector3D Bullet::GetPos()
 { return Pos;}
+void Bullet::SetPosX(float x)
+{ Pos.x = x;}
+void Bullet::SetPosY(float y)
+{ Pos.y = y;}

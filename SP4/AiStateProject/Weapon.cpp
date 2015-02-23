@@ -214,3 +214,12 @@ void CWeapon::setCurrAmmo(int ammo)
 {
 	currEqAmmo = ammo;
 }
+Bullet* CWeapon::GetBullet(int bullet)
+{
+	return ListOfBullets[bullet];
+}
+
+int CWeapon::GetBulletListSize()
+{
+	return (int)ListOfBullets.size();
+}

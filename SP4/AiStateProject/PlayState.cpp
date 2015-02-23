@@ -225,12 +225,25 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 		//Set Limit
 		if (mapOffset_x < 0)
 			mapOffset_x = 0;
-
 		//Player will be at the middle of the screen
 		if (mapOffset_x != 0)
+		{
 			thePlayer->SetPos_x((float)leftBorder);
+			for(int i = 0; i < thePlayer->GetBulletListSize(); i++)
+			{
+				float diffX = thePlayer->GetBullet(i)->GetPos().x - thePlayer->GetPos().x;
+				thePlayer->GetBullet(i)->SetPosX((float)leftBorder+diffX);
+			}
+		}
 		else if (thePlayer->GetPos().x < TILE_SIZE*3)
+		{
 			thePlayer->SetPos_x( TILE_SIZE*3 );
+			for(int i = 0; i < thePlayer->GetBulletListSize(); i++)
+			{
+				float diffX = thePlayer->GetBullet(i)->GetPos().x - thePlayer->GetPos().x;
+				thePlayer->GetBullet(i)->SetPosX(TILE_SIZE*3+diffX);
+			}
+		}
 	}
 
 	else if (thePlayer->GetPos().x > rightBorder)
@@ -265,9 +278,23 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 
 		//Player will be at the middle of the screen
 		if (mapOffset_x < 999)
+		{
 			thePlayer->SetPos_x( (float)rightBorder );
+			for(int i = 0; i < thePlayer->GetBulletListSize(); i++)
+			{
+				float diffX = thePlayer->GetBullet(i)->GetPos().x - thePlayer->GetPos().x;
+				thePlayer->GetBullet(i)->SetPosX((float)rightBorder+diffX);
+			}
+		}
 		else if (thePlayer->GetPos().x > RESOLUTION_WIDTH-TILE_SIZE*11)
+		{
 			thePlayer->SetPos_x( RESOLUTION_WIDTH-TILE_SIZE*11 );
+			for(int i = 0; i < thePlayer->GetBulletListSize(); i++)
+			{
+				float diffX = thePlayer->GetBullet(i)->GetPos().x - thePlayer->GetPos().x;
+				thePlayer->GetBullet(i)->SetPosX(RESOLUTION_WIDTH-TILE_SIZE*11+diffX);
+			}
+		}
 	}
 
 	if (thePlayer->GetPos().y < topBorder)
@@ -302,9 +329,23 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 
 		//Player will be at the middle of the screen
 		if (mapOffset_y != 0)
+		{
 			thePlayer->SetPos_y( (float)topBorder );
+			for(int i = 0; i < thePlayer->GetBulletListSize(); i++)
+			{
+				float diffY = thePlayer->GetBullet(i)->GetPos().y - thePlayer->GetPos().y;
+				thePlayer->GetBullet(i)->SetPosY((float)topBorder+diffY);
+			}
+		}
 		else if (thePlayer->GetPos().y < TILE_SIZE*4)
+		{
 			thePlayer->SetPos_y(TILE_SIZE*4);
+			for(int i = 0; i < thePlayer->GetBulletListSize(); i++)
+			{
+				float diffY = thePlayer->GetBullet(i)->GetPos().y - thePlayer->GetPos().y;
+				thePlayer->GetBullet(i)->SetPosY(TILE_SIZE*4+diffY);
+			}
+		}
 	}
 
 	else if (thePlayer->GetPos().y > bottomBorder)
@@ -339,8 +380,22 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 
 		//Player will be at the middle of the screen
 		if (mapOffset_y < 1715) //1750
+		{
 			thePlayer->SetPos_y ((float)bottomBorder);
+			for(int i = 0; i < thePlayer->GetBulletListSize(); i++)
+			{
+				float diffY = thePlayer->GetBullet(i)->GetPos().y - thePlayer->GetPos().y;
+				thePlayer->GetBullet(i)->SetPosY((float)bottomBorder+diffY);
+			}
+		}
 		else if (thePlayer->GetPos().y > RESOLUTION_HEIGHT*2.15-TILE_SIZE*3)
+		{
 			thePlayer->SetPos_y ( RESOLUTION_HEIGHT*2.15-TILE_SIZE*3 );
+			for(int i = 0; i < thePlayer->GetBulletListSize(); i++)
+			{
+				float diffY = thePlayer->GetBullet(i)->GetPos().y - thePlayer->GetPos().y;
+				thePlayer->GetBullet(i)->SetPosY(RESOLUTION_HEIGHT*2.15-TILE_SIZE*3+diffY);
+			}
+		}
 	}
 }

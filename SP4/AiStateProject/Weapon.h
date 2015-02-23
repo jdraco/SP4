@@ -63,7 +63,8 @@ public:
 	CWeapon(void);
 	~CWeapon(void);
 
-
+	Bullet* GetBullet(int bullet);
+	int GetBulletListSize();//Get bullet list size
 private:
 
 

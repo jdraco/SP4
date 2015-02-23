@@ -465,3 +465,12 @@ void CPlayerInfo::setCurrAmmo(int ammo)
 	weapon->setCurrAmmo(ammo);
 }
 
+Bullet* CPlayerInfo::GetBullet(int bullet)
+{
+	return weapon->GetBullet(bullet);
+}
+
+int CPlayerInfo::GetBulletListSize()
+{
+	return weapon->GetBulletListSize();
+}

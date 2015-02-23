@@ -18,6 +18,8 @@ public:
 	Vector3D GetDir();
 	void SetPos(Vector3D pos);
 	Vector3D GetPos();
+	void SetPosX(float x);
+	void SetPosY(float y);
 private:	
 	CGlobal* theGlobal;
 };
