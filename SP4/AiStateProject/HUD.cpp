@@ -7,6 +7,7 @@ HUD::HUD(void)
 	,	showInventory(false)
 	,	LMouse_down_boolean(false)
 	,	volume(70)
+	,	CURRENT_WEAPON(NONE)
 {
 	LoadTGA( &HUDtex[ 0 ], "Texture/HUD/white.tga");
 	LoadTGA( &HUDtex[ 1 ], "Texture/HUD/optionsbutton.tga");
@@ -19,6 +20,7 @@ HUD::HUD(void)
 	LoadTGA( &HUDtex[ 8 ], "Texture/HUD/mutedbutton.tga");
 	LoadTGA( &HUDtex[ 9 ], "Texture/HUD/inventorybutton.tga");
 	LoadTGA( &HUDtex[ 10 ], "Texture/HUD/inventorybuttonMO.tga");
+	LoadTGA( &HUDtex[ 11 ], "Texture/HUD/knife.tga");
 
 	font_style = GLUT_BITMAP_HELVETICA_18;
 }
@@ -61,96 +63,16 @@ void HUD::printw (float x, float y, float z, char* format, ...)
 	//  Free the allocated memory for the string
 	free(text);
 }
-/*
-bool HUD::LoadTGA(TextureImage *texture, char *filename)			// Loads A TGA File Into Memory
-{    
-	GLubyte		TGAheader[12]={0,0,2,0,0,0,0,0,0,0,0,0};	// Uncompressed TGA Header
-	GLubyte		TGAcompare[12];								// Used To Compare TGA Header
-	GLubyte		header[6];									// First 6 Useful Bytes From The Header
-	GLuint		bytesPerPixel;								// Holds Number Of Bytes Per Pixel Used In The TGA File
-	GLuint		imageSize;									// Used To Store The Image Size When Setting Aside Ram
-	GLuint		temp;										// Temporary Variable
-	GLuint		type=GL_RGBA;								// Set The Default GL Mode To RBGA (32 BPP)
 
-	FILE *file = fopen(filename, "rb");						// Open The TGA File
-
-	if(	file==NULL ||										// Does File Even Exist?
-		fread(TGAcompare,1,sizeof(TGAcompare),file)!=sizeof(TGAcompare) ||	// Are There 12 Bytes To Read?
-		memcmp(TGAheader,TGAcompare,sizeof(TGAheader))!=0				||	// Does The Header Match What We Want?
-		fread(header,1,sizeof(header),file)!=sizeof(header))				// If So Read Next 6 Header Bytes
-	{
-		if (file == NULL)									// Did The File Even Exist? *Added Jim Strong*
-			return false;									// Return False
-		else
-		{
-			fclose(file);									// If Anything Failed, Close The File
-			return false;									// Return False
-		}
-	}
-
-	texture->width  = header[1] * 256 + header[0];			// Determine The TGA Width	(highbyte*256+lowbyte)
-	texture->height = header[3] * 256 + header[2];			// Determine The TGA Height	(highbyte*256+lowbyte)
-
-	if(	texture->width	<=0	||								// Is The Width Less Than Or Equal To Zero
-		texture->height	<=0	||								// Is The Height Less Than Or Equal To Zero
-		(header[4]!=24 && header[4]!=32))					// Is The TGA 24 or 32 Bit?
-	{
-		fclose(file);										// If Anything Failed, Close The File
-		return false;										// Return False
-	}
-
-	texture->bpp	= header[4];							// Grab The TGA's Bits Per Pixel (24 or 32)
-	bytesPerPixel	= texture->bpp/8;						// Divide By 8 To Get The Bytes Per Pixel
-	imageSize		= texture->width*texture->height*bytesPerPixel;	// Calculate The Memory Required For The TGA Data
-
-	texture->imageData=(GLubyte *)malloc(imageSize);		// Reserve Memory To Hold The TGA Data
-
-	if(	texture->imageData==NULL ||							// Does The Storage Memory Exist?
-		fread(texture->imageData, 1, imageSize, file)!=imageSize)	// Does The Image Size Match The Memory Reserved?
-	{
-		if(texture->imageData!=NULL)						// Was Image Data Loaded
-			free(texture->imageData);						// If So, Release The Image Data
-
-		fclose(file);										// Close The File
-		return false;										// Return False
-	}
-
-	for(GLuint i=0; i<int(imageSize); i+=bytesPerPixel)		// Loop Through The Image Data
-	{														// Swaps The 1st And 3rd Bytes ('R'ed and 'B'lue)
-		temp=texture->imageData[i];							// Temporarily Store The Value At Image Data 'i'
-		texture->imageData[i] = texture->imageData[i + 2];	// Set The 1st Byte To The Value Of The 3rd Byte
-		texture->imageData[i + 2] = temp;					// Set The 3rd Byte To The Value In 'temp' (1st Byte Value)
-	}
-
-	fclose (file);											// Close The File
-
-	// Build A Texture From The Data
-	glGenTextures(1, &texture[0].texID);					// Generate OpenGL texture IDs
-
-	glBindTexture(GL_TEXTURE_2D, texture[0].texID);			// Bind Our Texture
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);	// Linear Filtered
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	// Linear Filtered
-
-	if (texture[0].bpp==24)									// Was The TGA 24 Bits
-	{
-		type=GL_RGB;										// If So Set The 'type' To GL_RGB
-	}
-
-	glTexImage2D(GL_TEXTURE_2D, 0, type, texture[0].width, texture[0].height, 0, type, GL_UNSIGNED_BYTE, texture[0].imageData);
-
-	return true;											// Texture Building Went Ok, Return True
-}
-*/
-
-void HUD::HelpScreen(void)
+void HUD::HelpScreen(int mouseX,int mouseY, bool mouseState)
 {
 	// Help screen
 	if (showHelp == true)
 	{
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		glPushMatrix();
-		glTranslatef(0, 50 * h / 600, 0);
-		glScalef(20 * w / 800, 10.75 * h / 600, 1);
+		glTranslatef(0, 62.5, 0);
+		glScalef(25.6/* * w / 1024*/, 15.35/* * h / 745*/, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -164,6 +86,50 @@ void HUD::HelpScreen(void)
 		glDisable( GL_BLEND );
 		glDisable( GL_TEXTURE_2D );
 		glPopMatrix();
+
+		// Close help window button
+		glColor4f(0.6f, 0.1f, 0.1f, 1.0f);
+		glPushMatrix();
+		glTranslatef(985, 77.5, 0);
+		glEnable( GL_TEXTURE_2D );
+		glEnable( GL_BLEND );
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,1); glVertex2f(0,0);
+				glTexCoord2f(0,0); glVertex2f(0,25);
+				glTexCoord2f(1,0); glVertex2f(25,25);
+				glTexCoord2f(1,1); glVertex2f(25,0);
+			glEnd();
+		glDisable( GL_BLEND );
+		glDisable( GL_TEXTURE_2D );
+		glPopMatrix();
+
+		if(mouseX > 985 * w / 1024 && mouseX < 1010 * w / 1024 && mouseY > 70 * h / 745 && mouseY < 95 * h / 745)
+		{
+			glLoadIdentity();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(0.5f, 0.5f, 0.5f);
+				printw (992, 97.5, 0, "X");
+			glPopAttrib();
+
+			// When clicked
+			if (mouseState == false)
+			{
+				showHelp = false;
+			}
+			else
+			{
+			}
+		}
+		else
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1, 1, 1);
+				printw (992, 97.5, 0, "X");
+			glPopAttrib();
+		}
 	}
 }
 
@@ -174,8 +140,8 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		// Options window
 		glColor4f(0.2f, 0.2f, 0.2f, 0.95f);
 		glPushMatrix();
-		glTranslatef(250 * w / 800, 50 * h / 600, 0);
-		glScalef(7.5 * w / 800, 11.75 * h / 600, 1);
+		glTranslatef(360, 150, 0);
+		glScalef(7.5/* * w / 1024*/, 12.25 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -191,12 +157,11 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		glPopMatrix();
 
 		// Lower volume button
-		if (mouseX > 305 * w / 800 && mouseX < 335 * w / 800 && mouseY > 165 * h / 600 && mouseY < 190 * h / 600)
+		if (mouseX > 405 * w / 1024 && mouseX < 445 * w / 1024 && mouseY > 245 * h / 745 && mouseY < 285 * h / 745)
 		{
 			glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
 			glPushMatrix();
-			glTranslatef(300 * w / 800, 160 * h / 600, 0);
-			glScalef(1, 1, 1);
+			glTranslatef(410, 260, 0);
 			glEnable( GL_TEXTURE_2D );
 			glEnable( GL_BLEND );
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -233,8 +198,7 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		{
 			glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 			glPushMatrix();
-			glTranslatef(300 * w / 800, 160 * h / 600, 0);
-			glScalef(1, 1, 1);
+			glTranslatef(410, 260, 0);
 			glEnable( GL_TEXTURE_2D );
 			glEnable( GL_BLEND );
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -251,12 +215,11 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		}
 
 		// Increase volume button
-		if(mouseX > 465 * w / 800 && mouseX < 495 * w / 800 && mouseY > 165 * h / 600 && mouseY < 195 * h / 600)
+		if(mouseX > 575 * w / 1024 && mouseX < 610 * w / 1024 && mouseY > 245 * h / 745 && mouseY < 285 * h / 745)
 		{
 			glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
 			glPushMatrix();
-			glTranslatef(460 * w / 800, 160 * h / 600, 0);
-			glScalef(1, 1, 1);
+			glTranslatef(570, 260, 0);
 			glEnable( GL_TEXTURE_2D );
 			glEnable( GL_BLEND );
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -293,8 +256,7 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		{
 			glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 			glPushMatrix();
-			glTranslatef(460 * w / 800, 160 * h / 600, 0);
-			glScalef(1, 1, 1);
+			glTranslatef(570, 260, 0);
 			glEnable( GL_TEXTURE_2D );
 			glEnable( GL_BLEND );
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -316,21 +278,20 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 			glColor3f(0.0f, 0.0f, 0.0f);
 
 			if (volume > 0)
-				printw (392.5 * w / 800, 185.0 * h / 600, 0, "%.i", volume); // SHOW MUSIC VOLUME (WHEN MORE THAN 0)
+				printw (500, 285.0, 0, "%.i", volume); // SHOW MUSIC VOLUME (WHEN MORE THAN 0)
 			else
-				printw (392.5 * w / 800, 185.0 * h / 600, 0, "0"); // SHOW MUSIC VOLUME (WHEN 0)
+				printw (500, 285.0, 0, "0"); // SHOW MUSIC VOLUME (WHEN 0)
 		
 		glPopAttrib();
 
 		// Mute/Unmute music button
 		if (mutemusic == true)
 		{
-			if (mouseX > 380 * w / 800 && mouseX < 420 * w / 800 && mouseY > 290 * h / 600 && mouseY < 320 * h / 600)
+			if (mouseX > 490 * w / 1024 && mouseX < 530 * w / 1024 && mouseY > 360 * h / 745 && mouseY < 400 * h / 745)
 			{
 				glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
 				glPushMatrix();
-				glTranslatef(380 * w / 800, 285 * h / 600, 0);
-				glScalef(1, 1, 1);
+				glTranslatef(490, 385, 0);
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -360,8 +321,7 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 			{
 				glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 				glPushMatrix();
-				glTranslatef(380 * w / 800, 285 * h / 600, 0);
-				glScalef(1, 1, 1);
+				glTranslatef(490, 385, 0);
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -379,12 +339,11 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		}
 		else
 		{
-			if (mouseX > 380 * w / 800 && mouseX < 420 * w / 800 && mouseY > 290 * h / 600 && mouseY < 320 * h / 600)
+			if (mouseX > 490 * w / 1024 && mouseX < 530 * w / 1024 && mouseY > 360 * h / 745 && mouseY < 400 * h / 745)
 			{
 				glColor4f(0.5f, 0.5f, 0.5f, 1.0f);
 				glPushMatrix();
-				glTranslatef(380 * w / 800, 285 * h / 600, 0);
-				glScalef(1, 1, 1);
+				glTranslatef(490, 385, 0);
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -414,8 +373,7 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 			{
 				glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 				glPushMatrix();
-				glTranslatef(380 * w / 800, 285 * h / 600, 0);
-				glScalef(1, 1, 1);
+				glTranslatef(490, 385, 0);
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -435,8 +393,8 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		// Resume Game button
 		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 		glPushMatrix();
-		glTranslatef(291 * w / 800, 400 * h / 600, 0);
-		glScalef(5.5 * w / 800, 1, 1);
+		glTranslatef(401, 500, 0);
+		glScalef(5.5/* * w / 1024*/, 1, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -451,12 +409,12 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		glDisable( GL_TEXTURE_2D );
 		glPopMatrix();
 
-		if(mouseX > 290 * w / 800 && mouseX < 511 * w / 800 && mouseY > 399 * h / 600 && mouseY < 440 * h / 600)
+		if(mouseX > 400 * w / 1024 && mouseX < 620 * w / 1024 && mouseY > 465 * h / 745 && mouseY < 505 * h / 745)
 		{
 			glLoadIdentity ();
 			glPushAttrib(GL_ALL_ATTRIB_BITS);
 				glColor3f(0.5f, 0.5f, 0.5f);
-				printw (355 * w / 800, 427.5 * h / 600, 0, "Resume Game");
+				printw (455, 527.5, 0, "Resume Game");
 			glPopAttrib();
 
 			// When clicked
@@ -473,7 +431,7 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 			glLoadIdentity ();
 			glPushAttrib(GL_ALL_ATTRIB_BITS);
 				glColor3f(1, 1, 1);
-				printw (355 * w / 800, 427.5 * h / 600, 0, "Resume Game");
+				printw (455, 527.5, 0, "Resume Game");
 			glPopAttrib();
 		}
 
@@ -481,8 +439,8 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		// Quit to Main Menu button
 		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 		glPushMatrix();
-		glTranslatef(291 * w / 800, 460 * h / 600, 0);
-		glScalef(5.5 * w / 800, 1, 1);
+		glTranslatef(401, 560, 0);
+		glScalef(5.5/* * w / 1024*/, 1, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -497,12 +455,12 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		glDisable( GL_TEXTURE_2D );
 		glPopMatrix();
 
-		if(mouseX > 290 * w / 800 && mouseX < 511 * w / 800 && mouseY > 459 * h / 600 && mouseY < 500 * h / 600)
+		if(mouseX > 400 * w / 1024 && mouseX < 620 * w / 1024 && mouseY > 520 * h / 745 && mouseY < 560 * h / 745)
 		{
 			glLoadIdentity ();
 			glPushAttrib(GL_ALL_ATTRIB_BITS);
 				glColor3f(0.5f, 0.5f, 0.5f);
-				printw (340 * w / 800, 487.5 * h / 600, 0, "Quit to Main Menu");
+				printw (435, 587.5, 0, "Quit to Main Menu");
 			glPopAttrib();
 
 			// When clicked
@@ -521,7 +479,7 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 			glLoadIdentity ();
 			glPushAttrib(GL_ALL_ATTRIB_BITS);
 				glColor3f(1, 1, 1);
-				printw (340 * w / 800, 487.5 * h / 600, 0, "Quit to Main Menu");
+				printw (435, 587.5, 0, "Quit to Main Menu");
 			glPopAttrib();
 		}
 
@@ -529,19 +487,19 @@ void HUD::OptionsScreen(int mouseX,int mouseY, bool mouseState)
 		glLoadIdentity ();
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 			glColor3f(0.0f, 0.0f, 0.0f);
-			printw (340.0 * w / 800, 90.0 * h / 600, 0, "OPTIONS MENU");
+			printw (437.5, 190.0, 0, "OPTIONS MENU");
 		glPopAttrib();
 
 		glLoadIdentity ();
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 			glColor3f(0.0f, 0.0f, 0.0f);
-			printw (355.0 * w / 800, 140.0 * h / 600, 0, "Music volume");
+			printw (455.0, 240.0, 0, "Music volume");
 		glPopAttrib();
 
 		glLoadIdentity ();
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 			glColor3f(0.0f, 0.0f, 0.0f);
-			printw (332.5 * w / 800, 260.0 * h / 600, 0, "Mute/Unmute music");
+			printw (432.5, 360.0, 0, "Mute/Unmute music");
 		glPopAttrib();
 	}
 	else
@@ -556,8 +514,8 @@ void HUD::InventoryScreen(int mouseX,int mouseY, bool mouseState, Inventory theI
 		// Inventory window
 		glColor4f(0.2f, 0.2f, 0.2f, 1.0f);
 		glPushMatrix();
-		glTranslatef(220 * w / 800, 120 * h / 600, 0);
-		glScalef(9 * w / 800, 8.4 * h / 600, 1);
+		glTranslatef(330, 200, 0);
+		glScalef(9/* * w / 1024*/, 8.75 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -575,14 +533,14 @@ void HUD::InventoryScreen(int mouseX,int mouseY, bool mouseState, Inventory theI
 		glLoadIdentity ();
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 			glColor3f(1, 1, 1);
-			printw (370 * w / 800, 150 * h / 600, 0, "Inventory");
+			printw (465, 230, 0, "Inventory");
 		glPopAttrib();
 
 
 		// Close inventory window button
 		glColor4f(0.6f, 0.1f, 0.1f, 1.0f);
 		glPushMatrix();
-		glTranslatef(545 * w / 800, 132 * h / 600, 0);
+		glTranslatef(655, 212, 0);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -597,12 +555,12 @@ void HUD::InventoryScreen(int mouseX,int mouseY, bool mouseState, Inventory theI
 		glDisable( GL_TEXTURE_2D );
 		glPopMatrix();
 
-		if(mouseX > 545 * w / 800 && mouseX < 570 * w / 800 && mouseY > 130 * h / 600 && mouseY < 157.5 * h / 600)
+		if(mouseX > 655 * w / 1024 && mouseX < 680 * w / 1024 && mouseY > 202 * h / 745 && mouseY < 227 * h / 745)
 		{
 			glLoadIdentity();
 			glPushAttrib(GL_ALL_ATTRIB_BITS);
 				glColor3f(0.5f, 0.5f, 0.5f);
-				printw (553 * w / 800, 150 * h / 600, 0, "X");
+				printw (662, 231, 0, "X");
 			glPopAttrib();
 
 			// When clicked
@@ -619,7 +577,7 @@ void HUD::InventoryScreen(int mouseX,int mouseY, bool mouseState, Inventory theI
 			glLoadIdentity ();
 			glPushAttrib(GL_ALL_ATTRIB_BITS);
 				glColor3f(1, 1, 1);
-				printw (553 * w / 800, 150 * h / 600, 0, "X");
+				printw (662, 231, 0, "X");
 			glPopAttrib();
 		}
 
@@ -633,7 +591,7 @@ void HUD::InventoryScreen(int mouseX,int mouseY, bool mouseState, Inventory theI
 			{
 				glColor4f(0.35f, 0.35f, 0.35f, 1.0f);
 				glPushMatrix();
-				glTranslatef((245 + (65 * j)) * w / 800, (175 + (65 * i)) * h / 600, 0);
+				glTranslatef(355 + (65 * j), 255 + (65 * i), 0);
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -655,18 +613,19 @@ void HUD::InventoryScreen(int mouseX,int mouseY, bool mouseState, Inventory theI
 				std::string item_name;
 				item_name = theInventory.getSlotItemName(slot_itr);
 
-				if ((mouseX > (245 + (65 * j)) * w / 800) && (mouseX < (295 + (65 * j)) * w / 800) && (mouseY > (175 + (65 * i)) * h / 600) && (mouseY < (225 + (65 * i)) * h / 600))
+				if ((mouseX > (355 + (65 * j)) * w / 1024) && (mouseX < (405 + (65 * j)) * w / 1024) && (mouseY > (240 + (65 * i)) * h / 745) && (mouseY < (290 + (65 * i)) * h / 745))
 				{
 					glLoadIdentity();
 					glPushAttrib(GL_ALL_ATTRIB_BITS);
 						glColor3f(1, 1, 1);
-						printw(370 * w / 800, 445 * h / 600, 0, "%s", item_name.c_str());
+						printw(480, 525, 0, "%s", item_name.c_str());
 					glPopAttrib();
 
 					// When clicked
 					if (mouseState == false && LMouse_down_boolean == false)
 					{
-						theInventory.setSlotItem(slot_itr, 0);
+						theInventory.emptySlot(slot_itr);
+						//theInventory.setSlotItem(slot_itr, 0);
 
 						LMouse_down_boolean = true;
 					}
@@ -688,7 +647,7 @@ void HUD::drawHealthMeter(void)
 	glLoadIdentity ();
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 		glColor3f(0.0f, 0.0f, 0.0f);
-		printw (10.0 * w / 800, 505.0 * h / 600, 0, "Health - ");
+		printw (110.0, 700.0, 0, "Health -");
 	glPopAttrib();
 
 	if (health >= 70)
@@ -696,7 +655,7 @@ void HUD::drawHealthMeter(void)
 		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
-			printw (85 * w / 800, 505.0 * h / 600, 0, "Good Condition");
+			printw (185, 700.0, 0, "Good Condition");
 		glPopAttrib();
 	}
 	else if (health >= 30 && health < 70)
@@ -704,7 +663,7 @@ void HUD::drawHealthMeter(void)
 		glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
 
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
-			printw (85 * w / 800, 505.0 * h / 600, 0, "Injured");
+			printw (185, 700.0, 0, "Injured");
 		glPopAttrib();
 	}
 	else
@@ -712,12 +671,12 @@ void HUD::drawHealthMeter(void)
 		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
-			printw (85 * w / 800, 505.0 * h / 600, 0, "Dying");
+			printw (185, 700.0, 0, "Dying");
 		glPopAttrib();
 	}
 
 	glPushMatrix();
-	glTranslatef(10 * w / 800, 510 * h / 600, 0);
+	glTranslatef(95, 705, 0);
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -725,15 +684,15 @@ void HUD::drawHealthMeter(void)
 		glBegin(GL_QUADS);
 			glTexCoord2f(0,1); glVertex2f(0,5);
 			glTexCoord2f(0,0); glVertex2f(0,25);
-			glTexCoord2f(1,0); glVertex2f(health*2.1,25);
-			glTexCoord2f(1,1); glVertex2f(health*2.1,5);
+			glTexCoord2f(1,0); glVertex2f(health*2.25,25);
+			glTexCoord2f(1,1); glVertex2f(health*2.25,5);
 		glEnd();
 	glDisable( GL_BLEND );
 	glDisable( GL_TEXTURE_2D );
 	glPopMatrix();
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
-		printw (((health*2.1) + 15) * w / 800, 531.5 * h / 600, 0, "%i", health);
+		printw (((health*2.25) + 100), 726.5, 0, "%i", health);
 	glPopAttrib();
 
 	
@@ -744,7 +703,7 @@ void HUD::drawDetectionStatus(void)
 	glLoadIdentity ();
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 		glColor3f(0.0f, 0.0f, 0.0f);
-		printw (10.0 * w / 800, 565.0 * h / 600, 0, "Detection Status:");
+		printw (125.0, 760.0, 0, "Detection Status:");
 	glPopAttrib();
 
 	// Undetected
@@ -752,7 +711,7 @@ void HUD::drawDetectionStatus(void)
 	{
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 			glColor3f(0.0f, 1.0f, 0.0f);
-			printw (10.0 * w / 800, 590.0 * h / 600, 0, "Undetected");
+			printw (145.0, 785.0, 0, "Undetected");
 		glPopAttrib();
 	}
 	// Detected
@@ -760,7 +719,7 @@ void HUD::drawDetectionStatus(void)
 	{
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 			glColor3f(1.0f, 0.0f, 0.0f);
-			printw (10.0 * w / 800, 590.0 * h / 600, 0, "Detected");
+			printw (145.0, 785.0, 0, "Detected");
 		glPopAttrib();
 	}
 }
@@ -770,26 +729,54 @@ void HUD::renderLevel(void)
 	glLoadIdentity ();
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 		glColor3f(0.0f, 0.0f, 0.0f);
-		printw (370 * w / 800, 32.5 * h / 600, 0, "Level %.i", level);
+		printw (475, 40, 0, "Level %.i", level);
 	glPopAttrib();
 }
 
 void HUD::renderCurrentWeapon(void)
 {
+	// Display literal "Current weapon" text
 	glLoadIdentity ();
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 		glColor3f(0.0f, 0.0f, 0.0f);
-		printw (337.5 * w / 800, 510.0 * h / 600, 0, "Current weapon");
+		printw (432.5, 700.0, 0, "Current weapon");
 	glPopAttrib();
+
+	// Display current weapon image
+	switch (CURRENT_WEAPON)
+	{
+		case KNIFE_HUD:
+			glPushMatrix();
+			glTranslatef(455, 710, 0);
+			glEnable( GL_TEXTURE_2D );
+			glEnable( GL_BLEND );
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				glBindTexture( GL_TEXTURE_2D, HUDtex[11].texID );
+				glBegin(GL_QUADS);
+					glTexCoord2f(0,1); glVertex2f(0,0);
+					glTexCoord2f(0,0); glVertex2f(0,85);
+					glTexCoord2f(1,0); glVertex2f(85,85);
+					glTexCoord2f(1,1); glVertex2f(85,0);
+				glEnd();
+			glDisable( GL_BLEND );
+			glDisable( GL_TEXTURE_2D );
+			glPopMatrix();
+			break;
+
+		default:
+			break;
+	}
 }
 
 void HUD::renderHelpButton(int mouseX,int mouseY, bool mouseState, int w, int h)
 {
 	// When mouse over
-	if(mouseX > (700 * w / 800) && mouseX < (740 * w / 800) && mouseY > (5 * h / 600) && mouseY < (45 * h / 600) && showInventory != true)
+	if(mouseX > (850 * w / 1024) && mouseX < (900 * w / 1024) && mouseY > (5 * h / 745) && mouseY < (55 * h / 745) && showInventory != true)
 	{
 		glPushMatrix();
-		glTranslatef(700 * w / 800, 5 * h / 600, 0);
+		glTranslatef(850, 5, 0);
+		glScalef(1.3 * w / 1024, 1.3 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -822,7 +809,8 @@ void HUD::renderHelpButton(int mouseX,int mouseY, bool mouseState, int w, int h)
 	else
 	{
 		glPushMatrix();
-		glTranslatef(700 * w / 800, 5 * h / 600, 0);
+		glTranslatef(850, 5, 0);
+		glScalef(1.3 * w / 1024, 1.3 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -843,10 +831,11 @@ void HUD::renderHelpButton(int mouseX,int mouseY, bool mouseState, int w, int h)
 void HUD::renderOptionsButton(int mouseX,int mouseY, bool mouseState, int w, int h)
 {
 	// When mouse over
-	if(mouseX > (750 * w / 800) && mouseX < (790 * w / 800) && mouseY > (5 * h / 600) && mouseY < (45 * h / 600) && showHelp != true && showInventory != true)
+	if(mouseX > (940 * w / 1024) && mouseX < (990 * w / 1024) && mouseY > (5 * h / 745) && mouseY < (55 * h / 745) && showHelp != true && showInventory != true)
 	{
 		glPushMatrix();
-		glTranslatef(750 * w / 800, 5 * h / 600, 0);
+		glTranslatef(940, 5, 0);
+		glScalef(1.3 * w / 1024, 1.3 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -878,7 +867,8 @@ void HUD::renderOptionsButton(int mouseX,int mouseY, bool mouseState, int w, int
 	else
 	{
 		glPushMatrix();
-		glTranslatef(750 * w / 800, 5 * h / 600, 0);
+		glTranslatef(940, 5, 0);
+		glScalef(1.3 * w / 1024, 1.3 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -899,10 +889,10 @@ void HUD::renderOptionsButton(int mouseX,int mouseY, bool mouseState, int w, int
 void HUD::renderInventoryButton(int mouseX,int mouseY, bool mouseState, int w, int h)
 {
 	// When mouse over
-	if(mouseX > (620 * w / 800) && mouseX < (705 * w / 800) && mouseY > (490 * h / 600) && mouseY < (585 * h / 600) && showHelp != true)
+	if(mouseX > (770 * w / 1024) && mouseX < (870 * w / 1024) && mouseY > (630 * h / 745) && mouseY < (730 * h / 745) && showHelp != true)
 	{
 		glPushMatrix();
-		glTranslatef(610 * w / 800, 487.5 * h / 600, 0);
+		glTranslatef(770, 685, 0);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -936,7 +926,7 @@ void HUD::renderInventoryButton(int mouseX,int mouseY, bool mouseState, int w, i
 	else
 	{
 		glPushMatrix();
-		glTranslatef(610 * w / 800, 487.5 * h / 600, 0);
+		glTranslatef(770, 685, 0);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -958,7 +948,7 @@ void HUD::renderMisc(void)
 {
 	// Top bar
 	glPushMatrix();
-	glScalef(20 * w / 800, 1.25 * h / 600, 1);
+	glScalef(25.6 * w / 1024, 1.6 * h / 745, 1);
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 		glColor4f(0.3f, 0.3f, 0.3f, 0.85f);
@@ -976,8 +966,8 @@ void HUD::renderMisc(void)
 
 	// Bottom bar
 	glPushMatrix();
-	glTranslatef(0, 480 * h / 600, 0);
-	glScalef(20 * w / 800, 3 * h / 600, 1);
+	glTranslatef(0, 675, 0);
+	glScalef(25.6 * w / 1024, 3.3 * h / 745, 1);
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 		glColor4f(0.3f, 0.3f, 0.3f, 0.85f);
@@ -995,8 +985,8 @@ void HUD::renderMisc(void)
 
 	// Mid-bottom bar
 	glPushMatrix();
-	glTranslatef(282.5 * w / 800, 480 * h / 600, 0);
-	glScalef(6 * w / 800, 3 * h / 600, 1);
+	glTranslatef(380, 675, 0);
+	glScalef(6 * w / 1024, 3.3 * h / 745, 1);
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 		glColor4f(0.2f, 0.2f, 0.2f, 0.9f);
@@ -1030,7 +1020,7 @@ void HUD::renderHUD (int health, int detection_state, int level, int mouseX, int
 
 	this->theInventory = theInventory;
 
-	HelpScreen();
+	HelpScreen(mouseX, mouseY, mouseState);
 	OptionsScreen(mouseX, mouseY, mouseState);
 	InventoryScreen(mouseX, mouseY, mouseState, theInventory);
 

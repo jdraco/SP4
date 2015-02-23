@@ -22,8 +22,11 @@ public:
 	CGlobal(void);
 	~CGlobal(void);
 
+	Vector3D MousePos;
+	bool MouseState;
+
 	static CGlobal* getInstance();
-	
+
 	bool myKeys[255];
 
 	//game time

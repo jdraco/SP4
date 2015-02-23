@@ -3,6 +3,8 @@
 #include "Variable.h"
 #include <string>
 #include "Function.h"
+#include "weaponManager.h"
+#include "bullet.h"
 
 #define INVENTORY_SIZE 5
 
@@ -54,6 +56,10 @@ public:
 
 	void setCurrAmmo(int ammo);
 
+	bool Attack(Vector3D dir,Vector3D pos);
+
+	void Update(void);
+
 	CWeapon(void);
 	~CWeapon(void);
 
@@ -77,5 +83,10 @@ private:
 
 	bool attack;
 
+	float cooldown;
+
+	CweaponManager *weapManager;
+
+	std::vector<Bullet *> ListOfBullets;
 	//CGlobal* theGlobal;
 };

@@ -77,6 +77,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
@@ -85,6 +86,8 @@
     <ClCompile Include="Goodies.cpp" />
     <ClCompile Include="GoodiesFactory.cpp" />
     <ClCompile Include="Guard.cpp" />
+    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="LuaReading.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -100,6 +103,7 @@
     <ClCompile Include="weaponManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Frustum.h" />
@@ -111,6 +115,8 @@
     <ClInclude Include="Goodies.h" />
     <ClInclude Include="GoodiesFactory.h" />
     <ClInclude Include="Guard.h" />
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="LuaReading.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MenuState.h" />
@@ -123,6 +129,7 @@
     <ClInclude Include="Variable.h" />
     <ClInclude Include="vector3D.h" />
     <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WeaponDB.h" />
     <ClInclude Include="weaponManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

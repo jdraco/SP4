@@ -159,6 +159,8 @@ void myApplication::inputKey(int key, int x, int y) {
 void myApplication::MouseMove (int x, int y) {
 	int diffX = x - mouseInfo.lastX;
 	int diffY = y - mouseInfo.lastY;
+
+	theGlobal->MousePos = Vector3D(x,y);
 	/*
 	//Update on y axis
 	theCamera->Pitch( diffY * 3.142f / 180.0f );
@@ -226,6 +228,7 @@ void myApplication::KeyboardUp(unsigned char key, int x, int y)
 
 void myApplication::MouseClick(int button, int state, int x, int y) 
 {
+	theGlobal->MouseState = state;
 	switch (button) 
 	{
 

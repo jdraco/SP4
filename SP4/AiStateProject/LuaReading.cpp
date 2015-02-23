@@ -28,6 +28,31 @@ int GetIntFromLua(const char* LuaFile , const char* Variable  )
 	return 0;
 }
 
+float GetFloatFromLua(const char* LuaFile , const char* Variable  )
+{
+	static int s=-1;
+	lua_State *L = lua_open();
+	 // Do stuff with lua code.
+	//Read a value from the lua text file
+	luaL_openlibs(L);
+	if (luaL_loadfile(L, LuaFile) || lua_pcall(L, 0, 0, 0))
+	{
+	 printf("error: %s", lua_tostring(L, s));
+	 system("pause");
+	 return -1;
+	}
+	lua_getglobal(L, Variable);
+
+	float temp = (float)lua_tonumber(L, s);
+
+	lua_close(L);
+
+	return temp;
+
+	system("pause");
+	return 0;
+}
+
 string GetStringFromLua(const char* LuaFile , const char* Variable  )
 {
 	static int s=-1;

@@ -3,6 +3,12 @@
 #include "Function.h"
 #include "Inventory.h"
 
+enum weapon_list
+{
+	NONE,
+	KNIFE_HUD
+};
+
 class HUD
 {
 private:
@@ -11,15 +17,15 @@ private:
 	void *font_style;
 
 	Inventory theInventory;
+	weapon_list CURRENT_WEAPON;
 	
-	TextureImage HUDtex[11];
+	TextureImage HUDtex[20];
 
 public:
 	HUD(void);
 	~HUD(void);
 
 	void printw (float x, float y, float z, char* format, ...);
-	//bool LoadTGA(TextureImage *texture, char *filename);
 
 	void renderHUD (int health, int detection_state, int level, int mouseX, int mouseY, bool mouseState, int volume, int w, int h, Inventory theInventory);
 
@@ -34,7 +40,7 @@ public:
 
 	void renderMisc(void);
 
-	void HelpScreen(void);
+	void HelpScreen(int mouseX,int mouseY, bool mouseState);
 	void OptionsScreen(int mouseX,int mouseY, bool mouseState);
 	void InventoryScreen(int mouseX,int mouseY, bool mouseState, Inventory theInventory);
 };

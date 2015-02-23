@@ -1,24 +1,25 @@
 #pragma once
 #include <iostream>
 #include "Weapon.h"
+#include "Inventory.h"
 #include <string>
 
 #define INVENTORY_SIZE 5
 
 using namespace std;
 
-struct Inventory{
-	Inventory(string invent,int amt)
-	{
-		inventory = invent;
-		amount = amt;
-	}
-	Inventory(): inventory("NIL"),amount(0)
-	{
-	}
-	string inventory;
-	int amount;
-};
+//struct Inventory{
+//	Inventory(string invent,int amt)
+//	{
+//		inventory = invent;
+//		amount = amt;
+//	}
+//	Inventory(): inventory("NIL"),amount(0)
+//	{
+//	}
+//	string inventory;
+//	int amount;
+//};
 class CPlayerInfo : public CVariable
 {
 public:
@@ -59,13 +60,22 @@ public:
 	int Mresist;
 	int Rresist;
 	//Inventory = string1,string2
-	Inventory getInventory(int slot);
+	/*Inventory getInventory(int slot);
 
 	void setInventory(Inventory set, int slot);
 
 	Inventory* getWInventory();
 
-	void setWInventory(Inventory set[INVENTORY_SIZE]);
+	void setWInventory(Inventory set[INVENTORY_SIZE]);*/
+
+	Inventory myInventory;
+	int getInventory(int slot);
+
+	bool CPlayerInfo::setInventory(int set, int slot);
+
+	int* getWInventory();
+
+	bool CPlayerInfo::setWInventory(int set[INVENTORY_SIZE]);
 
 	string getCurrEquipped();
 
@@ -86,25 +96,13 @@ private:
 		_instance;
 
 
-
-	// Hero's information
-<<<<<<< HEAD
-	int hero_x, hero_y ;
-
-=======
-	int jumpspeed;
-	bool heroAnimationInvert;
-	int heroAnimationCounter;
->>>>>>> 1c5b2c89043c90f9c5db30baa62fce6c27b9acf7
-
-	// Character State - ian
 	string state;
 
 	int HP;
 	
-	string inventory[INVENTORY_SIZE];
+	//string inventory[INVENTORY_SIZE];
 
-	int inventAmt[INVENTORY_SIZE];
+	//int inventAmt[INVENTORY_SIZE];
 
 	string currEquipped;
 
@@ -113,6 +111,8 @@ private:
 	CWeapon *weapon;
 
 	CGlobal* theGlobal;
+
+	//Inventory* inventory;
 
 	bool UD, LR;
 	bool bLeft, bRight, bMoving, stopMovement;

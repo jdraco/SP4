@@ -20,8 +20,6 @@ public:
 	CGameTime(void);
 	~CGameTime(void);
 	
-
-
 	enum EVENT						
 	{
 		GAMEROUND = 0,
@@ -40,7 +38,7 @@ public:
 	
 	static float GetDelta();			//for delta time
 
-	void Update(void);			
+	void Update(void);	
 };
 
 #endif

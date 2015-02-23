@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "GameState.h"
 #include "GoodiesFactory.h"
+#include "HUD.h"
 
 
 class CPlayer;
@@ -57,6 +58,7 @@ private:
 
 	CweaponManager *weapManager;
 
+	HUD* hud;
 	Camera* theCamera;
 
 	//global variable class

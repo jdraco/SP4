@@ -31,9 +31,9 @@ void CPlayerInfo::Init(void)
 		cout << "No hero texture" << endl;
 	if( !LoadTGA( &(Texture[ 1 ]), "Texture/Tiles/James.tga"))
 		cout << "No hero texture" << endl;
-	if( !LoadTGA( &(Texture[ 2 ]), "Texture/Tiles/James.tga"))
+	if( !LoadTGA( &(Texture[ 2 ]), "Texture/Tiles/Jamesup.tga"))
 		cout << "No hero texture" << endl;
-	if( !LoadTGA( &(Texture[ 3 ]), "Texture/Tiles/James.tga"))
+	if( !LoadTGA( &(Texture[ 3 ]), "Texture/Tiles/Jamesdown.tga"))
 		cout << "No hero texture" << endl;
 	Pos = Vector3D(200,310,0);
 	//hero_x = 200;
@@ -50,6 +50,10 @@ void CPlayerInfo::Init(void)
 	//weapen = CWeapon::GetInstance();
 	weapon->Init();
 
+	//inventory = new Inventory();
+	myInventory.addItem(1);
+	myInventory.addItem(2);
+	myInventory.addItem(2);
 }
 /****************************************************************************************************
 Draw the hero
@@ -58,10 +62,15 @@ void CPlayerInfo::Render(void) {
 
 	if (isMoving == false)
 	{
-		if (GetAnimationCounter() != 1)
-			SetAnimationCounter(1);
+		if (GetAnimationCounter() != 0)
+			SetAnimationCounter(0);
 	}
-
+	if(weapon->getCurrEquipped() != "NIL" && facingup)
+	{
+		weapon->SetPos_x(Pos.x);
+		weapon->SetPos_y(Pos.y);
+		weapon->Renderweap();
+	}
 	glPushMatrix();
 	glTranslatef(Pos.x, Pos.y, 1);
 	glEnable( GL_TEXTURE_2D );
@@ -101,12 +110,14 @@ void CPlayerInfo::Render(void) {
 	glDisable( GL_BLEND );
 	glDisable( GL_TEXTURE_2D );
 	glPopMatrix();
-	if(weapon->getCurrEquipped() != "NIL")
+	if(weapon->getCurrEquipped() != "NIL" && !facingup)
 	{
 		weapon->SetPos_x(Pos.x);
 		weapon->SetPos_y(Pos.y);
 		weapon->Renderweap();
 	}
+	weapon->Update();
+	//myInventory.renderInventorySlot(1);
 }
 
 
@@ -135,7 +146,7 @@ void CPlayerInfo::keyboardUpdate()
 					theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y);
 
 	//Determine Player Direction
-	Vector3D playerDir;
+	/*Vector3D playerDir;*/
 
 	//Player is Jumping
 	/*
@@ -154,7 +165,10 @@ void CPlayerInfo::keyboardUpdate()
 	if ((theGlobal->myKeys['w'] || theGlobal->myKeys['W']))
 	{
 		//Alter Player Direction
-		playerDir.y = 1;
+		if (!(theGlobal->myKeys['a'] && !theGlobal->myKeys['A']) 
+			&& !(theGlobal->myKeys['d'] && !theGlobal->myKeys['D']))
+		Dir.x = 0;
+		Dir.y = -1;
 		facingup = true;
 		facingdown = false;
 
@@ -181,7 +195,10 @@ void CPlayerInfo::keyboardUpdate()
 	if ((theGlobal->myKeys['s'] || theGlobal->myKeys['S']))
 	{
 		//Alter Player Direction
-		playerDir.y = -1;
+		if (!(theGlobal->myKeys['a'] && !theGlobal->myKeys['A']) 
+			&& !(theGlobal->myKeys['d'] && !theGlobal->myKeys['D']))
+		Dir.x = 0;
+		Dir.y = 1;
 		facingup = false;
 		facingdown = true;
 
@@ -211,8 +228,12 @@ void CPlayerInfo::keyboardUpdate()
 	if ((theGlobal->myKeys['a'] || theGlobal->myKeys['A']))
 	{
 		//Alter Player Direction
-		playerDir.x = -1;
+		if (!(theGlobal->myKeys['w'] && !theGlobal->myKeys['W']) 
+			&& !(theGlobal->myKeys['s'] && !theGlobal->myKeys['S']))
+		Dir.y = 0;
+		Dir.x = -1;
 		SetAnimationInvert( true );
+		weapon->SetAnimationInvert( true );
 		facingup = false;
 		facingdown = false;
 		SetAnimationCounter( GetAnimationCounter() - 1);
@@ -241,8 +262,12 @@ void CPlayerInfo::keyboardUpdate()
 	if ((theGlobal->myKeys['d'] || theGlobal->myKeys['D']))
 	{
 		//Alter Player Direction
-		playerDir.x = 1;
+		if (!(theGlobal->myKeys['w'] && !theGlobal->myKeys['W']) 
+			&& !(theGlobal->myKeys['s'] && !theGlobal->myKeys['S']))
+		Dir.y = 0;
+		Dir.x = 1;
 		SetAnimationInvert( false );
+		weapon->SetAnimationInvert(  false );
 		facingup = false;
 		facingdown = false;
 		SetAnimationCounter( GetAnimationCounter() + 1);
@@ -260,6 +285,23 @@ void CPlayerInfo::keyboardUpdate()
 				bMoving = true;
 			}
 		//}
+	}
+
+	if ((theGlobal->myKeys['e'] || theGlobal->myKeys['E']))
+	{
+		weapon->Attack(Dir,Pos);
+	}
+
+	if ((theGlobal->myKeys['t'] || theGlobal->myKeys['T']))
+	{
+		weapon->setCurrAmmo(20);
+		weapon->setCurrEquipped("Pistol");
+	}
+
+	if ((theGlobal->myKeys['y'] || theGlobal->myKeys['y']))
+	{
+		weapon->setCurrAmmo(1);
+		weapon->setCurrEquipped("Machete");
 	}
 
 	//Check if the player is standing still
@@ -344,35 +386,66 @@ void CPlayerInfo::setState(string state)
 	this->state = state;
 }
 
-Inventory CPlayerInfo::getInventory(int slot)
-{
-	Inventory temp = Inventory(inventory[slot],inventAmt[slot]);
+//Inventory CPlayerInfo::getInventory(int slot)
+//{
+//	Inventory temp = Inventory(inventory[slot],inventAmt[slot]);
+//
+//	return temp;
+//}
 
-	return temp;
-}
-void CPlayerInfo::setInventory(Inventory set, int slot)
+int CPlayerInfo::getInventory(int slot)
 {
-	inventory[slot] = set.inventory;
-	inventAmt[slot] = set.amount;
+	return myInventory.getSlotItem(slot);;
 }
 
-Inventory* CPlayerInfo::getWInventory()
+//void CPlayerInfo::setInventory(Inventory set, int slot)
+//{
+//	inventory[slot] = set.inventory;
+//	inventAmt[slot] = set.amount;
+//}
+
+bool CPlayerInfo::setInventory(int set, int slot)
 {
-	Inventory temp[INVENTORY_SIZE];
+	return myInventory.addItem(slot,set);
+}
+
+//Inventory* CPlayerInfo::getWInventory()
+//{
+//	Inventory temp[INVENTORY_SIZE];
+//	for(unsigned i = 0; i < INVENTORY_SIZE; i++)
+//	{
+//		temp[i] = Inventory(inventory[i],inventAmt[i]);
+//	}
+//	return temp;
+//}
+
+int* CPlayerInfo::getWInventory()
+{
+	int temp[INVENTORY_SIZE];
 	for(unsigned i = 0; i < INVENTORY_SIZE; i++)
 	{
-		temp[i] = Inventory(inventory[i],inventAmt[i]);
+		temp[i] = myInventory.getSlotItem(i);
 	}
 	return temp;
 }
 
-void CPlayerInfo::setWInventory(Inventory set[INVENTORY_SIZE])
+//void CPlayerInfo::setWInventory(Inventory set[INVENTORY_SIZE])
+//{
+//	for(unsigned i = 0; i < INVENTORY_SIZE; i++)
+//	{
+//		inventory[i] = set[i].inventory;
+//		inventAmt[i] = set[i].amount;
+//	}
+//}
+
+bool CPlayerInfo::setWInventory(int set[INVENTORY_SIZE])
 {
 	for(unsigned i = 0; i < INVENTORY_SIZE; i++)
 	{
-		inventory[i] = set[i].inventory;
-		inventAmt[i] = set[i].amount;
+		if(!myInventory.addItem(i,set[i]))
+			return false;
 	}
+	return true;
 }
 
 string CPlayerInfo::getCurrEquipped()
