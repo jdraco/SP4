@@ -3,6 +3,7 @@
 CGlobal* CGlobal::s_pInstance = NULL;
 
 CGlobal::CGlobal(void)
+:	chestlocked(false)
 {
 	for(int i=0; i<255; i++){
 		myKeys[i] = false;
@@ -236,6 +237,82 @@ bool CGlobal::FreeTiles(Vector3D pos, CMap *map, int x_offset, int y_offset, boo
 		map->theScreenMap[y][x] != CMap::ENTRANCE1 && map->theScreenMap[y][x] != CMap::ENTRANCE2 &&
 		! (map->theScreenMap[y][x] < -1) )
 		return true;
+
+	return false;
+}
+
+bool CGlobal::CheckTreasure(Vector3D pos, CMap *map, int x_offset, int y_offset)//check if there is treasure
+{
+	//The pos.x and pos.y are the top left corner of the hero, so we find the tile which this position occupies.
+	int x = (int)floor((float)(x_offset+pos.x-LEFT_BORDER) / TILE_SIZE);
+	int y = (int)floor((float)(y_offset+pos.y-BOTTOM_BORDER) / TILE_SIZE);
+
+	int random_openedORlocked = rand()%5;	//random from 0 to 4
+
+	if(random_openedORlocked < 4)
+	{
+		if (chestlocked == true)
+		{
+			chestlocked = false;
+		}
+
+		if(map->theScreenMap[y+1][x] == CMap::CHEST_CLOSED)
+		{
+			//gettreasurefunc
+			map->theScreenMap[y+1][x] = CMap::CHEST_OPENED;
+			return true;
+		}
+		if(map->theScreenMap[y-1][x] == CMap::CHEST_CLOSED)
+		{
+			//gettreasurefunc
+			map->theScreenMap[y-1][x] = CMap::CHEST_OPENED;
+			return true;
+		}
+		if(map->theScreenMap[y][x+1] == CMap::CHEST_CLOSED)
+		{
+			//gettreasurefunc
+			map->theScreenMap[y][x+1] = CMap::CHEST_OPENED;
+			return true;
+		}
+		if(map->theScreenMap[y][x-1] == CMap::CHEST_CLOSED)
+		{
+			//gettreasurefunc
+			map->theScreenMap[y][x-1] = CMap::CHEST_OPENED;
+			return true;
+		}
+	}
+	else
+	{
+		if (chestlocked == false)
+		{
+			chestlocked = true;
+		}
+
+		if(map->theScreenMap[y+1][x] == CMap::CHEST_CLOSED)
+		{
+			//gettreasurefunc
+			map->theScreenMap[y+1][x] = CMap::CHEST_LOCKED;
+			return true;
+		}
+		if(map->theScreenMap[y-1][x] == CMap::CHEST_CLOSED)
+		{
+			//gettreasurefunc
+			map->theScreenMap[y-1][x] = CMap::CHEST_LOCKED;
+			return true;
+		}
+		if(map->theScreenMap[y][x+1] == CMap::CHEST_CLOSED)
+		{
+			//gettreasurefunc
+			map->theScreenMap[y][x+1] = CMap::CHEST_LOCKED;
+			return true;
+		}
+		if(map->theScreenMap[y][x-1] == CMap::CHEST_CLOSED)
+		{
+			//gettreasurefunc
+			map->theScreenMap[y][x-1] = CMap::CHEST_LOCKED;
+			return true;
+		}
+	}
 
 	return false;
 }

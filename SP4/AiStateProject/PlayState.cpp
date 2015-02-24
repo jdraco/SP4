@@ -89,9 +89,6 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM)
 {
-	cout << "mapoffsety" << theGlobal->theMap->mapOffset_y << endl;
-	cout << "playerpos" <<  thePlayer->GetPos().y << endl;
-	system("cls");
 	ScanMap();
 	//Constrain Hero to middle of screen (unless he reaches the border)
 	ConstrainPlayer((const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), (const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), 
@@ -139,7 +136,6 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		}
 	}
 	*/
-	
 		
 	theCamera->SetHUD(true);
 	glColor3f(1,1,1);

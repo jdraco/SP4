@@ -294,7 +294,17 @@ void CPlayerInfo::keyboardUpdate()
 
 	if ((theGlobal->myKeys['e'] || theGlobal->myKeys['E']))
 	{
-		weapon->Attack(Dir,Pos);
+		int random_loot = rand()%2+1;
+
+		if(!theGlobal->CheckTreasure(Pos,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+			weapon->Attack(Dir,Pos);
+		else
+		{
+			if (theGlobal->chestlocked == false)
+			{
+				myInventory.addItem(random_loot);
+			}
+		}
 	}
 
 	if ((theGlobal->myKeys['t'] || theGlobal->myKeys['T']))

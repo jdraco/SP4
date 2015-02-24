@@ -37,13 +37,15 @@ public:
 	
 	//game map
 	CMap* theMap;
+	
+	bool chestlocked;
 		
 	bool Collided(Vector3D pos, 
 				  bool m_bCheckUpwards, bool m_bCheckDownwards, 
 				  bool m_bCheckLeft, bool m_bCheckRight, CMap *map, int x_offset, int y_offset);
 	void CheckCollision(Vector3D pos, CMap *map, int x_offset, int y_offset);
 	bool FreeTiles(Vector3D pos, CMap *map, int x_offset, int y_offset, bool start, short UDLR);
-
+	bool CheckTreasure(Vector3D pos, CMap *map, int x_offset, int y_offset);
 };
 
 #endif

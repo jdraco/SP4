@@ -596,6 +596,61 @@ void CMap::RenderTileMap(CMap* map) {
 			case JAIL_WINDOW_RIGHT:
 				IndoorMap->changeSubImage(38); 
 				IndoorMap->changeVariation(9);
+			
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case HOLE:
+				IndoorMap->changeSubImage(31); 
+				IndoorMap->changeVariation(2);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+			
+			case CHEST_CLOSED:
+				IndoorMap->changeSubImage(20); 
+				IndoorMap->changeVariation(0);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case CHEST_OPENED:
+				IndoorMap->changeSubImage(21); 
+				IndoorMap->changeVariation(0);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case CHEST_LOCKED:
+				IndoorMap->changeSubImage(22); 
+				IndoorMap->changeVariation(0);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case GRASS:
+				IndoorMap->changeSubImage(23); 
+				IndoorMap->changeVariation(0);
 
 				//Render Tile
 				glPushMatrix();
