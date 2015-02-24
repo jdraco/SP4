@@ -9,7 +9,10 @@ CMenuState CMenuState::theMenuState;
 
 void CMenuState::Init()
 {
+	theGlobal = CGlobal::getInstance();
 	theCamera = Camera::getInstance();
+	myMenu = new GameMenu();
+
 	cout << "CMenuState::Init\n" << endl;
 }
 
@@ -43,8 +46,9 @@ void CMenuState::Draw(CGameStateManager* theGSM)
 {
 	theCamera->SetHUD(true);
 
-	glColor3f(0,0,1);
-	drawString();
+	//glColor3f(0,0,1);
+	//drawString();
+	myMenu->renderMenu(theGlobal->MousePos.x,theGlobal->MousePos.y,theGlobal->MouseState,glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_WINDOW_HEIGHT));
 
 	theCamera->SetHUD(false);
 	

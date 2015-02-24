@@ -24,6 +24,8 @@ Bullet::Bullet(bool melee)
 	theGlobal = CGlobal::getInstance();
 	AnimationCounter = 0;
 LoadTGA( &(Texture[0]), "Texture/swipeanimation.tga");
+LoadTGA( &(Texture[1]), "Texture/swipeanimationdown.tga");
+LoadTGA( &(Texture[2]), "Texture/swipeanimationup.tga");
 }
 
 Bullet::~Bullet(void)
@@ -34,37 +36,21 @@ void Bullet::Render(void)
 {
 	glPushMatrix();
 	glTranslatef(Pos.x, Pos.y, 1);
-	/*glRotatef(Dir.x,1,0,0);
-	glRotatef(Dir.y,0,1,0);*/
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture( GL_TEXTURE_2D, Texture[0].texID );
+	int i = 0;
+	if (Dir.y == 1 && range < 100)
+		i = 1;
+	if (Dir.y == -1 && range < 100)
+		i = 2;
+	glBindTexture( GL_TEXTURE_2D, Texture[i].texID );
 	if(range < 100)
 	{
 		//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		
-		if (AnimationInvert == true)
+		if (Dir.x == -1)
 		{
-			glTexCoord2f(0.166 * AnimationCounter,1); 
-			glVertex2f(0,0);
-			glTexCoord2f(0.166 * AnimationCounter,0); 
-			glVertex2f(0,m_iTileSize);
-			glTexCoord2f(0.166 * AnimationCounter + 0.166,0); 
-			glVertex2f(m_iTileSize,m_iTileSize);
-			glTexCoord2f(0.166 * AnimationCounter + 0.166,1); 
-			glVertex2f(m_iTileSize,0);
-		}
-		else
-		{
-			/*glTexCoord2f(0.166 * AnimationCounter + 0.166,1); 
-			glVertex2f(0,0);
-			glTexCoord2f(0.166 * AnimationCounter + 0.166,0); 
-			glVertex2f(0,m_iTileSize);
-			glTexCoord2f(0.166 * AnimationCounter,0); 
-			glVertex2f(m_iTileSize,m_iTileSize);
-			glTexCoord2f(0.166 * AnimationCounter,1); 
-			glVertex2f(m_iTileSize,0);*/
 			glBegin(GL_QUADS);
 			glTexCoord2f(0.166 * AnimationCounter,0); 
 			glVertex2f(0,0);
@@ -73,6 +59,18 @@ void Bullet::Render(void)
 			glTexCoord2f(0.166 * AnimationCounter + 0.166,1); 
 			glVertex2f(TILE_SIZE,TILE_SIZE);
 			glTexCoord2f(0.166 * AnimationCounter + 0.166,0); 
+			glVertex2f(TILE_SIZE,0);
+		}
+		else
+		{
+			glBegin(GL_QUADS);
+			glTexCoord2f(0.166 * AnimationCounter + 0.166,0); 
+			glVertex2f(0,0);
+			glTexCoord2f(0.166 * AnimationCounter + 0.166,1); 
+			glVertex2f(0,TILE_SIZE);
+			glTexCoord2f(0.166 * AnimationCounter,1); 
+			glVertex2f(TILE_SIZE,TILE_SIZE);
+			glTexCoord2f(0.166 * AnimationCounter,0); 
 			glVertex2f(TILE_SIZE,0);
 		}
 	}

@@ -211,6 +211,7 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+
 			case WALL_CROSS:
 				IndoorMap->changeSubImage(19); 
 				IndoorMap->changeVariation(8);
@@ -221,6 +222,7 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+
 			case WALL_CROSS_BOTTOM:
 				IndoorMap->changeSubImage(19); 
 				IndoorMap->changeVariation(7);
@@ -231,6 +233,7 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+
 			case WALL_BOTTOM1:
 				IndoorMap->changeSubImage(20); 
 				IndoorMap->changeVariation(8);
@@ -241,6 +244,7 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+
 			case WALL_BOTTOM2:
 				IndoorMap->changeSubImage(26); 
 				IndoorMap->changeVariation(7);
@@ -251,6 +255,7 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+
 			case WALL_BOTTOM3:
 				IndoorMap->changeSubImage(20); 
 				IndoorMap->changeVariation(16);
@@ -261,6 +266,7 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+
 			case LEFT_WALL_SIDE:
 				IndoorMap->changeSubImage(19); 
 				IndoorMap->changeVariation(16);
@@ -531,6 +537,73 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+
+			case JAIL_BARS_FRONT:
+				IndoorMap->changeSubImage(26); 
+				IndoorMap->changeVariation(2);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case JAIL_WALL_LEFT:
+				IndoorMap->changeSubImage(19); 
+				IndoorMap->changeVariation(3);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case JAIL_WALL_RIGHT:
+				IndoorMap->changeSubImage(38); 
+				IndoorMap->changeVariation(2);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case JAIL_WINDOW_FRONT:
+				IndoorMap->changeSubImage(30); 
+				IndoorMap->changeVariation(8);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case JAIL_WINDOW_LEFT:
+				IndoorMap->changeSubImage(19); 
+				IndoorMap->changeVariation(12);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case JAIL_WINDOW_RIGHT:
+				IndoorMap->changeSubImage(38); 
+				IndoorMap->changeVariation(9);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
 			default: //Ground
 				IndoorMap->changeSubImage(2); 
 				IndoorMap->changeVariation(9); 

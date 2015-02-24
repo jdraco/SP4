@@ -128,7 +128,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	glColor3f(1,1,1);
 	LoadLevel(currentMap);
 	thePlayer->Render();
-	hud->renderHUD(100,0, 1, theGlobal->MousePos.x,theGlobal->MousePos.y,theGlobal->MouseState,70,glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_WINDOW_HEIGHT),thePlayer->myInventory);
+	hud->renderHUD(100,0, 1, theGlobal->MousePos.x,theGlobal->MousePos.y,theGlobal->MouseState,theGlobal->MouseType,glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_WINDOW_HEIGHT),thePlayer->myInventory,thePlayer->getCurrEquipped());
 	//glColor3f(0,0,1);
 	//printw (500, 50, 0, "Test");
 	//drawString();

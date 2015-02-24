@@ -228,12 +228,12 @@ void myApplication::KeyboardUp(unsigned char key, int x, int y)
 
 void myApplication::MouseClick(int button, int state, int x, int y) 
 {
-	theGlobal->MouseState = state;
 	switch (button) 
 	{
-
 		case GLUT_LEFT_BUTTON:
 			mouseInfo.mLButtonUp = state;
+			theGlobal->MouseState = state;
+			theGlobal->MouseType = 0;
 			mouseInfo.lastX = x;
 			mouseInfo.lastY = y;
 
@@ -245,6 +245,11 @@ void myApplication::MouseClick(int button, int state, int x, int y)
 			break;
 
 		case GLUT_RIGHT_BUTTON:
+			mouseInfo.mRButtonUp = state;
+			theGlobal->MouseState = state;
+			theGlobal->MouseType = 1;
+			mouseInfo.lastX = x;
+			mouseInfo.lastY = y;
 
 			break;
 

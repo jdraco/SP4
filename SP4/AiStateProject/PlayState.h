@@ -25,6 +25,7 @@ public:
 	static CPlayState* Instance() {
 		return &thePlayState;
 	}
+	CPlayerInfo *thePlayer;
 
 protected:
 	CPlayState() { }
@@ -54,7 +55,7 @@ private:
 		TOTAL
 	};
 
-	CPlayerInfo *thePlayer;
+	
 
 	CweaponManager *weapManager;
 

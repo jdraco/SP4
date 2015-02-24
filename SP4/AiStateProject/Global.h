@@ -24,6 +24,7 @@ public:
 
 	Vector3D MousePos;
 	bool MouseState;
+	int MouseType;
 
 	static CGlobal* getInstance();
 

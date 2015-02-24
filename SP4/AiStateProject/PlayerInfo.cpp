@@ -54,6 +54,9 @@ void CPlayerInfo::Init(void)
 	myInventory.addItem(1);
 	myInventory.addItem(2);
 	myInventory.addItem(2);
+	myInventory.addItem(3);
+	myInventory.addItem(4);
+	myInventory.addItem(4);
 }
 /****************************************************************************************************
 Draw the hero
@@ -298,10 +301,22 @@ void CPlayerInfo::keyboardUpdate()
 		weapon->setCurrEquipped("Pistol");
 	}
 
-	if ((theGlobal->myKeys['y'] || theGlobal->myKeys['y']))
+	if ((theGlobal->myKeys['y'] || theGlobal->myKeys['Y']))
 	{
 		weapon->setCurrAmmo(1);
 		weapon->setCurrEquipped("Machete");
+	}
+
+	if ((theGlobal->myKeys['u'] || theGlobal->myKeys['U']))
+	{
+		weapon->setCurrAmmo(20);
+		weapon->setCurrEquipped("Rifle");
+	}
+
+	if ((theGlobal->myKeys['i'] || theGlobal->myKeys['I']))
+	{
+		myInventory.addItem(3);
+		myInventory.addItem(4);
 	}
 
 	//Check if the player is standing still

@@ -1,4 +1,6 @@
 #pragma once
+
+
 #include <vector>
 #include <fstream>
 #include <string>
@@ -39,6 +41,7 @@ public:
 		LEFT_WALL, WALL_TOP,
 		LEFT_CORNER1, LEFT_CORNER2, LEFT_CORNER3,
 		SOFA_1, SOFA_2, SOFA_3, SOFA_4,
+		JAIL_BARS_FRONT, JAIL_WALL_LEFT, JAIL_WALL_RIGHT, JAIL_WINDOW_FRONT, JAIL_WINDOW_LEFT, JAIL_WINDOW_RIGHT,
 		TILE_TOTAL
 	};
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "gamestate.h"
+#include "GameMenu.h"
+#include "Global.h"
 
 class CMenuState : public CGameState
 {
@@ -25,6 +27,9 @@ protected:
 private:
 	static CMenuState theMenuState;
 	
+	CGlobal* theGlobal;
+
 	void drawString();
 	Camera* theCamera;
+	GameMenu* myMenu;
 };
