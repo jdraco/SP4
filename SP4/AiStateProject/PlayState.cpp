@@ -46,6 +46,14 @@ void CPlayState::Init()
 	theGlobal->InGameTime->SetCurrent();
 	 theGlobal->InGameTime->SetTotalTime(60);
 	 lastTime =  theGlobal->InGameTime->GetCurrent();
+	 
+	 //Player init
+	LoadLevel(currentMap);
+	
+	thePlayer = CPlayerInfo::getInstance();
+	thePlayer->Init();
+	//ScanMap();
+	//thePlayer->Init();
 }
 
 
@@ -81,6 +89,10 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM)
 
 void CPlayState::Update(CGameStateManager* theGSM)
 {
+	cout << "mapoffsety" << theGlobal->theMap->mapOffset_y << endl;
+	cout << "playerpos" <<  thePlayer->GetPos().y << endl;
+	system("cls");
+	ScanMap();
 	//Constrain Hero to middle of screen (unless he reaches the border)
 	ConstrainPlayer((const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), (const int)(MAP_SCREEN_WIDTH*0.5+LEFT_BORDER), 
 					(const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER), (const int)(MAP_SCREEN_HEIGHT*0.5+BOTTOM_BORDER),
@@ -90,6 +102,11 @@ void CPlayState::Update(CGameStateManager* theGSM)
 
 	theGlobal->InGameTime->Update();
 
+	for(unsigned a = 0; a < GuardList.size(); ++a)
+	{
+		CGuard *guard = GuardList[a];
+		guard->Update();
+	}
 	/*
 	if(theGlobal->InGameTime->GetCurrent() < lastTime-3){ 
 		int A = theGlobal->RG.getImmediateResult(0,theGlobal->theMain.size()-1);
@@ -101,7 +118,7 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	}
 	*/
 	//theCamera->SetPlayerInfo(thePlayer->GetPos(), thePlayer->GetRot());
-
+	thePlayer->SetGuardList(GuardList);
 	thePlayer->Update();
 	//cout << "CPlayState::Update\n" << endl;
 }
@@ -129,9 +146,12 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	LoadLevel(currentMap);
 	thePlayer->Render();
 	hud->renderHUD(100,0, 1, theGlobal->MousePos.x,theGlobal->MousePos.y,theGlobal->MouseState,theGlobal->MouseType,glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_WINDOW_HEIGHT),thePlayer->myInventory,thePlayer->getCurrEquipped());
-	//glColor3f(0,0,1);
-	//printw (500, 50, 0, "Test");
-	//drawString();
+	for(unsigned a = 0; a < GuardList.size(); ++a)
+	{
+		CGuard *guard = GuardList[a];
+		if(guard->active == true)
+			guard->Render();
+	}
 	theCamera->SetHUD(false);
 	
 
@@ -199,22 +219,25 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 	if (thePlayer->GetPos().x < leftBorder)
 	{
 		mapOffset_x -= ScrollSpeed;
-		/*
-		//Scroll Enemies with Map
-		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
-		{
-			CEnemy *CurrentEnemy = *it;
 
-			if (CurrentEnemy->active && mapOffset_x > 0)
+		//Scroll Enemies with Map
+		for(unsigned a = 0; a < GuardList.size(); ++a)
+		{
+			CGuard *guard = GuardList[a];
+
+			if (guard->active && mapOffset_x > 0)
 			{
-				CurrentEnemy->setPosX(CurrentEnemy->getPos().x+ScrollSpeed);
+				guard->SetPos_x(guard->GetPos().x+ScrollSpeed);
 
 				//Scroll Way Points
-				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
+				/*
+				for (short i = 0; i < (short)guard->Path->WayPointList.size(); ++i)
 					CurrentEnemy->Path->WayPointList[i].x += ScrollSpeed;
+					*/
 			}
 		}
 
+		/*
 		//Scroll Skills with Map
 		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
 		{
@@ -249,22 +272,24 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 	else if (thePlayer->GetPos().x > rightBorder)
 	{
 		mapOffset_x += ScrollSpeed;
-		/*
+		
 		//Scroll Enemies with Map
-		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
+		for(unsigned a = 0; a < GuardList.size(); ++a)
 		{
-			CEnemy *CurrentEnemy = *it;
+			CGuard *guard = GuardList[a];
 
-			if (CurrentEnemy->active && mapOffset_x < RESOLUTION_WIDTH)
+			if (guard->active && mapOffset_x < RESOLUTION_WIDTH)
 			{
-				CurrentEnemy->setPosX(CurrentEnemy->getPos().x-ScrollSpeed);
+				guard->SetPos_x(guard->GetPos().x-ScrollSpeed);
 
 				//Scroll Way Points
+				/*
 				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
 					CurrentEnemy->Path->WayPointList[i].x -= ScrollSpeed;
+					*/
 			}
 		}	
-
+		/*
 		//Scroll Skills with Map
 		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
 		{
@@ -300,23 +325,25 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 	if (thePlayer->GetPos().y < topBorder)
 	{
 		mapOffset_y -= ScrollSpeed;
-		/*
-		//Scroll Enemies with Map
-		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
+		
+		for(unsigned a = 0; a < GuardList.size(); ++a)
 		{
-			CEnemy *CurrentEnemy = *it;
+			CGuard *guard = GuardList[a];
 
-			if (CurrentEnemy->active && mapOffset_y > 0)
+			if (guard->active && mapOffset_y > 0)
 			{
-				CurrentEnemy->setPosY(CurrentEnemy->getPos().y+ScrollSpeed);
+				guard->SetPos_y(guard->GetPos().y+ScrollSpeed);
 
 				//Scroll Way Points
+				/*
 				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
 					CurrentEnemy->Path->WayPointList[i].y += ScrollSpeed;
+					*/
 			}
 		}
 
 		//Scroll Skills with Map
+		/*
 		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
 		{
 			if ((*it)->active && mapOffset_y > 0)
@@ -351,22 +378,24 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 	else if (thePlayer->GetPos().y > bottomBorder)
 	{
 		mapOffset_y += ScrollSpeed;
-		/*
+		
 		//Scroll Enemies with Map
-		for (vector<CEnemy*>::iterator it = CPlayState::Instance()->EnemyList.begin(); it < CPlayState::Instance()->EnemyList.end(); ++it)
+		for(unsigned a = 0; a < GuardList.size(); ++a)
 		{
-			CEnemy *CurrentEnemy = *it;
+			CGuard *guard = GuardList[a];
 
-			if (CurrentEnemy->active && mapOffset_y < RESOLUTION_HEIGHT*2.15)
+			if (guard->active && mapOffset_y < RESOLUTION_HEIGHT*2.15)
 			{
-				CurrentEnemy->setPosY(CurrentEnemy->getPos().y-ScrollSpeed);
+				guard->SetPos_y(guard->GetPos().y-ScrollSpeed);
 
 				//Scroll Way Points
+				/*
 				for (short i = 0; i < (short)CurrentEnemy->Path->WayPointList.size(); ++i)
 					CurrentEnemy->Path->WayPointList[i].y -= ScrollSpeed;
+					*/
 			}
 		}
-
+		/*
 		//Scroll Skills with Map
 		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
 		{
@@ -399,3 +428,60 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 		}
 	}
 }
+void CPlayState::ScanMap()
+{
+
+	int NoOfMob = 0;
+	//Loop through column
+
+		for (short p = 0; p < theGlobal->theMap->getNumOfTiles_MapHeight(); ++p)
+			{
+				//Loop through row
+				for (short q = 0; q < theGlobal->theMap->getNumOfTiles_MapWidth(); ++q)
+				{
+					int current = theGlobal->theMap->theScreenMap[p][q];
+					switch (current) 
+					{
+						case CMap::SPAWN_MONSTER:
+							NoOfMob++;
+							break;
+					}
+
+				}
+			}
+
+
+	for (short i = 0; i < theGlobal->theMap->getNumOfTiles_MapHeight(); ++i)
+	{
+		//Loop through row
+		for (short k = 0; k < theGlobal->theMap->getNumOfTiles_MapWidth(); ++k)
+		{
+			int current = theGlobal->theMap->theScreenMap[i][k];
+
+			//Process Tiles
+			switch (current) 
+			{
+			case CMap::SPAWN_MONSTER:
+				
+				
+
+				if (NoOfMob > GuardList.size())
+				{
+					cout << NoOfMob  << " , " << GuardList.size() << endl;
+					//Create new Enemy
+					CGuard *temp = new CGuard; 
+					temp->SelfInit();
+					temp->SetPos(Vector3D((float)(k*TILE_SIZE+LEFT_BORDER-theGlobal->theMap->mapOffset_x), (float)(i*TILE_SIZE+BOTTOM_BORDER-theGlobal->theMap->mapOffset_y)));
+					//temp->SetWayPoints(); //Set Way Points for Enemy
+					cout << temp->GetPos().x << " , " <<  temp->GetPos().x << endl;
+
+					GuardList.push_back(temp); 
+				}
+				break;
+
+			}
+		}
+	} 
+
+}
+

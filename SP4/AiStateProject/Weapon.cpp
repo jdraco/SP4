@@ -223,3 +223,17 @@ int CWeapon::GetBulletListSize()
 {
 	return (int)ListOfBullets.size();
 }
+
+bool CWeapon::checkProjectileCollision(Vector3D Target)
+{
+	for(unsigned i = 0; i < GetBulletListSize(); i++)
+	{
+		if ( (Target - GetBullet(i)->GetPos()).GetMagnitude2D() < 25)
+		{
+			if(GetBullet(i)->range > 100)
+				delete GetBullet(i);
+			return true;
+		}
+	}
+	return false;
+}

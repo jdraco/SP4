@@ -56,6 +56,14 @@ public:
 		MAP_TOTAL
 	};
 
+	enum OtherList
+	{
+		INVERSE_START_POINT = -200,
+		SPAWN_PLAYER,
+		SPAWN_MONSTER,
+		INVERSE_END_POINT,
+	};
+
 	//Starting Map
 	const short STARTING_MAP;
 

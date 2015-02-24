@@ -8,6 +8,7 @@
 
 
 class CPlayer;
+class CGuard;
 
 class CPlayState : public CGameState
 {
@@ -65,6 +66,7 @@ private:
 	//global variable class
 	CGlobal* theGlobal;
 
+	std::vector<CGuard*> GuardList;
 	//map rendering
 
 	void LoadLevel(short level);
@@ -83,4 +85,6 @@ private:
 							  const int topBorder, const int bottomBorder, 
 							  float timeDiff,
 							  int& mapOffset_x, int& mapOffset_y);
+
+	void ScanMap();
 };

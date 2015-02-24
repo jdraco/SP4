@@ -8,24 +8,43 @@
 
 using namespace std;
 
-//struct Inventory{
-//	Inventory(string invent,int amt)
-//	{
-//		inventory = invent;
-//		amount = amt;
-//	}
-//	Inventory(): inventory("NIL"),amount(0)
-//	{
-//	}
-//	string inventory;
-//	int amount;
-//};
+class CGuard;
+
 class CPlayerInfo : public CVariable
 {
-public:
+private:
 
 	static CPlayerInfo*
-	getInstance();
+		_instance;
+
+
+	string state;
+
+	int HP;
+	
+	//string inventory[INVENTORY_SIZE];
+
+	//int inventAmt[INVENTORY_SIZE];
+
+	string currEquipped;
+
+	int currEqAmmo;
+
+	CWeapon *weapon;
+
+	CGlobal* theGlobal;
+
+	//store enemy
+	vector<CGuard*> guardlist;
+	
+	//Inventory* inventory;
+
+	bool UD, LR;
+	bool bLeft, bRight, bMoving, stopMovement;
+
+public:
+
+	static CPlayerInfo*getInstance();
 
 	//TextureImage HeroTexture[4];
 	// Render the Hero onto the screen
@@ -39,7 +58,8 @@ public:
 	void save();
 	void load();
 
-	// Ian
+	//check for initialisation
+	bool IsPos;
 
 
 	int damage;
@@ -87,35 +107,11 @@ public:
 
 	Bullet * GetBullet(int bullet);//calls GetBullet from weapon.cpp
 	int GetBulletListSize();//Get bullet list size
+	
+	void SetGuardList(vector<CGuard*> tempguardlist) { guardlist = tempguardlist;} ;
+	
 protected:
 	CPlayerInfo(void);
 	~CPlayerInfo(void);
 
-
-private:
-
-	static CPlayerInfo*
-		_instance;
-
-
-	string state;
-
-	int HP;
-	
-	//string inventory[INVENTORY_SIZE];
-
-	//int inventAmt[INVENTORY_SIZE];
-
-	string currEquipped;
-
-	int currEqAmmo;
-
-	CWeapon *weapon;
-
-	CGlobal* theGlobal;
-
-	//Inventory* inventory;
-
-	bool UD, LR;
-	bool bLeft, bRight, bMoving, stopMovement;
 };

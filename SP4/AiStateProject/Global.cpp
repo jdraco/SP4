@@ -233,7 +233,8 @@ bool CGlobal::FreeTiles(Vector3D pos, CMap *map, int x_offset, int y_offset, boo
 
 	//Free Tiles (No-Collision)
 	if (map->theScreenMap[y][x] != CMap::TILE_NULL &&
-		map->theScreenMap[y][x] != CMap::ENTRANCE1 && map->theScreenMap[y][x] != CMap::ENTRANCE2)
+		map->theScreenMap[y][x] != CMap::ENTRANCE1 && map->theScreenMap[y][x] != CMap::ENTRANCE2 &&
+		! (map->theScreenMap[y][x] < -1) )
 		return true;
 
 	return false;

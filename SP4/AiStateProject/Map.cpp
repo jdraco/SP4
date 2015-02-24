@@ -59,7 +59,7 @@ void CMap::Init(const int theScreen_Height, const int theScreen_Width,
 	{
 	case INDOOR:
 		mapOffset_x = 40;
-		mapOffset_y = 1800;
+		mapOffset_y = 1720;
 		break;
 	case LITTLEROOT:
 		mapOffset_x = 0;

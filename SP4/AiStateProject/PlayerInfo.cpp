@@ -1,4 +1,5 @@
 #include "PlayerInfo.h"
+#include "Guard.h"
 #include <fstream>
 
 using namespace std;
@@ -15,6 +16,7 @@ CPlayerInfo*CPlayerInfo::getInstance()
 }
 
 CPlayerInfo::CPlayerInfo(void)
+:IsPos(false)
 {
 	theGlobal = CGlobal::getInstance();
 }
@@ -35,9 +37,9 @@ void CPlayerInfo::Init(void)
 		cout << "No hero texture" << endl;
 	if( !LoadTGA( &(Texture[ 3 ]), "Texture/Tiles/Jamesdown.tga"))
 		cout << "No hero texture" << endl;
-	Pos = Vector3D(200,310,0);
-	//hero_x = 200;
-	//hero_y = 310;
+	
+	//Init Position (Can be Lua-ed)
+	//Pos = Vector3D(200,310,0);
 
 
 	damage = 1;
@@ -336,6 +338,41 @@ void CPlayerInfo::keyboardUpdate()
 		!theGlobal->myKeys['d'] && !theGlobal->myKeys['D'])
 		LR = false;
 
+		//get item
+
+	//for(unsigned i = 0; i < GetBulletListSize(); i++)
+	//{
+	//	for(unsigned a = 0; a < guardlist.size(); ++a)
+	//	{
+	//		CGuard *guard = guardlist[a];
+	//		//can be lua-ed
+
+	//		if ( (guard->GetPos() - GetBullet(i)->GetPos()).GetMagnitude2D() < 50)
+	//		{
+	//			myInventory.addItem(1);
+	//			guard->active = false;
+	//			guard->SetPos(Vector3D()); // reset back to zero
+	//			break;
+	//		}
+
+	//	}
+	//}
+
+	for(unsigned a = 0; a < guardlist.size(); ++a)
+	{
+		CGuard *guard = guardlist[a];
+		//can be lua-ed
+
+		if (weapon->checkProjectileCollision(guard->GetPos()))
+		{
+			myInventory.addItem(1);
+			guard->active = false;
+			guard->SetPos(Vector3D()); // reset back to zero
+			break;
+		}
+
+	}
+	
 	//Update Sprite
 	if (!bMoving)
 	{

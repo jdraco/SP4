@@ -1,5 +1,5 @@
 #include "Guard.h"
-
+#include "PlayerInfo.h"
 
 CGuard::CGuard(void)
 {
@@ -16,21 +16,15 @@ void CGuard::SelfInit(void)
 
 	//RotateAngle = 0;
 	CurrentState = IDLE;
-	//Pos.Set(500, 400 ,0);
-	Scale.Set(20, 20, 1);
-	Vel.Set(5,5,1);
+
+	//Basic Setup
+	Scale.Set(1.0f, 1.0f, 1.0f);
+	Vel.Set(5.0f,5.0f,0.0f);
+	Dir.Set(1.0f,0.0f,0.0f);
 	Color.Set(1.0f, 1.0f, 1.0f);
 	active = true;
-	/*
-	for(unsigned i = 0; i < CGoodies::theArrayOfGoodies.size(); ++i)
-	{
-		CGoodies *go = CGoodies::theArrayOfGoodies[i];
-		if(go->Object == PLAYER && go->GetItem(TEAMNO) != TeamNo)
-		{
-			SetTarget(go);
-		}
-	}
-	*/
+	NeedRender = true;
+	
 	//Health and armor
 	Health.max = 100;
 	Health.current = Health.max;
@@ -39,9 +33,17 @@ void CGuard::SelfInit(void)
 	//Team
 	//TeamNo = 1;
 
+	GuardSprite = new CSprite;
+	GuardSprite->ImageInit(4, 1, 100);
 
-	
-	LoadTGA(&Texture[0], "Texture/player.tga");
+	if( !LoadTGA( &(Texture[ 0 ]), "Texture/Tiles/Japan1.tga"))
+		cout << "No hero texture" << endl;
+	if( !LoadTGA( &(Texture[ 1 ]), "Texture/Tiles/Japan1.tga"))
+		cout << "No hero texture" << endl;
+	if( !LoadTGA( &(Texture[ 2 ]), "Texture/Tiles/Japan1up.tga"))
+		cout << "No hero texture" << endl;
+	if( !LoadTGA( &(Texture[ 3 ]), "Texture/Tiles/Japan1down.tga"))
+		cout << "No hero texture" << endl;
 }
 
 bool CGuard::Update(void)
@@ -51,6 +53,25 @@ bool CGuard::Update(void)
 	Dir = ( Pos - Target->GetPos() ) * 0.1 ;
 	Dir.normalizeVector3D();
 	*/
+	
+	float dt = CGameTime::GetDelta();
+	//cout << dt << endl;
+
+	if (Pos.x < LEFT_BORDER || Pos.x > RESOLUTION_WIDTH-LEFT_BORDER-TILE_SIZE*3 || 
+		Pos.y < BOTTOM_BORDER || Pos.y > RESOLUTION_HEIGHT-BOTTOM_BORDER+TILE_SIZE)
+	{
+		NeedRender = false;
+	}
+	else
+	{
+		NeedRender = true;
+	}
+
+	//Moving
+	//Pos = Pos - Vel * Dir * 0.3; //* dt; 
+	//cout <<  << endl;
+	//cout << Pos.x << " , " << Pos.y << endl;
+
 	if (Health.current < 0)
 	{
 		if(Health.no > 0)
@@ -72,35 +93,7 @@ bool CGuard::Update(void)
 	{
 		case ATTACK:
 		{
-			/*
-			if(Target->active == false){
-				PreviousTarget = Target;
-				for(unsigned i = 0; i < CGoodies::theArrayOfGoodies.size(); ++i)
-				{
-					CGoodies *go = CGoodies::theArrayOfGoodies[i];
-					if(go->GetItem(TEAMNO) != TeamNo && go->active != false)
-					{
-							SetTarget(go);
-					}
-				}
-			}
-
-			Vector3D targetdiff;
-			
-			targetdiff.Set(Target->GetPos().x - Pos.x , Target->GetPos().y - Pos.y ,Target->GetPos().z - Pos.z);
-			RotateAngle = -(atan2(targetdiff.x,targetdiff.z)+90)* 180 / PI;
-
-			AttackTime.Update();
-
-			if ( AttackTime.GetCurrent() < 1){
-				AttackTime.SetCurrent();
-				AttackTime.SetTotalTime(3);
-
-				Target->setCurrentHealth( Target->getHealth().current - 20); //damage to enemy
-				Target->setCurrentArmor(Target->getArmor().current - 4);
-			}
-		}
-		*/
+	
 		}
 			break;
 
@@ -128,33 +121,15 @@ bool CGuard::Update(void)
 		}
 			break;
 
-		case MOVELEFT:
+		case PATROL:
 		{
-			this->Pos.x += -moveSpeed;
+			//Pos = Pos - Vel * Dir * -0.1; 
 		}
-			break;
+		break;
 
-		case MOVERIGHT:
-		{
-			this->Pos.x += moveSpeed;
-		}
-			break;
-
-		case MOVEUP:
-		{
-			this->Pos.y += -moveSpeed;
-		}
-			break;
-
-		case MOVEDOWN:
-		{
-			this->Pos.y += moveSpeed;
-		}
-			break;
-		
 		case RETREAT:
 		{
-			Pos = Pos - Vel * Dir * -0.1; //run
+			//Pos = Pos - Vel * Dir * -0.1; //run
 			CurrentState = IDLE;			//reset to idle if not retreating alr
 		}
 		break;
@@ -174,75 +149,8 @@ bool CGuard::Update(void)
 void CGuard::IndividualAction(){
 
 
-	//State making
-
-	//Chasing/attacking for target
-	/*
-	if(CurrentState != RETREAT){
-		for(unsigned i = 0; i < CGoodies::theArrayOfGoodies.size(); ++i)
-			{
-				CGoodies *go = CGoodies::theArrayOfGoodies[i];
-				if(go->GetItem(TEAMNO) != TeamNo && ( Pos - go->GetPos() ).GetMagnitude2D() < 150 )
-				{
-						SetTarget(go);
-
-						if((Target->GetPos()-this->Pos).GetMagnitude2D() < chasesight)
-						{
-							CurrentState = CHASE;
-						}
-	
-						if((Target->GetPos()-this->Pos).GetMagnitude2D() < attacksight)
-						{
-							CurrentState = ATTACK;
-
-						}
-				}
-			}
-	}
-	*/
-	//else
-	//{
-
-		int chance = (int)theGlobal->RG.getImmediateResult(1, 100);
-		IdleTime.Update();
-
-		if (CurrentState == IDLE && IdleTime.GetCurrent() < 1)
-		{
-			IdleTime.SetCurrent();
-			IdleTime.SetTotalTime(1);
-			
-			if (chance > 0 && chance < 20)
-			{
-				CurrentState = MOVERIGHT;
-			}
-			else if (chance > 19 && chance < 40)
-			{
-				CurrentState = MOVELEFT;
-			}
-			else if (chance > 39 && chance < 60)
-			{
-				CurrentState = MOVEUP;
-			}
-			else if (chance > 59 && chance < 80)
-			{
-				CurrentState = MOVEDOWN;
-			}
-			else
-			{
-				CurrentState = IDLE;
-			}
-		}
-		else if (CurrentState == MOVELEFT || CurrentState == MOVERIGHT || CurrentState == MOVEUP 
-			|| CurrentState == MOVEDOWN || CurrentState == ATTACK || CurrentState == CHASE)
-		{
-			if (rand() % 100 < 2)
-			{
-				CurrentState = IDLE;
-
-			}
-		}
-
 }
+
 /*
 void CGuard::TeamAction(){
 	/*
@@ -348,46 +256,13 @@ void CGuard::Render()
 	}
 	//cout << Pos.x << " , " << Pos.y << endl; 
 	
-	Info();
-
-	glPushMatrix();
-	glTranslatef(Pos.x, Pos.y, 1);
-	glEnable( GL_TEXTURE_2D );
-	glEnable( GL_BLEND );
-	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glBindTexture( GL_TEXTURE_2D, Texture[0].texID );
-	glBegin(GL_QUADS);
-	if (heroAnimationInvert == true)
-	{
-		glTexCoord2f(0.25 * heroAnimationCounter,1); 
-		glVertex2f(0,0);
-		glTexCoord2f(0.25 * heroAnimationCounter,0); 
-		glVertex2f(0,m_iTileSize);
-		glTexCoord2f(0.25 * heroAnimationCounter + 0.25,0); 
-		glVertex2f(m_iTileSize,m_iTileSize);
-		glTexCoord2f(0.25 * heroAnimationCounter + 0.25,1); 
-		glVertex2f(m_iTileSize,0);
+	//Info();
+	if(NeedRender == true){
+		glPushMatrix();
+			glTranslatef((float)(Pos.x+TILE_SIZE*0.5), (float)(Pos.y+TILE_SIZE*0.5), 0);
+			GuardSprite->render(Texture[0]);
+		glPopMatrix();
 	}
-	else
-	{
-		glTexCoord2f(0.25 * heroAnimationCounter + 0.25,1); 
-		glVertex2f(0,0);
-		glTexCoord2f(0.25 * heroAnimationCounter + 0.25,0); 
-		glVertex2f(0,m_iTileSize);
-		glTexCoord2f(0.25 * heroAnimationCounter,0); 
-		glVertex2f(m_iTileSize,m_iTileSize);
-		glTexCoord2f(0.25 * heroAnimationCounter,1); 
-		glVertex2f(m_iTileSize,0);
-	}
-	glEnd();
-	glDisable( GL_BLEND );
-	glDisable( GL_TEXTURE_2D );
-	glPopMatrix();
-
-	glColor3f( 0.0f, 0.0f, 0.0f);
-	
 
 }
 
@@ -423,34 +298,11 @@ void CGuard::Info(){
 		}
 			break;
 
-		case MOVELEFT:
+		case PATROL:
 		{
-			tempState = "MOVELEFT STATE";
-			//printw(Pos.x,Pos.y+repos,0,"MOVELEFT STATE");
+			tempState = "PATROL STATE";
 		}
 			break;
-
-		case MOVERIGHT:
-		{
-			tempState = "MOVERIGHT STATE";
-			//printw(Pos.x-30,Pos.y+repos,0,"MOVERIGHT STATE");
-		}
-			break;
-
-		case MOVEUP:
-		{
-			tempState = "MOVEUP STATE";
-			//printw(Pos.x-30,Pos.y+repos,0,"MOVEUP STATE");
-		}
-			break;
-
-		case MOVEDOWN:
-		{
-			tempState = "MOVEDOWN STATE";
-			//printw(Pos.x-30,Pos.y+repos,0,"MOVEDOWN STATE");
-		}
-			break;
-
 		case IDLE:
 		{
 			tempState = "IDLE STATE";

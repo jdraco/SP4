@@ -65,6 +65,9 @@ public:
 
 	Bullet* GetBullet(int bullet);
 	int GetBulletListSize();//Get bullet list size
+
+	bool checkProjectileCollision(Vector3D Target);
+
 private:
 
 

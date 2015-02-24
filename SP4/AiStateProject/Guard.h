@@ -1,7 +1,8 @@
 #pragma once
 #include "Goodies.h"
 
-//Minion
+class CPlayerInfo;
+
 class CGuard : public CGoodies 
 {
 
@@ -9,7 +10,12 @@ private:
 	CGameTime IdleTime; // Time state
 	CGameTime AttackTime; // Time state
 
+	//Store player info
+	CPlayerInfo* Player;
+	CSprite* GuardSprite;
+
 	bool isMoving;
+	bool NeedRender;
 
 	bool heroAnimationInvert;
 	int heroAnimationCounter;
@@ -24,10 +30,7 @@ public:
 		IDLE = 0,
 		ATTACK,
 		CHASE,
-		MOVELEFT,
-		MOVERIGHT,
-		MOVEUP,
-		MOVEDOWN,
+		PATROL,
 		RETREAT,
 		STATE_TOTAL
 	};
@@ -42,5 +45,9 @@ public:
 
 	 void SetItem(ITEM_ID item_id , int SetItem);
 	 int GetItem(ITEM_ID item_id);
+
+	 //Get player info over
+	 void SetTarget(CPlayerInfo* thePlayer);
+	 // CPlayerInfo GetTarget();
 };
 
