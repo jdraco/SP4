@@ -55,10 +55,10 @@ void CPlayerInfo::Init(void)
 	//inventory = new Inventory();
 	myInventory.addItem(1);
 	myInventory.addItem(2);
-	myInventory.addItem(2);
 	myInventory.addItem(3);
-	myInventory.addItem(4);
-	myInventory.addItem(4);
+	//myInventory.addItem(4);
+	myInventory.addItem(5);
+	myInventory.addItem(6);
 }
 /****************************************************************************************************
 Draw the hero

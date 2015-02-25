@@ -50,8 +50,7 @@ void CPlayState::Init()
 	 //Player init
 	LoadLevel(currentMap);
 	
-	thePlayer = CPlayerInfo::getInstance();
-	thePlayer->Init();
+
 	//ScanMap();
 	//thePlayer->Init();
 }

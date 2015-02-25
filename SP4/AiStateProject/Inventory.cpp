@@ -1,4 +1,5 @@
 #include "Inventory.h"
+#include "PlayerInfo.h"
 
 
 Inventory::Inventory(void)
@@ -11,6 +12,9 @@ Inventory::Inventory(void)
 	LoadTGA( &item_tex[ 1 ], "Texture/Inventory/bandages.tga");
 	LoadTGA( &item_tex[ 2 ], "Texture/Inventory/cloth.tga");
 	LoadTGA( &item_tex[ 3 ], "Texture/Inventory/alcohol.tga");
+	LoadTGA( &item_tex[ 4 ], "Texture/Inventory/machete.tga");
+	LoadTGA( &item_tex[ 5 ], "Texture/Inventory/broken_wooden_handle.tga");
+	LoadTGA( &item_tex[ 6 ], "Texture/Inventory/broken_blade.tga");
 
 
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
@@ -78,6 +82,7 @@ void Inventory::addItem(int item_id)
 				item_added = true;
 			}
 		}
+
 		num_of_items++;
 		break;
 
@@ -102,6 +107,51 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = ALCOHOL;
+				slot[i].is_a_material = true;
+
+				item_added = true;
+			}
+		}
+
+		num_of_items++;
+		break;
+
+		case MACHETE:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == EMPTY && item_added == false)
+			{
+				slot[i].item_id = MACHETE;
+				slot[i].is_a_material = false;
+
+				item_added = true;
+			}
+		}
+
+		num_of_items++;
+		break;
+
+		case BROKEN_WOODEN_HANDLE:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == EMPTY && item_added == false)
+			{
+				slot[i].item_id = BROKEN_WOODEN_HANDLE;
+				slot[i].is_a_material = true;
+
+				item_added = true;
+			}
+		}
+
+		num_of_items++;
+		break;
+
+		case BROKEN_BLADE:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == EMPTY && item_added == false)
+			{
+				slot[i].item_id = BROKEN_BLADE;
 				slot[i].is_a_material = true;
 
 				item_added = true;
@@ -170,11 +220,49 @@ void Inventory::removeItem(int item_id)
 		num_of_items--;
 		break;
 
+		case MACHETE:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == MACHETE && item_removed == false)
+			{
+				slot[i].item_id = EMPTY;
+				item_removed = true;
+			}
+		}
+
+		num_of_items--;
+		break;
+
+		case BROKEN_WOODEN_HANDLE:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == BROKEN_WOODEN_HANDLE && item_removed == false)
+			{
+				slot[i].item_id = EMPTY;
+				item_removed = true;
+			}
+		}
+
+		num_of_items--;
+		break;
+
+		case BROKEN_BLADE:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == BROKEN_BLADE && item_removed == false)
+			{
+				slot[i].item_id = EMPTY;
+				item_removed = true;
+			}
+		}
+
+		num_of_items--;
+		break;
+
 		default:
 		break;
 	}
 }
-
 
 void Inventory::emptySlot(int slot_no)
 {
@@ -191,6 +279,7 @@ void Inventory::setSlotItem(int slot_no, int item_id)
 {
 	if (item_id == EMPTY)
 		num_of_items--;
+
 	this->slot[slot_no].item_id = item_id;
 }
 
@@ -206,7 +295,6 @@ void Inventory::useSlotItem(int slot_no)
 	// BANDAGES (CONSUMABLE)
 	case 1:
 		// Add 15HP
-		
 
 		emptySlot(slot_no);
 		break;
@@ -219,8 +307,21 @@ void Inventory::useSlotItem(int slot_no)
 	case 3:
 		// Add 5HP
 
-
 		emptySlot(slot_no);
+		break;
+
+	// MACHETE (EQUIPABLE)
+	case 4:
+		CPlayerInfo::getInstance()->setCurrAmmo(1);
+		CPlayerInfo::getInstance()->setCurrEquipped("Machete");
+		break;
+
+	// BROKEN WOODEN HANDLE (MATERIAL)
+	case 5:
+		break;
+
+	// BROKEN BLADE (MATERIAL)
+	case 6:
 		break;
 
 	default:
@@ -274,6 +375,26 @@ void Inventory::attemptCrafting()
 
 		resetCraftingSlots();
 	}
+
+	// CRAFTING A MACHETE
+	if (crafting_slot[0].item_id == BROKEN_WOODEN_HANDLE && crafting_slot[1].item_id == BROKEN_BLADE)
+	{
+		removeItem(BROKEN_WOODEN_HANDLE);
+		removeItem(BROKEN_BLADE);
+
+		addItem(MACHETE);
+
+		resetCraftingSlots();
+	}
+	else if (crafting_slot[1].item_id == BROKEN_WOODEN_HANDLE && crafting_slot[0].item_id == BROKEN_BLADE)
+	{
+		removeItem(BROKEN_WOODEN_HANDLE);
+		removeItem(BROKEN_BLADE);
+
+		addItem(MACHETE);
+
+		resetCraftingSlots();
+	}
 }
 
 void Inventory::renderInventorySlot(int slot_no)
@@ -316,11 +437,24 @@ void Inventory::renderInventorySlot(int slot_no)
 			slot[i].item_name = "Alcohol";
 			break;
 
+		case MACHETE:
+			slot[i].item_name = "Machete";
+			break;
+
+		case BROKEN_WOODEN_HANDLE:
+			slot[i].item_name = "Broken handle";
+			break;
+
+		case BROKEN_BLADE:
+			slot[i].item_name = "Broken blade";
+			break;
+
 		default:
 			break;
 		}
 	}
 }
+
 void Inventory::renderCraftingSlots()
 {
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
@@ -357,6 +491,44 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 					glBindTexture( GL_TEXTURE_2D, item_tex[3].texID );
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,1); glVertex2f(0,0);
+						glTexCoord2f(0,0); glVertex2f(0,50);
+						glTexCoord2f(1,0); glVertex2f(50,50);
+						glTexCoord2f(1,1); glVertex2f(50,0);
+					glEnd();
+				glDisable( GL_BLEND );
+				glDisable( GL_TEXTURE_2D );
+				glPopMatrix();
+				break;
+
+			case BROKEN_WOODEN_HANDLE:
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glPushMatrix();
+				glTranslatef(650, 255, 0);
+				glEnable( GL_TEXTURE_2D );
+				glEnable( GL_BLEND );
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture( GL_TEXTURE_2D, item_tex[5].texID );
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,1); glVertex2f(0,0);
+						glTexCoord2f(0,0); glVertex2f(0,50);
+						glTexCoord2f(1,0); glVertex2f(50,50);
+						glTexCoord2f(1,1); glVertex2f(50,0);
+					glEnd();
+				glDisable( GL_BLEND );
+				glDisable( GL_TEXTURE_2D );
+				glPopMatrix();
+				break;
+
+			case BROKEN_BLADE:
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glPushMatrix();
+				glTranslatef(650, 255, 0);
+				glEnable( GL_TEXTURE_2D );
+				glEnable( GL_BLEND );
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture( GL_TEXTURE_2D, item_tex[6].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);
@@ -413,6 +585,44 @@ void Inventory::renderCraftingSlots()
 				glPopMatrix();
 				break;
 
+			case BROKEN_WOODEN_HANDLE:
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glPushMatrix();
+				glTranslatef(765, 255, 0);
+				glEnable( GL_TEXTURE_2D );
+				glEnable( GL_BLEND );
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture( GL_TEXTURE_2D, item_tex[5].texID );
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,1); glVertex2f(0,0);
+						glTexCoord2f(0,0); glVertex2f(0,50);
+						glTexCoord2f(1,0); glVertex2f(50,50);
+						glTexCoord2f(1,1); glVertex2f(50,0);
+					glEnd();
+				glDisable( GL_BLEND );
+				glDisable( GL_TEXTURE_2D );
+				glPopMatrix();
+				break;
+
+			case BROKEN_BLADE:
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glPushMatrix();
+				glTranslatef(765, 255, 0);
+				glEnable( GL_TEXTURE_2D );
+				glEnable( GL_BLEND );
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture( GL_TEXTURE_2D, item_tex[6].texID );
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,1); glVertex2f(0,0);
+						glTexCoord2f(0,0); glVertex2f(0,50);
+						glTexCoord2f(1,0); glVertex2f(50,50);
+						glTexCoord2f(1,1); glVertex2f(50,0);
+					glEnd();
+				glDisable( GL_BLEND );
+				glDisable( GL_TEXTURE_2D );
+				glPopMatrix();
+				break;
+
 			default:
 				break;
 			}
@@ -440,7 +650,47 @@ void Inventory::renderCraftingSlots()
 				glDisable( GL_TEXTURE_2D );
 				glPopMatrix();
 	}
-	else if (crafting_slot[1].item_id == CLOTH && crafting_slot[0].item_id == ALCOHOL)
+	else if (crafting_slot[1].item_id == CLOTH && crafting_slot[0].item_id == BROKEN_BLADE)
+	{
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glPushMatrix();
+				glTranslatef(880, 255, 0);
+				glEnable( GL_TEXTURE_2D );
+				glEnable( GL_BLEND );
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture( GL_TEXTURE_2D, item_tex[4].texID );
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,1); glVertex2f(0,0);
+						glTexCoord2f(0,0); glVertex2f(0,50);
+						glTexCoord2f(1,0); glVertex2f(50,50);
+						glTexCoord2f(1,1); glVertex2f(50,0);
+					glEnd();
+				glDisable( GL_BLEND );
+				glDisable( GL_TEXTURE_2D );
+				glPopMatrix();
+	}
+
+	// MACHETE
+	if (crafting_slot[0].item_id == BROKEN_WOODEN_HANDLE && crafting_slot[1].item_id == BROKEN_BLADE)
+	{
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glPushMatrix();
+				glTranslatef(880, 255, 0);
+				glEnable( GL_TEXTURE_2D );
+				glEnable( GL_BLEND );
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture( GL_TEXTURE_2D, item_tex[4].texID );
+					glBegin(GL_QUADS);
+						glTexCoord2f(0,1); glVertex2f(0,0);
+						glTexCoord2f(0,0); glVertex2f(0,50);
+						glTexCoord2f(1,0); glVertex2f(50,50);
+						glTexCoord2f(1,1); glVertex2f(50,0);
+					glEnd();
+				glDisable( GL_BLEND );
+				glDisable( GL_TEXTURE_2D );
+				glPopMatrix();
+	}
+	else if (crafting_slot[1].item_id == BROKEN_WOODEN_HANDLE && crafting_slot[0].item_id == ALCOHOL)
 	{
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				glPushMatrix();
