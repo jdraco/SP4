@@ -197,5 +197,8 @@
     <ClInclude Include="GameMenu.h">
       <Filter>Header Files\Game Object</Filter>
     </ClInclude>
+    <ClInclude Include="Detect.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

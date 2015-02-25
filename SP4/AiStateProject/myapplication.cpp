@@ -254,7 +254,11 @@ void myApplication::MouseClick(int button, int state, int x, int y)
 			break;
 
 		case GLUT_MIDDLE_BUTTON:
-
+			mouseInfo.middleButtonUp = state;
+			theGlobal->MouseState = state;
+			theGlobal->MouseType = 2;
+			mouseInfo.lastX = x;
+			mouseInfo.lastY = y;
 			break;
 	}
 }

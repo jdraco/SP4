@@ -8,10 +8,10 @@ Inventory::Inventory(void)
 	font_style = GLUT_BITMAP_HELVETICA_18;
 
 	LoadTGA( &item_tex[ 0 ], "Texture/Inventory/transparent.tga");
-	LoadTGA( &item_tex[ 1 ], "Texture/Inventory/knife.tga");
-	LoadTGA( &item_tex[ 2 ], "Texture/Inventory/bandages.tga");
-	LoadTGA( &item_tex[ 3 ], "Texture/Inventory/cloth.tga");
-	LoadTGA( &item_tex[ 4 ], "Texture/Inventory/alcohol.tga");
+	LoadTGA( &item_tex[ 1 ], "Texture/Inventory/bandages.tga");
+	LoadTGA( &item_tex[ 2 ], "Texture/Inventory/cloth.tga");
+	LoadTGA( &item_tex[ 3 ], "Texture/Inventory/alcohol.tga");
+
 
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
 	{
@@ -64,27 +64,17 @@ void Inventory::addItem(int item_id)
 {
 	bool item_added = false;
 
+	// Assign item ID, name and material status to added items
 	switch (item_id)
 	{
-		case KNIFE:
-		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
-		{
-			if (slot[i].item_id == EMPTY && item_added == false)
-			{
-				slot[i].item_id = KNIFE;
-				item_added = true;
-			}
-		}
-
-		num_of_items++;
-		break;
-
 		case BANDAGES:
 		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
 		{
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = BANDAGES;
+				slot[i].is_a_material = false;
+
 				item_added = true;
 			}
 		}
@@ -97,6 +87,8 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = CLOTH;
+				slot[i].is_a_material = true;
+				
 				item_added = true;
 			}
 		}
@@ -110,6 +102,8 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = ALCOHOL;
+				slot[i].is_a_material = true;
+
 				item_added = true;
 			}
 		}
@@ -137,19 +131,6 @@ void Inventory::removeItem(int item_id)
 
 	switch (item_id)
 	{
-		case KNIFE:
-		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
-		{
-			if (slot[i].item_id == KNIFE && item_removed == false)
-			{
-				slot[i].item_id = EMPTY;
-				item_removed = true;
-			}
-		}
-
-		num_of_items--;
-		break;
-
 		case BANDAGES:
 		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
 		{
@@ -218,20 +199,28 @@ std::string Inventory::getSlotItemName(int slot_no)
 	return slot[slot_no].item_name;
 }
 
-void Inventory::useItem(int slot_no)
+void Inventory::useSlotItem(int slot_no)
 {
 	switch (slot[slot_no].item_id)
 	{
+	// BANDAGES (CONSUMABLE)
 	case 1:
+		// Add 15HP
+		
+
+		emptySlot(slot_no);
 		break;
 
+	// CLOTH (MATERIAL)
 	case 2:
 		break;
 
+	// ALCOHOL (CONSUMABLE) (MATERIAL)
 	case 3:
-		break;
+		// Add 5HP
 
-	case 4:
+
+		emptySlot(slot_no);
 		break;
 
 	default:
@@ -239,16 +228,16 @@ void Inventory::useItem(int slot_no)
 	}
 }
 
-void Inventory::craftWithItem(int slot_no)
+void Inventory::craftWithSlotItem(int slot_no)
 {
-	if (craft_in_first_slot == true)
+	if (craft_in_first_slot == true && slot[slot_no].is_a_material == true)
 	{
 		resetCraftingSlots();
 
 		crafting_slot[0].item_id = slot[slot_no].item_id;
 		craft_in_first_slot = false;
 	}
-	else if (craft_in_first_slot == false && crafting_slot[0].item_id != slot[slot_no].item_id)
+	else if (craft_in_first_slot == false && slot[slot_no].is_a_material == true && crafting_slot[0].item_id != slot[slot_no].item_id)
 	{
 		crafting_slot[1].item_id = slot[slot_no].item_id;
 		craft_in_first_slot = true;
@@ -260,6 +249,8 @@ void Inventory::resetCraftingSlots()
 	crafting_slot[0].item_id = 0;
 	crafting_slot[1].item_id = 0;
 	crafting_slot[2].item_id = 0;
+	
+	craft_in_first_slot = true;
 }
 
 void Inventory::attemptCrafting()
@@ -270,7 +261,7 @@ void Inventory::attemptCrafting()
 		removeItem(CLOTH);
 		removeItem(ALCOHOL);
 
-		addItem(2);
+		addItem(BANDAGES);
 
 		resetCraftingSlots();
 	}
@@ -279,7 +270,7 @@ void Inventory::attemptCrafting()
 		removeItem(CLOTH);
 		removeItem(ALCOHOL);
 
-		addItem(2);
+		addItem(BANDAGES);
 
 		resetCraftingSlots();
 	}
@@ -312,9 +303,6 @@ void Inventory::renderInventorySlot(int slot_no)
 	{
 		switch (slot[i].item_id)
 		{
-		case KNIFE:
-			slot[i].item_name = "Knife";
-			break;
 
 		case BANDAGES:
 			slot[i].item_name = "Bandages";
@@ -349,7 +337,7 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture( GL_TEXTURE_2D, item_tex[3].texID );
+					glBindTexture( GL_TEXTURE_2D, item_tex[2].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);
@@ -368,7 +356,7 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture( GL_TEXTURE_2D, item_tex[4].texID );
+					glBindTexture( GL_TEXTURE_2D, item_tex[3].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);
@@ -394,7 +382,7 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture( GL_TEXTURE_2D, item_tex[3].texID );
+					glBindTexture( GL_TEXTURE_2D, item_tex[2].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);
@@ -413,7 +401,7 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture( GL_TEXTURE_2D, item_tex[4].texID );
+					glBindTexture( GL_TEXTURE_2D, item_tex[3].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);
@@ -441,7 +429,7 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture( GL_TEXTURE_2D, item_tex[2].texID );
+					glBindTexture( GL_TEXTURE_2D, item_tex[1].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);
@@ -460,7 +448,7 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture( GL_TEXTURE_2D, item_tex[2].texID );
+					glBindTexture( GL_TEXTURE_2D, item_tex[1].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);

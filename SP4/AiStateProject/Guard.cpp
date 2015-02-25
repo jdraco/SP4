@@ -32,7 +32,6 @@ void CGuard::SelfInit(void)
 
 	//Team
 	//TeamNo = 1;
-
 	GuardSprite = new CSprite;
 	GuardSprite->ImageInit(4, 1, 100);
 
@@ -147,7 +146,6 @@ bool CGuard::Update(void)
 }
 
 void CGuard::IndividualAction(){
-
 
 }
 

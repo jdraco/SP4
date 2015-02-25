@@ -7,7 +7,7 @@ HUD::HUD(void)
 	,	showInventory(false)
 	,	LMouse_down_boolean(false)
 	,	volume(70)
-	,	CURRENT_WEAPON(NONE)
+	,	current_weapon(0)
 {
 	LoadTGA( &HUDtex[ 0 ], "Texture/HUD/white.tga");
 	LoadTGA( &HUDtex[ 1 ], "Texture/HUD/optionsbutton.tga");
@@ -505,7 +505,7 @@ void HUD::InventoryScreen()
 		glColor4f(0.2f, 0.2f, 0.2f, 0.95f);
 		glPushMatrix();
 		glTranslatef(240, 200, 0);
-		glScalef(9, 8.75 * h / 745, 1);
+		glScalef(9, 8.75, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -606,24 +606,26 @@ void HUD::InventoryScreen()
 					glLoadIdentity();
 					glPushAttrib(GL_ALL_ATTRIB_BITS);
 						glColor3f(1, 1, 1);
-						printw(390, 525, 0, "%s", item_name.c_str());
+						printw(387.5, 532.5, 0, "%s", item_name.c_str());
 					glPopAttrib();
 					
 					// When clicked (Left mouse button - USE ITEM)
 					if (mouseState == false && LMouse_down_boolean == false && mouseType == 0)
 					{
-						HUDInventory.useItem(slot_itr);
-
-						//HUDInventory.emptySlot(slot_itr);
-						CPlayState::Instance()->thePlayer->myInventory.emptySlot(slot_itr);
+						CPlayState::Instance()->thePlayer->myInventory.useSlotItem(slot_itr);
 
 						LMouse_down_boolean = true;
 					}
 					// When clicked (Right mouse button - CRAFT WITH ITEM)
 					else if (mouseState == false && LMouse_down_boolean == false && mouseType == 1)
 					{
-						//HUDInventory.craftWithItem(slot_itr);
-						CPlayState::Instance()->thePlayer->myInventory.craftWithItem(slot_itr);
+						CPlayState::Instance()->thePlayer->myInventory.craftWithSlotItem(slot_itr);
+
+						LMouse_down_boolean = true;
+					}
+					else if (mouseState == false && LMouse_down_boolean == false && mouseType == 2)
+					{
+						CPlayState::Instance()->thePlayer->myInventory.emptySlot(slot_itr);
 
 						LMouse_down_boolean = true;
 					}
@@ -647,7 +649,7 @@ void HUD::CraftingScreen()
 		glColor4f(0.2f, 0.2f, 0.2f, 0.95f);
 		glPushMatrix();
 		glTranslatef(610, 200, 0);
-		glScalef(9, 4.6 * h / 745, 1);
+		glScalef(9, 4.7, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -765,7 +767,7 @@ void HUD::CraftingScreen()
 			// When clicked
 			if (mouseState == false && mouseType == 0)
 			{
-				// CRAFT ITEM
+				// Attempt to craft product item
 				CPlayState::Instance()->thePlayer->myInventory.attemptCrafting();
 			}
 		}
@@ -776,6 +778,15 @@ void HUD::CraftingScreen()
 				glColor3f(1, 1, 1);
 				printw (750, 355.5, 0, "Craft item");
 			glPopAttrib();
+		}
+		// Reset crafting slots when crafting slot 1 or 2 are selected
+		if((mouseX > 650 * w / 1024 && mouseX < 700 * w / 1024 && mouseY > 235 * h / 745 && mouseY < 285 * h / 745) || (mouseX > 765 * w / 1024 && mouseX < 815 * w / 1024 && mouseY > 235 * h / 745 && mouseY < 285 * h / 745))
+		{
+			// When clicked
+			if (mouseState == false && (mouseType == 0 || mouseType == 1 || mouseType == 2))
+			{	
+				CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
+			}
 		}
 
 		HUDInventory.renderCraftingSlots();
@@ -909,7 +920,7 @@ void HUD::renderHelpButton()
 	{
 		glPushMatrix();
 		glTranslatef(850, 5, 0);
-		glScalef(1.3 * w / 1024, 1.3 * h / 745, 1);
+		glScalef(1.3, 1.3 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -943,7 +954,7 @@ void HUD::renderHelpButton()
 	{
 		glPushMatrix();
 		glTranslatef(850, 5, 0);
-		glScalef(1.3 * w / 1024, 1.3 * h / 745, 1);
+		glScalef(1.3, 1.3 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -968,7 +979,7 @@ void HUD::renderOptionsButton()
 	{
 		glPushMatrix();
 		glTranslatef(940, 5, 0);
-		glScalef(1.3 * w / 1024, 1.3 * h / 745, 1);
+		glScalef(1.3, 1.3 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1001,7 +1012,7 @@ void HUD::renderOptionsButton()
 	{
 		glPushMatrix();
 		glTranslatef(940, 5, 0);
-		glScalef(1.3 * w / 1024, 1.3 * h / 745, 1);
+		glScalef(1.3, 1.3 * h / 745, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -1022,7 +1033,7 @@ void HUD::renderOptionsButton()
 void HUD::renderInventoryButton()
 {
 	// When mouse over
-	if(mouseX > (770 * w / 1024) && mouseX < (870 * w / 1024) && mouseY > (630 * h / 745) && mouseY < (730 * h / 745) && showHelp != true)
+	if(mouseX > (770 * w / 1024) && mouseX < (870 * w / 1024) && mouseY > (630 * h / 745) && mouseY < (740 * h / 745) && showHelp != true)
 	{
 		glPushMatrix();
 		glTranslatef(770, 685, 0);
@@ -1081,7 +1092,7 @@ void HUD::renderMisc(void)
 {
 	// Top bar
 	glPushMatrix();
-	glScalef(25.6 * w / 1024, 1.6 * h / 745, 1);
+	glScalef(25.6 * w / 1024, 1.6, 1);
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 		glColor4f(0.3f, 0.3f, 0.3f, 0.85f);
@@ -1119,7 +1130,7 @@ void HUD::renderMisc(void)
 	// Mid-bottom bar
 	glPushMatrix();
 	glTranslatef(380, 675, 0);
-	glScalef(6 * w / 1024, 3.3 * h / 745, 1);
+	glScalef(6, 3.3 * h / 745, 1);
 	glEnable( GL_TEXTURE_2D );
 	glEnable( GL_BLEND );
 		glColor4f(0.2f, 0.2f, 0.2f, 0.9f);

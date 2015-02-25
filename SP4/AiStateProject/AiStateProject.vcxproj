@@ -107,6 +107,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="Detect.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="GameMenu.h" />

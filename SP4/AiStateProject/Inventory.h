@@ -8,7 +8,7 @@ struct item
 {
 	int item_id;
 	std::string item_name;
-	bool has_been_rendered;
+	bool has_been_rendered, is_a_material;
 };
 
 class Inventory
@@ -17,7 +17,6 @@ private:
 	enum item_list
 	{
 		EMPTY,
-		KNIFE,		// EQUIPPABLE
 		BANDAGES,	// CONSUMABLE
 		CLOTH,		// MATERIAL
 		ALCOHOL		// MATERIAL + CONSUMABLE
@@ -26,7 +25,6 @@ private:
 	int num_of_items;
 	item slot[MAX_ITEM_SLOTS];
 	item crafting_slot[3];		// Crafting-slot 3 is a product slot (DO NOT ALLOW USER TO PLACE ANYTHING INSIDE)
-	bool craft_in_first_slot;
 
 	TextureImage item_tex[10];
 	void *font_style;
@@ -45,12 +43,14 @@ public:
 	void setSlotItem(int slot_no, int item_no);
 	std::string getSlotItemName(int slot_no);
 
-	void useItem(int slot_no);
+	void useSlotItem(int slot_no);
 
-	void craftWithItem(int slot_no);
+	void craftWithSlotItem(int slot_no);
 	void resetCraftingSlots();
 	void attemptCrafting();
 
 	void renderInventorySlot(int slot_no);
 	void renderCraftingSlots();
+
+	bool craft_in_first_slot;
 };

@@ -5,11 +5,6 @@
 #include "Inventory.h"
 #include "weaponManager.h"
 
-enum weapon_list
-{
-	NONE,
-	KNIFE_HUD
-};
 
 class HUD
 {
@@ -19,7 +14,7 @@ private:
 	void *font_style;
 
 	Inventory HUDInventory;
-	weapon_list CURRENT_WEAPON;
+	int current_weapon;
 	
 	TextureImage HUDtex[20];
 	CweaponManager* weapManager;
