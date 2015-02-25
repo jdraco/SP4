@@ -10,8 +10,11 @@ class HUD
 {
 private:
 	int health, detection_state, level, mouseX, mouseY, mouseType, volume, w, h;
-	bool mouseState, showHelp, showOptions, showInventory, mutemusic, LMouse_down_boolean;
+	bool mouseState, showHelp, showOptions, showInventory, showConfirmUseScreen, showConfirmDiscardScreen, mutemusic, LMouse_down_boolean;
 	void *font_style;
+
+	std::string confirm_temp_item_name;
+	int confirm_temp_item_id;
 
 	Inventory HUDInventory;
 	int current_weapon;
@@ -41,6 +44,8 @@ public:
 	void HelpScreen();
 	void OptionsScreen();
 	void InventoryScreen();
+	void ConfirmUseScreen(std::string item_name, int slot_num);
+	void ConfirmDiscardScreen(std::string item_name, int slot_num);
 	void CraftingScreen();
 };
 

@@ -637,7 +637,9 @@ void HUD::InventoryScreen()
 					// When clicked (Left mouse button - USE ITEM)
 					if (mouseState == false && LMouse_down_boolean == false && mouseType == 0)
 					{
-						CPlayState::Instance()->thePlayer->myInventory.useSlotItem(slot_itr);
+						confirm_temp_item_id = slot_itr;
+						confirm_temp_item_name = item_name;
+						showConfirmUseScreen = true;
 
 						LMouse_down_boolean = true;
 					}
@@ -651,7 +653,10 @@ void HUD::InventoryScreen()
 					// When clicked (Middle mouse button - DISCARD ITEM)
 					else if (mouseState == false && LMouse_down_boolean == false && mouseType == 2)
 					{
-						CPlayState::Instance()->thePlayer->myInventory.emptySlot(slot_itr);
+						confirm_temp_item_id = slot_itr;
+						confirm_temp_item_name = item_name;
+						showConfirmDiscardScreen = true;
+
 						CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
 
 						LMouse_down_boolean = true;
@@ -665,6 +670,252 @@ void HUD::InventoryScreen()
 
 				slot_itr++;
 			}
+		}
+	}
+}
+
+void HUD::ConfirmUseScreen(std::string item_name, int slot_num)
+{
+	if (showConfirmUseScreen == true)
+	{
+		showInventory = false;
+
+		// Use confirmation window
+		glColor4f(0.2f, 0.2f, 0.2f, 0.95f);
+		glPushMatrix();
+		glTranslatef(350, 250, 0);
+		glScalef(8, 4.7, 1);
+		glEnable( GL_TEXTURE_2D );
+		glEnable( GL_BLEND );
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,1); glVertex2f(0,0);
+				glTexCoord2f(0,0); glVertex2f(0,40);
+				glTexCoord2f(1,0); glVertex2f(40,40);
+				glTexCoord2f(1,1); glVertex2f(40,0);
+				glEnd();
+		glDisable( GL_BLEND );
+		glDisable( GL_TEXTURE_2D );
+		glPopMatrix();
+
+
+		// 'Yes' button
+		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		glPushMatrix();
+		glTranslatef(415, 380, 0);
+		glScalef(1.5, 1, 1);
+		glEnable( GL_TEXTURE_2D );
+		glEnable( GL_BLEND );
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,1); glVertex2f(0,0);
+				glTexCoord2f(0,0); glVertex2f(0,40);
+				glTexCoord2f(1,0); glVertex2f(40,40);
+				glTexCoord2f(1,1); glVertex2f(40,0);
+			glEnd();
+		glDisable( GL_BLEND );
+		glDisable( GL_TEXTURE_2D );
+		glPopMatrix();
+
+		glLoadIdentity ();
+		glPushAttrib(GL_ALL_ATTRIB_BITS);
+			glColor3f(1.0f, 1.0f, 1.0f);
+			printw (415, 320, 0, "Use item '%s'?", item_name.c_str());
+		glPopAttrib();
+
+		if(mouseX > 415 * w / 1024 && mouseX < 475 * w / 1024 && mouseY > 355 * h / 745 && mouseY < 390 * h / 745)
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(0.2f, 0.2f, 0.2f);
+				printw (427.5, 407.5, 0, "Yes");
+			glPopAttrib();
+
+			// When clicked
+			if (mouseState == false && mouseType == 0)
+			{
+				showConfirmUseScreen = false;
+				showInventory = true;
+
+				CPlayState::Instance()->thePlayer->myInventory.useSlotItem(slot_num);
+			}
+		}
+		else
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1.0f, 1.0f, 1.0f);
+				printw (427.5, 407.5, 0, "Yes");
+			glPopAttrib();
+		}
+
+
+		// 'No' button
+		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		glPushMatrix();
+		glTranslatef(545, 380, 0);
+		glScalef(1.5, 1, 1);
+		glEnable( GL_TEXTURE_2D );
+		glEnable( GL_BLEND );
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,1); glVertex2f(0,0);
+				glTexCoord2f(0,0); glVertex2f(0,40);
+				glTexCoord2f(1,0); glVertex2f(40,40);
+				glTexCoord2f(1,1); glVertex2f(40,0);
+			glEnd();
+		glDisable( GL_BLEND );
+		glDisable( GL_TEXTURE_2D );
+		glPopMatrix();
+
+		if(mouseX > 545 * w / 1024 && mouseX < 605 * w / 1024 && mouseY > 355 * h / 745 && mouseY < 390 * h / 745)
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(0.2f, 0.2f, 0.2f);
+				printw (562.5, 407.5, 0, "No");
+			glPopAttrib();
+
+			// When clicked
+			if (mouseState == false && mouseType == 0)
+			{
+				showConfirmUseScreen = false;
+				showInventory = true;
+			}
+		}
+		else
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1.0f, 1.0f, 1.0f);
+				printw (562.5, 407.5, 0, "No");
+			glPopAttrib();
+		}
+	}
+}
+
+void HUD::ConfirmDiscardScreen(std::string item_name, int slot_num)
+{
+	if (showConfirmDiscardScreen == true)
+	{
+		showInventory = false;
+
+		// Use confirmation window
+		glColor4f(0.2f, 0.2f, 0.2f, 0.95f);
+		glPushMatrix();
+		glTranslatef(350, 250, 0);
+		glScalef(8, 4.7, 1);
+		glEnable( GL_TEXTURE_2D );
+		glEnable( GL_BLEND );
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,1); glVertex2f(0,0);
+				glTexCoord2f(0,0); glVertex2f(0,40);
+				glTexCoord2f(1,0); glVertex2f(40,40);
+				glTexCoord2f(1,1); glVertex2f(40,0);
+				glEnd();
+		glDisable( GL_BLEND );
+		glDisable( GL_TEXTURE_2D );
+		glPopMatrix();
+
+
+		// 'Yes' button
+		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		glPushMatrix();
+		glTranslatef(415, 380, 0);
+		glScalef(1.5, 1, 1);
+		glEnable( GL_TEXTURE_2D );
+		glEnable( GL_BLEND );
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,1); glVertex2f(0,0);
+				glTexCoord2f(0,0); glVertex2f(0,40);
+				glTexCoord2f(1,0); glVertex2f(40,40);
+				glTexCoord2f(1,1); glVertex2f(40,0);
+			glEnd();
+		glDisable( GL_BLEND );
+		glDisable( GL_TEXTURE_2D );
+		glPopMatrix();
+
+		glLoadIdentity ();
+		glPushAttrib(GL_ALL_ATTRIB_BITS);
+			glColor3f(1.0f, 1.0f, 1.0f);
+			printw (415, 320, 0, "Discard item '%s'?", item_name.c_str());
+		glPopAttrib();
+
+		if(mouseX > 415 * w / 1024 && mouseX < 475 * w / 1024 && mouseY > 355 * h / 745 && mouseY < 390 * h / 745)
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(0.2f, 0.2f, 0.2f);
+				printw (427.5, 407.5, 0, "Yes");
+			glPopAttrib();
+
+			// When clicked
+			if (mouseState == false && mouseType == 0)
+			{
+				showConfirmDiscardScreen = false;
+				showInventory = true;
+
+				CPlayState::Instance()->thePlayer->myInventory.emptySlot(slot_num);
+			}
+		}
+		else
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1.0f, 1.0f, 1.0f);
+				printw (427.5, 407.5, 0, "Yes");
+			glPopAttrib();
+		}
+
+
+		// 'No' button
+		glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+		glPushMatrix();
+		glTranslatef(545, 380, 0);
+		glScalef(1.5, 1, 1);
+		glEnable( GL_TEXTURE_2D );
+		glEnable( GL_BLEND );
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+			glBegin(GL_QUADS);
+				glTexCoord2f(0,1); glVertex2f(0,0);
+				glTexCoord2f(0,0); glVertex2f(0,40);
+				glTexCoord2f(1,0); glVertex2f(40,40);
+				glTexCoord2f(1,1); glVertex2f(40,0);
+			glEnd();
+		glDisable( GL_BLEND );
+		glDisable( GL_TEXTURE_2D );
+		glPopMatrix();
+
+		if(mouseX > 545 * w / 1024 && mouseX < 605 * w / 1024 && mouseY > 355 * h / 745 && mouseY < 390 * h / 745)
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(0.2f, 0.2f, 0.2f);
+				printw (562.5, 407.5, 0, "No");
+			glPopAttrib();
+
+			// When clicked
+			if (mouseState == false && mouseType == 0)
+			{
+				showConfirmDiscardScreen = false;
+				showInventory = true;
+			}
+		}
+		else
+		{
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1.0f, 1.0f, 1.0f);
+				printw (562.5, 407.5, 0, "No");
+			glPopAttrib();
 		}
 	}
 }
@@ -808,6 +1059,16 @@ void HUD::CraftingScreen()
 		// Reset crafting slots when crafting slot 1 or 2 are selected
 		if((mouseX > 650 * w / 1024 && mouseX < 700 * w / 1024 && mouseY > 235 * h / 745 && mouseY < 285 * h / 745) || (mouseX > 765 * w / 1024 && mouseX < 815 * w / 1024 && mouseY > 235 * h / 745 && mouseY < 285 * h / 745))
 		{
+			float mouseX_new = (float) mouseX * (1024 / (float) w);
+			float mouseY_new = (float) mouseY * (745 / (float) h);
+
+			// 'Reset crafting slots' text
+			glLoadIdentity ();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1.0f, 1.0f, 0.0f);
+				printw (mouseX_new - 10, mouseY_new + 60, 0, "Reset crafting slots");
+			glPopAttrib();
+
 			// When clicked
 			if (mouseState == false && (mouseType == 0 || mouseType == 1 || mouseType == 2))
 			{	
@@ -942,7 +1203,7 @@ void HUD::renderCurrentWeapon(void)
 void HUD::renderHelpButton()
 {
 	// When mouse over
-	if(mouseX > (850 * w / 1024) && mouseX < (900 * w / 1024) && mouseY > (5 * h / 745) && mouseY < (55 * h / 745) && showInventory != true)
+	if(mouseX > (850 * w / 1024) && mouseX < (900 * w / 1024) && mouseY > (5 * h / 745) && mouseY < (55 * h / 745) && showInventory != true && showConfirmUseScreen != true)
 	{
 		glPushMatrix();
 		glTranslatef(850, 5, 0);
@@ -1020,7 +1281,7 @@ void HUD::renderHelpButton()
 void HUD::renderOptionsButton()
 {
 	// When mouse over
-	if(mouseX > (940 * w / 1024) && mouseX < (990 * w / 1024) && mouseY > (5 * h / 745) && mouseY < (55 * h / 745) && showHelp != true && showInventory != true)
+	if(mouseX > (940 * w / 1024) && mouseX < (990 * w / 1024) && mouseY > (5 * h / 745) && mouseY < (55 * h / 745) && showHelp != true && showInventory != true && showConfirmUseScreen != true)
 	{
 		glPushMatrix();
 		glTranslatef(940, 5, 0);
@@ -1087,7 +1348,7 @@ void HUD::renderOptionsButton()
 void HUD::renderInventoryButton()
 {
 	// When mouse over
-	if(mouseX > (770 * w / 1024) && mouseX < (870 * w / 1024) && mouseY > (630 * h / 745) && mouseY < (740 * h / 745) && showHelp != true)
+	if(mouseX > (770 * w / 1024) && mouseX < (870 * w / 1024) && mouseY > (630 * h / 745) && mouseY < (740 * h / 745) && showHelp != true && showConfirmUseScreen != true)
 	{
 		glPushMatrix();
 		glTranslatef(770, 685, 0);
@@ -1252,6 +1513,8 @@ void HUD::renderHUD (int health, int detection_state, int level, int mouseX, int
 	HelpScreen();
 	OptionsScreen();
 	InventoryScreen();
+	ConfirmUseScreen(confirm_temp_item_name, confirm_temp_item_id);
+	ConfirmDiscardScreen(confirm_temp_item_name, confirm_temp_item_id);
 
 	if (showOptions != true)
 	{

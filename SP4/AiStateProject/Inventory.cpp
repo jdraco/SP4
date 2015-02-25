@@ -293,35 +293,35 @@ void Inventory::useSlotItem(int slot_no)
 	switch (slot[slot_no].item_id)
 	{
 	// BANDAGES (CONSUMABLE)
-	case 1:
+	case BANDAGES:
 		// Add 15HP
 
 		emptySlot(slot_no);
 		break;
 
 	// CLOTH (MATERIAL)
-	case 2:
+	case CLOTH:
 		break;
 
 	// ALCOHOL (CONSUMABLE) (MATERIAL)
-	case 3:
+	case ALCOHOL:
 		// Add 5HP
 
 		emptySlot(slot_no);
 		break;
 
 	// MACHETE (EQUIPABLE)
-	case 4:
+	case MACHETE:
 		CPlayerInfo::getInstance()->setCurrAmmo(1);
 		CPlayerInfo::getInstance()->setCurrEquipped("Machete");
 		break;
 
 	// BROKEN WOODEN HANDLE (MATERIAL)
-	case 5:
+	case BROKEN_WOODEN_HANDLE:
 		break;
 
 	// BROKEN BLADE (MATERIAL)
-	case 6:
+	case BROKEN_BLADE:
 		break;
 
 	default:
