@@ -650,7 +650,7 @@ void Inventory::renderCraftingSlots()
 				glDisable( GL_TEXTURE_2D );
 				glPopMatrix();
 	}
-	else if (crafting_slot[1].item_id == CLOTH && crafting_slot[0].item_id == BROKEN_BLADE)
+	else if (crafting_slot[1].item_id == CLOTH && crafting_slot[0].item_id == ALCOHOL)
 	{
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				glPushMatrix();
@@ -658,7 +658,7 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture( GL_TEXTURE_2D, item_tex[4].texID );
+					glBindTexture( GL_TEXTURE_2D, item_tex[1].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);
@@ -690,7 +690,7 @@ void Inventory::renderCraftingSlots()
 				glDisable( GL_TEXTURE_2D );
 				glPopMatrix();
 	}
-	else if (crafting_slot[1].item_id == BROKEN_WOODEN_HANDLE && crafting_slot[0].item_id == ALCOHOL)
+	else if (crafting_slot[1].item_id == BROKEN_WOODEN_HANDLE && crafting_slot[0].item_id == BROKEN_BLADE)
 	{
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				glPushMatrix();
@@ -698,7 +698,7 @@ void Inventory::renderCraftingSlots()
 				glEnable( GL_TEXTURE_2D );
 				glEnable( GL_BLEND );
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glBindTexture( GL_TEXTURE_2D, item_tex[1].texID );
+					glBindTexture( GL_TEXTURE_2D, item_tex[4].texID );
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,1); glVertex2f(0,0);
 						glTexCoord2f(0,0); glVertex2f(0,50);

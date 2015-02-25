@@ -570,6 +570,9 @@ void HUD::InventoryScreen()
 		}
 
 
+		CraftingScreen();
+
+
 		// Inventory slots
 		int slot_itr = 0;
 
@@ -596,19 +599,41 @@ void HUD::InventoryScreen()
 
 				HUDInventory.renderInventorySlot(slot_itr);
 
-
-				std::string item_name;
-				item_name = HUDInventory.getSlotItemName(slot_itr);
 				
 				// Mouse over inventory item slot
-				if ((mouseX > (265 + (65 * j)) * w / 1024) && (mouseX < (315 + (65 * j)) * w / 1024) && (mouseY > (240 + (65 * i)) * h / 745) && (mouseY < (290 + (65 * i)) * h / 745))
+				if ((mouseX > (265 + (65 * j)) * w / 1024) && (mouseX < (315 + (65 * j)) * w / 1024) && (mouseY > (235 + (60 * i)) * h / 745) && (mouseY < (285 + (60 * i)) * h / 745))
 				{
+					float mouseX_new = (float) mouseX * (1024 / (float) w);
+					float mouseY_new = (float) mouseY * (745 / (float) h);
+
+					std::string item_name;
+					item_name = HUDInventory.getSlotItemName(slot_itr);
+					int text_box_width = item_name.size();
+
+					glColor4f(0.025f, 0.025f, 0.025f, 1);
+					glPushMatrix();
+					glTranslatef(mouseX_new + 10, mouseY_new + 40, 0);
+					glEnable( GL_TEXTURE_2D );
+					glEnable( GL_BLEND );
+						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+						glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+						glBegin(GL_QUADS);
+							glTexCoord2f(0,1); glVertex2f(0,0);
+							glTexCoord2f(0,0); glVertex2f(0,28);
+							glTexCoord2f(1,0); glVertex2f(11 * text_box_width,28);
+							glTexCoord2f(1,1); glVertex2f(11 * text_box_width,0);
+						glEnd();
+					glDisable( GL_BLEND );
+					glDisable( GL_TEXTURE_2D );
+					glPopMatrix();
+
 					glLoadIdentity();
 					glPushAttrib(GL_ALL_ATTRIB_BITS);
 						glColor3f(1, 1, 1);
-						printw(387.5, 532.5, 0, "%s", item_name.c_str());
+						printw(mouseX_new + 14, mouseY_new + 60, 0, "%s", item_name.c_str());
 					glPopAttrib();
 					
+
 					// When clicked (Left mouse button - USE ITEM)
 					if (mouseState == false && LMouse_down_boolean == false && mouseType == 0)
 					{
@@ -623,9 +648,11 @@ void HUD::InventoryScreen()
 
 						LMouse_down_boolean = true;
 					}
+					// When clicked (Middle mouse button - DISCARD ITEM)
 					else if (mouseState == false && LMouse_down_boolean == false && mouseType == 2)
 					{
 						CPlayState::Instance()->thePlayer->myInventory.emptySlot(slot_itr);
+						CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
 
 						LMouse_down_boolean = true;
 					}
@@ -639,7 +666,6 @@ void HUD::InventoryScreen()
 				slot_itr++;
 			}
 		}
-		CraftingScreen();
 	}
 }
 
@@ -936,6 +962,25 @@ void HUD::renderHelpButton()
 		glDisable( GL_TEXTURE_2D );
 		glPopMatrix();
 
+		float mouseX_new = (float) mouseX * (1024 / (float) w);
+		float mouseY_new = (float) mouseY * (745 / (float) h);
+
+		if (showHelp == false)
+		{
+			glLoadIdentity();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1, 1, 0);
+				printw(mouseX_new, mouseY_new + 45, 0, "Help");
+			glPopAttrib();
+		}
+		else
+		{
+			glLoadIdentity();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1, 1, 0);
+				printw(mouseX_new, mouseY_new + 45, 0, "Close Help");
+			glPopAttrib();
+		}
 		// When clicked
 		if (mouseState == false && LMouse_down_boolean == false && mouseType == 0)
 		{
@@ -995,6 +1040,15 @@ void HUD::renderOptionsButton()
 		glDisable( GL_TEXTURE_2D );
 		glPopMatrix();
 
+		float mouseX_new = (float) mouseX * (1024 / (float) w);
+		float mouseY_new = (float) mouseY * (745 / (float) h);
+
+		glLoadIdentity();
+		glPushAttrib(GL_ALL_ATTRIB_BITS);
+			glColor3f(1, 1, 0);
+			printw(mouseX_new - 10, mouseY_new + 45, 0, "Options");
+		glPopAttrib();
+
 		if (mouseState == false && LMouse_down_boolean == false && mouseType == 0)
 		{
 			if (showOptions == false)
@@ -1052,13 +1106,38 @@ void HUD::renderInventoryButton()
 		glDisable( GL_TEXTURE_2D );
 		glPopMatrix();
 
+		float mouseX_new = (float) mouseX * (1024 / (float) w);
+		float mouseY_new = (float) mouseY * (745 / (float) h);
+
+		if (showInventory == false)
+		{
+			glLoadIdentity();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1, 1, 0);
+				printw(mouseX_new, mouseY_new + 87.5f, 0, "Inventory");
+			glPopAttrib();
+		}
+		else
+		{
+			glLoadIdentity();
+			glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glColor3f(1, 1, 0);
+				printw(mouseX_new, mouseY_new + 87.5f, 0, "Close Inventory");
+			glPopAttrib();
+		}
+
+
 		// When clicked
 		if (mouseState == false && LMouse_down_boolean == false && mouseType == 0)
 		{
 			if (showInventory == false)
 				showInventory = true;
 			else
+			{
+				CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
+
 				showInventory = false;
+			}
 
 			LMouse_down_boolean = true;
 		}
