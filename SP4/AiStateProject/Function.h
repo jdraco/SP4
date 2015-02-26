@@ -260,5 +260,25 @@ inline Mesh * LoadObj(char *filename){
 	return pMesh;
 }
 
+inline void DrawHealthBar( int m_iHealth,  int m_iMaxHealth , GLfloat posx , GLfloat posy , short temp_iHeightOfBar = 10 ,  short temp_iWidthOfBar = 50)
+{
+	short m_iHeightOfBar = temp_iHeightOfBar;
+	short m_iWidthOfBar = temp_iWidthOfBar;
+
+	glBegin(GL_QUADS);
+		glTexCoord2f(0,0); glVertex2f((GLfloat)posx+100, (GLfloat)posy);
+		glTexCoord2f(1,0); glVertex2f((GLfloat)posx+100, (GLfloat)posy + m_iHeightOfBar);
+		glTexCoord2f(1,1); glVertex2f((GLfloat)posx+100+((float)m_iHealth/m_iMaxHealth)*m_iWidthOfBar, (GLfloat)posy + m_iHeightOfBar);
+		glTexCoord2f(0,1); glVertex2f((GLfloat)posx+100+((float)m_iHealth/m_iMaxHealth)*m_iWidthOfBar, (GLfloat)posy);	
+	glEnd();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0,0); glVertex2f((GLfloat)posx+100,(GLfloat)posy);
+		glTexCoord2f(1,0); glVertex2f((GLfloat)posx+100, (GLfloat)posy + m_iHeightOfBar);
+		glTexCoord2f(1,1); glVertex2f((GLfloat)posx+100+m_iWidthOfBar, (GLfloat)posy + m_iHeightOfBar);
+		glTexCoord2f(0,1); glVertex2f((GLfloat)posx+100+m_iWidthOfBar, (GLfloat)posy);	
+	glEnd();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
 
 #endif

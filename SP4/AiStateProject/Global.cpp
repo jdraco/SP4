@@ -233,14 +233,51 @@ bool CGlobal::FreeTiles(Vector3D pos, CMap *map, int x_offset, int y_offset, boo
 	}
 
 	//Free Tiles (No-Collision)
-	if (map->theScreenMap[y][x] != CMap::TILE_NULL &&
+	if (map->theScreenMap[y][x] != CMap::TILE_NULL && map->theScreenMap[y][x] != CMap::BROWNFLOOR && map->theScreenMap[y][x] != CMap::GRASS &&
 		map->theScreenMap[y][x] != CMap::ENTRANCE1 && map->theScreenMap[y][x] != CMap::ENTRANCE2 &&
-		! (map->theScreenMap[y][x] < -1) )
+		map->theScreenMap[y][x] != CMap::PATH_START && map->theScreenMap[y][x] != CMap::PATH_ONE &&
+		map->theScreenMap[y][x] != CMap::PATH_TWO && map->theScreenMap[y][x] != CMap::PATH_END &&
+		map->theScreenMap[y][x] != CMap::INVERSE_START_POINT && map->theScreenMap[y][x] != CMap::SPAWN_PLAYER &&
+		map->theScreenMap[y][x] != CMap::SPAWN_MONSTER && map->theScreenMap[y][x] != CMap::INVERSE_END_POINT)
+
 		return true;
 
 	return false;
 }
 
+bool CGlobal::CheckEntrance(Vector3D pos, CMap *map, int x_offset, int y_offset)//check if there is entrance
+{
+	//The pos.x and pos.y are the top left corner of the hero, so we find the tile which this position occupies.
+	int x = (int)floor((float)(x_offset+pos.x-LEFT_BORDER) / TILE_SIZE);
+	int y = (int)floor((float)(y_offset+pos.y-BOTTOM_BORDER) / TILE_SIZE);
+
+	if((map->theScreenMap[y+1][x] == CMap::ENTRANCE1) || (map->theScreenMap[y+1][x] == CMap::ENTRANCE2))
+	{
+		theMap->LoadMap( "MapDesign2.csv" );
+		theMap->Level2_mapOffset();
+		//return true;
+	}
+	if((map->theScreenMap[y-1][x] == CMap::ENTRANCE1) || (map->theScreenMap[y-1][x] == CMap::ENTRANCE2))
+	{
+		theMap->LoadMap( "MapDesign2.csv" );
+		theMap->Level2_mapOffset();
+		//return true;
+	}
+	if((map->theScreenMap[y][x+1] == CMap::ENTRANCE1) || (map->theScreenMap[y][x+1] == CMap::ENTRANCE2))
+	{
+		theMap->LoadMap( "MapDesign2.csv" );
+		theMap->Level2_mapOffset();
+		//return true;
+	}
+	if((map->theScreenMap[y][x-1] == CMap::ENTRANCE1) || (map->theScreenMap[y][x-1] == CMap::ENTRANCE2))
+	{
+		theMap->LoadMap( "MapDesign2.csv" );
+		theMap->Level2_mapOffset();
+		//return true;
+	}
+
+	return false;
+}
 bool CGlobal::CheckTreasure(Vector3D pos, CMap *map, int x_offset, int y_offset)//check if there is treasure
 {
 	//The pos.x and pos.y are the top left corner of the hero, so we find the tile which this position occupies.

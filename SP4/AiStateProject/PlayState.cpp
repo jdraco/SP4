@@ -186,7 +186,7 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 		if(guard->active == true)
 			guard->Render();
 	}
-	//font->Render("HELLO /Bye",thePlayer->GetPos(),Vector3D(0,1,1));
+	//font->Render("HELLO1234567890 /Bye!!!!!",thePlayer->GetPos(),Vector3D(1,0,0));
 	hud->renderHUD(100,0, 1, theGlobal->MousePos.x,theGlobal->MousePos.y,theGlobal->MouseState,theGlobal->MouseType,glutGet(GLUT_WINDOW_WIDTH),glutGet(GLUT_WINDOW_HEIGHT),thePlayer->myInventory,thePlayer->getCurrEquipped());
 	theCamera->SetHUD(false);
 	
@@ -268,7 +268,7 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 				//Scroll Way Points
 				
 				for (short i = 0; i < (short)guard->OwnPath.Points.size(); ++i)
-					guard->OwnPath.Points[i]->setX (guard->OwnPath.Points[i]->getX() + ScrollSpeed);
+					guard->OwnPath.Points[i].setX (guard->OwnPath.Points[i].getX() + ScrollSpeed);
 					
 			}
 		}
@@ -323,12 +323,13 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 				guard->SetPos_x(guard->GetPos().x-ScrollSpeed);
 
 			for (short i = 0; i < (short)guard->OwnPath.Points.size(); ++i)
-					guard->OwnPath.Points[i]->setX (guard->OwnPath.Points[i]->getX() - ScrollSpeed);
+					guard->OwnPath.Points[i].setX (guard->OwnPath.Points[i].getX() - ScrollSpeed);
 					
 			}
 		}	
-		/*
+		
 		//Scroll Skills with Map
+		/*
 		for (vector<CSkill*>::iterator it = SkillsList.begin(); it != SkillsList.end(); ++it)
 		{
 			if ((*it)->active && mapOffset_x < RESOLUTION_WIDTH)
@@ -377,9 +378,12 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 				guard->SetPos_y(guard->GetPos().y+ScrollSpeed);
 
 				//Scroll Way Points
-					for (short i = 0; i < (short)guard->OwnPath.Points.size(); ++i)
-					guard->OwnPath.Points[i]->setY (guard->OwnPath.Points[i]->getY() + ScrollSpeed);
-					
+				
+				for (short i = 0; i < (short)guard->OwnPath.Points.size(); ++i)
+				{
+					guard->OwnPath.Points[i].setY (guard->OwnPath.Points[i].getY() + ScrollSpeed);
+					//cout << guard->OwnPath.Points[i].getY() << endl;
+				}
 			}
 		}
 
@@ -434,9 +438,12 @@ void CPlayState::ConstrainPlayer(const int leftBorder, const int rightBorder,
 				guard->SetPos_y(guard->GetPos().y-ScrollSpeed);
 
 				//Scroll Way Points
-			for (short i = 0; i < (short)guard->OwnPath.Points.size(); ++i)
-					guard->OwnPath.Points[i]->setY (guard->OwnPath.Points[i]->getY() - ScrollSpeed);
-					
+				for (short i = 0; i < (short)guard->OwnPath.Points.size(); ++i)
+					{
+						guard->OwnPath.Points[i].setY (guard->OwnPath.Points[i].getY() - ScrollSpeed);
+						//cout << guard->OwnPath.Points[i].getY() << endl;
+					}
+				
 			}
 		}
 		/*
@@ -482,29 +489,29 @@ void CPlayState::ScanMap()
 	int NoOfMob = 0;
 	//Loop through column
 
-		for (short p = 0; p < theGlobal->theMap->getNumOfTiles_MapHeight(); ++p)
+	for (short p = 0; p < theGlobal->theMap->getNumOfTiles_MapHeight(); ++p)
+	{
+		//Loop through row
+		for (short q = 0; q < theGlobal->theMap->getNumOfTiles_MapWidth(); ++q)
+		{
+			int current = theGlobal->theMap->theScreenMap[p][q];
+			switch (current) 
 			{
-				//Loop through row
-				for (short q = 0; q < theGlobal->theMap->getNumOfTiles_MapWidth(); ++q)
-				{
-					int current = theGlobal->theMap->theScreenMap[p][q];
-					switch (current) 
-					{
-						case CMap::SPAWN_MONSTER:
-							NoOfMob++;
-							break;
-						//WayPoint initing
-						case CMap::PATH_ONE:
-							///Vector3D * temp = 
-							Paths[0].Points.push_back(new Vector3D((float)(q*TILE_SIZE+LEFT_BORDER-theGlobal->theMap->mapOffset_x), (float)(p*TILE_SIZE+BOTTOM_BORDER-theGlobal->theMap->mapOffset_y)));
-							break;
-						case CMap::PATH_TWO:
-							Paths[1].Points.push_back(new Vector3D(((float)(q*TILE_SIZE+LEFT_BORDER-theGlobal->theMap->mapOffset_x), (float)(p*TILE_SIZE+BOTTOM_BORDER-theGlobal->theMap->mapOffset_y))));
-							break;
-					}
-
-				}
+			case CMap::SPAWN_MONSTER:
+				NoOfMob++;
+				break;
+				//WayPoint initing
+			case CMap::PATH_ONE:
+				///Vector3D * temp = 
+				Paths[0].Points.push_back(Vector3D((float)(q*TILE_SIZE+LEFT_BORDER-theGlobal->theMap->mapOffset_x), (float)(p*TILE_SIZE+BOTTOM_BORDER-theGlobal->theMap->mapOffset_y)));
+				break;
+			case CMap::PATH_TWO:
+				Paths[1].Points.push_back(Vector3D(((float)(q*TILE_SIZE+LEFT_BORDER-theGlobal->theMap->mapOffset_x), (float)(p*TILE_SIZE+BOTTOM_BORDER-theGlobal->theMap->mapOffset_y))));
+				break;
 			}
+
+		}
+	}
 
 
 	for (short i = 0; i < theGlobal->theMap->getNumOfTiles_MapHeight(); ++i)
@@ -513,13 +520,16 @@ void CPlayState::ScanMap()
 		for (short k = 0; k < theGlobal->theMap->getNumOfTiles_MapWidth(); ++k)
 		{
 			int current = theGlobal->theMap->theScreenMap[i][k];
+			int path = 0;
 
 			//Process Tiles
 			switch (current) 
 			{
+
+
 			case CMap::SPAWN_MONSTER:
-				
-				
+
+
 
 				if (NoOfMob > GuardList.size())
 				{
@@ -528,11 +538,14 @@ void CPlayState::ScanMap()
 					CGuard *temp = new CGuard; 
 					temp->SelfInit();
 					temp->SetPos(Vector3D((float)(k*TILE_SIZE+LEFT_BORDER-theGlobal->theMap->mapOffset_x), (float)(i*TILE_SIZE+BOTTOM_BORDER-theGlobal->theMap->mapOffset_y)));
-					temp->SetPath(Paths[0]);
+					temp->SetPath(Paths[path]); 
+					temp->SetTarget(thePlayer);
 					//temp->SetWayPoints(); //Set Way Points for Enemy
 					cout << temp->GetPos().x << " , " <<  temp->GetPos().x << endl;
 
 					GuardList.push_back(temp); 
+
+					//path++;
 				}
 				break;
 
@@ -541,4 +554,3 @@ void CPlayState::ScanMap()
 	} 
 
 }
-

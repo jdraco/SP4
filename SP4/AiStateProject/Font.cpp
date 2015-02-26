@@ -20,6 +20,7 @@ void CFont::Render(string text, Vector3D pos, Vector3D color)
 	{
 		RenderAlphabet(text.at(i),i);
 	}
+	glColor3f(1,1,1);
 	glPopMatrix();
 }
 
@@ -35,6 +36,26 @@ void CFont::RenderAlphabet(char text,int count)
 		if(text == 32)
 		{
 		}
+		else if(text == '?' || text == '!' || text == '.' || text == ',')
+		{
+			int texLocX = 1;
+			if(text == '!')
+				texLocX = 2;
+			if(text == '.')
+				texLocX = 3;
+			if(text == ',')
+				texLocX = 4;
+			glBegin(GL_QUADS);
+			glTexCoord2f(0.14285 * texLocX,1-(0.166 *5)); 
+			glVertex2f(0,0);
+			glTexCoord2f(0.14285 * texLocX,1-(0.166 *5+0.166)); 
+			glVertex2f(0,BIG_TEXT);
+			glTexCoord2f(0.14285 * texLocX+0.14285,1-(0.166 *5+0.166)); 
+			glVertex2f(BIG_TEXT,BIG_TEXT);
+			glTexCoord2f(0.14285 * texLocX+0.14285,1-(0.166 *5)); 
+			glVertex2f(BIG_TEXT,0);
+			glEnd();
+		}
 		else if(text >= 97)
 		{
 			float textLocX = text - 97;
@@ -43,6 +64,8 @@ void CFont::RenderAlphabet(char text,int count)
 			{
 				textLocY++;
 			}
+			glPushMatrix();
+			glTranslatef(0,9,0);
 			glBegin(GL_QUADS);
 			glTexCoord2f(0.14285 * textLocX,1-(0.166 *textLocY)); 
 			glVertex2f(0,0);
@@ -53,6 +76,7 @@ void CFont::RenderAlphabet(char text,int count)
 			glTexCoord2f(0.14285 * textLocX+0.14285,1-(0.166 *textLocY)); 
 			glVertex2f(SMALL_TEXT,0);
 			glEnd();
+			glPopMatrix();
 		}
 		else if(text >= 65)
 		{
@@ -75,8 +99,8 @@ void CFont::RenderAlphabet(char text,int count)
 		}
 		else if(text >= 30)
 		{
-			float textLocX = text - 25;
-			float textLocY = 3;
+			float textLocX = text - 22;
+			float textLocY = 6;
 			for(; textLocX > 6; textLocX-=7)
 			{
 				textLocY++;

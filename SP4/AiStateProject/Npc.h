@@ -3,7 +3,7 @@
 #include"Goodies.h"
 #include "Global.h"
 #include<string>
-
+#include "Font.h"
 class CNpc : public CVariable
 {
 public:
@@ -18,4 +18,8 @@ public:
 private:
 	CGlobal *theGlobal;
 	int dir;
+
+	CFont *font;
+	CSprite*NpcSprite;
+	TextureImage Npctex[10];
 };

@@ -44,6 +44,11 @@ void CPlayerInfo::Init(void)
 	Money = 0;
 	HP = 100;
 
+	//Health and armor
+	Health.max = 100;
+	Health.current = Health.max;
+	Damage = 1;		//can be change to weopen damage
+
 	weapon = new CWeapon();
 	//weapen = CWeapon::GetInstance();
 	weapon->Init();
@@ -62,6 +67,9 @@ void CPlayerInfo::Init(void)
 Draw the hero
 ****************************************************************************************************/
 void CPlayerInfo::Render(void) {
+	
+	DrawHealthBar(Health.current, Health.max ,  Pos.x-110 ,Pos.y-20);
+	
 	if (isMoving == false)
 	{
 		if (GetAnimationCounter() != 0)
@@ -166,6 +174,8 @@ void CPlayerInfo::keyboardUpdate()
 	//Check Collision of the player before moving Up
 	if ((theGlobal->myKeys['w'] || theGlobal->myKeys['W']))
 	{
+		if (!theGlobal->CheckEntrance(Pos,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+		{
 		//Alter Player Direction
 		if (!(theGlobal->myKeys['a'] && !theGlobal->myKeys['A']) 
 			&& !(theGlobal->myKeys['d'] && !theGlobal->myKeys['D']))
@@ -191,11 +201,14 @@ void CPlayerInfo::keyboardUpdate()
 				bMoving = true;
 			}
 		//}
+		}
 	}
 
 	//Check Collision of the player before moving down
 	if ((theGlobal->myKeys['s'] || theGlobal->myKeys['S']))
 	{
+		if (!theGlobal->CheckEntrance(Pos,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+		{
 		//Alter Player Direction
 		if (!(theGlobal->myKeys['a'] && !theGlobal->myKeys['A']) 
 			&& !(theGlobal->myKeys['d'] && !theGlobal->myKeys['D']))
@@ -220,6 +233,7 @@ void CPlayerInfo::keyboardUpdate()
 				bMoving = true;
 			}
 		//}
+		}
 	}
 
 	//Check Collision of the hero before moving left
@@ -229,6 +243,8 @@ void CPlayerInfo::keyboardUpdate()
 	//Move Left
 	if ((theGlobal->myKeys['a'] || theGlobal->myKeys['A']))
 	{
+		if (!theGlobal->CheckEntrance(Pos,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+		{
 		//Alter Player Direction
 		if (!(theGlobal->myKeys['w'] && !theGlobal->myKeys['W']) 
 			&& !(theGlobal->myKeys['s'] && !theGlobal->myKeys['S']))
@@ -253,6 +269,7 @@ void CPlayerInfo::keyboardUpdate()
 				bMoving = true;
 			}
 		//}
+		}
 			//Check Collision of the hero before moving right
 
 	}
@@ -263,6 +280,8 @@ void CPlayerInfo::keyboardUpdate()
 	//Move Right
 	if ((theGlobal->myKeys['d'] || theGlobal->myKeys['D']))
 	{
+		if (!theGlobal->CheckEntrance(Pos,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+		{
 		//Alter Player Direction
 		if (!(theGlobal->myKeys['w'] && !theGlobal->myKeys['W']) 
 			&& !(theGlobal->myKeys['s'] && !theGlobal->myKeys['S']))
@@ -287,12 +306,13 @@ void CPlayerInfo::keyboardUpdate()
 				bMoving = true;
 			}
 		//}
+		}
 	}
 
 	if ((theGlobal->myKeys['e'] || theGlobal->myKeys['E']))
 	{
 		int random_loot = rand()%5+1;
-		Rot.x+=1;
+		//Rot.x+=1;
 		if (theGlobal->CheckDoor(Pos,Dir,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
 		{
 		}
@@ -376,6 +396,8 @@ void CPlayerInfo::keyboardUpdate()
 		if (weapon->checkProjectileCollision(guard->GetPos()))
 		{
 			myInventory.addItem(1);
+			
+			guard->setCurrentHealth(guard->getHealth().current - Damage);		//minus health according to players damage
 			guard->active = false;
 			guard->SetPos(Vector3D()); // reset back to zero
 			break;

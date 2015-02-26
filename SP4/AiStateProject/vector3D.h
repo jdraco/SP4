@@ -128,6 +128,12 @@ public:
 		return  Vector3D(x/GetMagnitude(), y/GetMagnitude(), z/GetMagnitude());
 	}
 
+	Vector3D negative()
+	{
+		return Vector3D(-x, -y, -z);
+	}
+
+
 			void setX(float value)
 		{
 			x = value;

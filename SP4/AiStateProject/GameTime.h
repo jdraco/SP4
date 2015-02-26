@@ -16,6 +16,7 @@ private:
 		elapsedSecond,
 		old_clock;
 
+		static float dt;
 public:
 	CGameTime(void);
 	~CGameTime(void);
@@ -36,8 +37,9 @@ public:
 	int GetCurrent(void);			//Get the current time
 	void SetCurrent();
 	
-	static float GetDelta();			//for delta time
-
+	static void UpdateDelta();
+	static float GetDelta();
+	
 	void Update(void);	
 };
 

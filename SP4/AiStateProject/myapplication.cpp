@@ -40,6 +40,7 @@ void myApplication::Update(void)
 {
 	Score = (int)LuaReading::getInstance()->luaPlusPlus(Score);
 
+	CGameTime::UpdateDelta();
 	theGSM->Update();
 }
 

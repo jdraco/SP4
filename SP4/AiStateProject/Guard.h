@@ -14,8 +14,6 @@ private:
 	CPlayerInfo* Player;
 	CSprite* GuardSprite;
 
-
-
 	bool isMoving;
 	bool NeedRender;
 
@@ -27,10 +25,10 @@ public:
 
 	//path point;
 	CWayPoint OwnPath;
-	void Movement();
+	void WayPointDir();
 
 	short CurrentState;
-
+	short PrevState;
 	enum Playerstate 
 	{
 		IDLE = 0,
@@ -38,6 +36,10 @@ public:
 		CHASE,
 		PATROL,
 		RETREAT,
+		COLLIDED_D,
+		COLLIDED_U,
+		COLLIDED_L,
+		COLLIDED_R,
 		STATE_TOTAL
 	};
 
@@ -53,7 +55,7 @@ public:
 	 int GetItem(ITEM_ID item_id);
 
 	 //Get player info over
-	 void SetTarget(CPlayerInfo* thePlayer);
+	 void SetTarget(CPlayerInfo* thePlayer) {Player = thePlayer;};
 	  //set path for guard to walk
 	 void SetPath(CWayPoint ownpath) { OwnPath = ownpath; } ;
 

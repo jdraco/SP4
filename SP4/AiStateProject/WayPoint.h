@@ -4,7 +4,7 @@
 class CWayPoint
 {
 public:		
-	vector<Vector3D*> Points;	//list of point to go to
+	vector<Vector3D> Points;	//list of point to go to
 	short index;				//point that the char is at;
 
 	CWayPoint(void):index(0){};
@@ -17,7 +17,7 @@ public:
 			index = 0; 
 	};
 
-	Vector3D* getCurrentPoint() 
+	Vector3D getCurrentPoint() 
 	{
 		return Points[index];
 	}; 

@@ -105,7 +105,17 @@ void CMap::Update()
 	if (tileOffset_y+theNumOfTiles_ScreenHeight > theNumOfTiles_MapHeight)
 		tileOffset_y = theNumOfTiles_MapHeight - theNumOfTiles_ScreenHeight;
 }
+void CMap::Level2_mapOffset()
+{
+	mapOffset_x = 40;
+	mapOffset_y = 700;
+}
 
+void CMap::Level3_mapOffset()
+{
+	mapOffset_x = 40;
+	mapOffset_y = 1700;
+}
 bool CMap::LoadTextures()
 {
 	//Load All Textures, if loading failed, return False
@@ -647,10 +657,83 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+			case BROWNFLOOR:
+				IndoorMap->changeSubImage(2); 
+				IndoorMap->changeVariation(9);
 
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+				
 			case GRASS:
 				IndoorMap->changeSubImage(23); 
 				IndoorMap->changeVariation(0);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+			case BOOKSHELF00:
+				IndoorMap->changeSubImage(22); 
+				IndoorMap->changeVariation(5);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case BOOKSHELF01:
+				IndoorMap->changeSubImage(22); 
+				IndoorMap->changeVariation(6);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case BOOKSHELF02:
+				IndoorMap->changeSubImage(22); 
+				IndoorMap->changeVariation(7);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case BOOKSHELF10:
+				IndoorMap->changeSubImage(23); 
+				IndoorMap->changeVariation(5);
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+			case BOOKSHELF11:
+				IndoorMap->changeSubImage(23); 
+				IndoorMap->changeVariation(6);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+
+			case BOOKSHELF12:
+				IndoorMap->changeSubImage(23); 
+				IndoorMap->changeVariation(7);
 
 				//Render Tile
 				glPushMatrix();
@@ -699,8 +782,9 @@ void CMap::RenderTileMap(CMap* map) {
 				glPopMatrix();
 				break;
 			default: //Ground
-				IndoorMap->changeSubImage(2); 
-				IndoorMap->changeVariation(9); 
+				IndoorMap->changeSubImage(0); 
+				IndoorMap->changeVariation(8); 
+
 
 				//Render Tile
 				glPushMatrix();

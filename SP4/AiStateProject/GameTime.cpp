@@ -1,5 +1,6 @@
 #include "GameTime.h"
 
+float CGameTime::dt = 0;
 
 CGameTime::CGameTime(void)
 {
@@ -38,14 +39,23 @@ int CGameTime::GetCurrent(void){
 	return CurrentTime;
 }
 
-float CGameTime::GetDelta(){
-	//Set Time
+void CGameTime::UpdateDelta(){
 	static int previousTime = 0;
 	int currentTime = timeGetTime();
 
 	//Calculate Time Passed
 	int timeInterval = currentTime - previousTime;
 	int dtPTime = currentTime;
-	int dt = (float)((currentTime-dtPTime)*0.001);
+	dt = (float)((currentTime-previousTime)*0.01);
+
+	if(dt > 0.5)
+		dt = 0.17;
+
+	previousTime = currentTime;
+}
+
+
+float CGameTime::GetDelta(){
+	//Set Time
 	return dt;
 }

@@ -15,7 +15,7 @@ protected:
 	Vector3D Vel;	// Velocity
 	Vector3D Dir;	// Direction
 	Vector3D Scale;	// Scale
-	Vector3D Rot;
+	Vector3D Rot;	// Rotation
 
 	Region Collision;
 
@@ -25,6 +25,7 @@ protected:
 	//Game logic
 	
 	STATE Health;
+	float Damage;
 	int delay;
 	CGlobal* theGlobal;
 	
@@ -121,6 +122,10 @@ public:
 	STATE getHealth(){return Health;};
 	int getNoOfHealth(){return Health.no;};
 	
+	//damage
+	void setDamage(float damage){Damage = damage;};
+	float getDamage(){return Damage;};
+
 	int GetDelay(void);
 
 	Vector3D GetMin(void);

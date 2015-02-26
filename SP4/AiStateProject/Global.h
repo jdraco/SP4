@@ -52,6 +52,7 @@ public:
 	bool CheckTreasure(Vector3D pos, CMap *map, int x_offset, int y_offset);
 	bool CheckDoor(Vector3D pos, Vector3D dir, CMap *map, int x_offset, int y_offset);
 	bool Unlock(Vector3D pos,Vector3D dir, CMap *map, int x_offset, int y_offset,int lockpick);
+	bool CheckEntrance(Vector3D pos, CMap *map, int x_offset, int y_offset);
 };
 
 #endif

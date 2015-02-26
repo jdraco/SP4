@@ -15,7 +15,8 @@ void CGuard::SelfInit(void)
 {
 
 	//RotateAngle = 0;
-	CurrentState = IDLE;
+	//starting state
+	CurrentState = PATROL;
 
 	//Basic Setup
 	Scale.Set(1.0f, 1.0f, 1.0f);
@@ -25,9 +26,10 @@ void CGuard::SelfInit(void)
 	active = true;
 	NeedRender = true;
 	
-	//Health and armor
+	//Health and Damage
 	Health.max = 100;
 	Health.current = Health.max;
+	Damage = 10;
 	//Health.no = 4;
 
 	//Team
@@ -51,6 +53,7 @@ bool CGuard::Update(void)
 	float dt = CGameTime::GetDelta();
 	//cout << dt << endl;
 
+	//decide whether to render or not
 	if (Pos.x < LEFT_BORDER || Pos.x > RESOLUTION_WIDTH-LEFT_BORDER-TILE_SIZE*3 || 
 		Pos.y < BOTTOM_BORDER || Pos.y > RESOLUTION_HEIGHT-BOTTOM_BORDER+TILE_SIZE)
 	{
@@ -61,11 +64,7 @@ bool CGuard::Update(void)
 		NeedRender = true;
 	}
 
-	//Moving
-	//Pos = Pos - Vel * Dir * 0.3; //* dt; 
-	//cout <<  << endl;
-	//cout << Pos.x << " , " << Pos.y << endl;
-
+	//health system
 	if (Health.current < 0)
 	{
 		if(Health.no > 0)
@@ -79,72 +78,247 @@ bool CGuard::Update(void)
 		}
 	}
 
-	//temp movement
-	Movement();
+	//individual
 	IndividualAction();
 
-	Pos = Pos - Vel * Dir * 0.3; //* dt; 
+	
 	//TeamAction();
 
 	//Act on the current state
-	switch (CurrentState)
+	switch (CurrentState) //Switch to decide dir
 	{
 		case ATTACK:
 		{
-	
+			Dir = Vector3D();		//stop movement
+			if(Player->getHealth().current > 0)
+				Player->setCurrentHealth(Player->getHealth().current - Damage);
+			//attack
 		}
 			break;
 
 		case CHASE:
 		{
-			/*
-			if (Target->GetPos().x > this->Pos.x)
-			{
-				this->Pos.x += speed;
-			}
-			else
-			{
-				this->Pos.x += -speed;
-			}
-
-			if (Target->GetPos().y > this->Pos.y)
-			{
-				this->Pos.y += speed;
-			}
-			else
-			{
-				this->Pos.y += -speed;
-			}
-			*/
+			Dir = Pos - Player->GetPos();
 		}
 			break;
 
 		case PATROL:
 		{
-			//Pos = Pos - Vel * Dir * -0.1; 
+			WayPointDir(); //follow way point
 		}
 		break;
 
 		case RETREAT:
 		{
-			//Pos = Pos - Vel * Dir * -0.1; //run
-			CurrentState = IDLE;			//reset to idle if not retreating alr
+			Dir = (Pos - Player->GetPos()).negative(); //run away
+			//only needed if using msgboard
+			//CurrentState = IDLE;			//reset to idle if not retreating alr
 		}
 		break;
 		
-		case IDLE:
+		case COLLIDED_D://THIS IS ACTUALLY UP
 		{
+			float distbetween = (Pos - Player->GetPos()).GetMagnitude();
+			if(PrevState == CHASE || distbetween < 200)
+			{
+				Dir = Pos - Player->GetPos();
+				if(Dir.y > 0)
+				Dir.y = 0;
+			}
+			else if(PrevState == PATROL)
+			{
+				WayPointDir();
+				if(Dir.y > 0)
+				Dir.y = 0;
+			}
+			else if(PrevState == RETREAT)
+			{
+				Dir = (Pos - Player->GetPos()).negative();
+				if(Dir.y > 0)
+				Dir.y = 0;
+			}
+			else
+			{
+				CurrentState = PATROL;
+			}
+			if (!theGlobal->Collided(Pos, false, true, false, false, 
+			theGlobal->theMap, theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+			{
+				CurrentState = PrevState;
+			}
+		}
+		break;
+		case COLLIDED_U://THIS IS ACTUALLY DOWN
+		{
+			float distbetween = (Pos - Player->GetPos()).GetMagnitude();
 			
+			if(PrevState == CHASE || distbetween < 200)
+			{
+				Dir = Pos - Player->GetPos();
+				if(Dir.y < 0)
+				Dir.y = 0;
+			}
+			else if(PrevState == PATROL)
+			{
+				WayPointDir();
+				if(Dir.y < 0)
+				Dir.y = 0;
+			}
+			else if(PrevState == RETREAT)
+			{
+				Dir = (Pos - Player->GetPos()).negative();
+				if(Dir.y < 0)
+				Dir.y = 0;
+			}
+			else
+			{
+				CurrentState = PATROL;
+			}
+			if (!theGlobal->Collided(Pos, false, true, false, false, 
+			theGlobal->theMap, theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+			{
+				CurrentState = PrevState;
+			}
+		}
+		break;
+		case COLLIDED_L:
+		{
+			float distbetween = (Pos - Player->GetPos()).GetMagnitude();
+			if(PrevState == CHASE || distbetween < 200)
+			{
+				Dir = Pos - Player->GetPos();
+				if(Dir.x < 0)
+				Dir.x = 0;
+			}
+			else if(PrevState == PATROL)
+			{
+				WayPointDir();
+				if(Dir.x < 0)
+				Dir.x = 0;
+			}
+			else if(PrevState == RETREAT)
+			{
+				Dir = (Pos - Player->GetPos()).negative();
+				if(Dir.x < 0)
+				Dir.x = 0;
+			}
+			else
+			{
+				CurrentState = PATROL;
+			}
+			Vector3D posL; //Fixes the Collision 
+			posL.Set(Pos.x-7, Pos.y); //Buffer of 7
+			if (!theGlobal->Collided(posL, false, false, true, false, 
+				theGlobal->theMap, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y))
+			{
+				CurrentState = PrevState;
+			}
+		}
+		break;
+		case COLLIDED_R:
+		{
+			float distbetween = (Pos - Player->GetPos()).GetMagnitude();
+			if(PrevState == CHASE || distbetween < 200)
+			{
+				Dir = Pos - Player->GetPos();
+				if(Dir.x > 0)
+				Dir.x = 0;
+			}
+			else if(PrevState == PATROL)
+			{
+				WayPointDir();
+				if(Dir.x > 0)
+				Dir.x = 0;
+			}
+			else if(PrevState == RETREAT)
+			{
+				Dir = (Pos - Player->GetPos()).negative();
+				if(Dir.x > 0)
+				Dir.x = 0;
+			}
+			else
+			{
+				CurrentState = PATROL;
+			}
+			Vector3D posR; //Fixes the Collision 
+			posR.Set(Pos.x+7, Pos.y); //Buffer of 7
+			if (!theGlobal->Collided(posR, false, false, false, true, 
+				theGlobal->theMap, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y))
+			{
+				CurrentState = PrevState;
+			}
+		}
+		break;
+		case IDLE:	
+		{
+			//do nothing
 		}
 		break;
 	}
+	if (theGlobal->Collided(Pos-Vector3D(0,5,0), true, false, false, false, 
+		theGlobal->theMap,theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y) && CurrentState != COLLIDED_D)
+	{
+		//Pos.y =  Pos.y + (int) (5.0f *  1.0f) ;
+		PrevState = CurrentState;
+		CurrentState = COLLIDED_D;
+	}
+	if (theGlobal->Collided(Pos+Vector3D(0,5,0), false, true, false, false, 
+		theGlobal->theMap, theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y) && CurrentState != COLLIDED_U)
+	{
+		//Pos.y = Pos.y - (int) (5.0f *  1.0f) ;
+		PrevState = CurrentState;
+		CurrentState = COLLIDED_U;
+	}
+	Vector3D posL; //Fixes the Collision 
+	posL.Set(Pos.x-7, Pos.y); //Buffer of 7
+	if (theGlobal->Collided(posL, false, false, true, false, 
+		theGlobal->theMap, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y) && CurrentState != COLLIDED_L)
+	{
+		//SetPos_x( GetPos().x + (int) (5.0f *  1.0f) );
+		PrevState = CurrentState;
+		CurrentState = COLLIDED_L;
+	}
+	Vector3D posR; //Fixes the Collision 
+	posR.Set(Pos.x+7, Pos.y); //Buffer of 7
+	if (theGlobal->Collided(posR, false, false, false, true, 
+		theGlobal->theMap, theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y) && CurrentState != COLLIDED_R)
+	{
+		//SetPos_x( GetPos().x - (int) (5.0f *  1.0f) );
+		PrevState = CurrentState;
+		CurrentState = COLLIDED_R;
+	}
+	if(CurrentState != ATTACK)			//cause dir = 0 at attack
+		Dir.normalizeVector3D();				//normalise dir before using
+	Pos = Pos - Vel * Dir * dt;	//move character
 
+	cout << CurrentState << endl;
+//	cout << dt << endl;
 	//cout << CurrentState << endl;
-	
+	//cout << active << endl;
+
 	return true;
 }
 
 void CGuard::IndividualAction(){
+	//can be lua-ed
+	float distbetween = (Pos - Player->GetPos()).GetMagnitude();
+
+	if ( distbetween < 50 )
+	{
+		CurrentState = ATTACK;
+	}
+	else if ( distbetween < 200 )
+	{
+		if (CurrentState != COLLIDED_D && CurrentState != COLLIDED_U
+		&& CurrentState != COLLIDED_L && CurrentState != COLLIDED_R)
+		CurrentState = CHASE;
+	}
+	else
+	{
+		//random between partrol and idle
+		CurrentState = PATROL;
+	}
+
 
 }
 
@@ -246,11 +420,17 @@ void CGuard::TeamAction(){
 	
 void CGuard::Render()
 {
+	DrawHealthBar(Health.current, Health.max ,  Pos.x-110 ,Pos.y-20);
+
 	if (isMoving == false)
 	{
 		if (GetAnimationCounter() != 1)
 			SetAnimationCounter(1);
 	}
+
+	SetAnimationCounter( GetAnimationCounter() + 1);
+	if (GetAnimationCounter()> 3)
+			SetAnimationCounter( 0 );
 	//cout << Pos.x << " , " << Pos.y << endl; 
 	
 	//Info();
@@ -347,17 +527,17 @@ int CGuard::GetItem(ITEM_ID item_id)
 	return 0;
 }
 
-void CGuard::Movement()
+void CGuard::WayPointDir()
 {
-	Vector3D Point = Vector3D(OwnPath.getCurrentPoint()->getX() ,OwnPath.getCurrentPoint()->getY() , OwnPath.getCurrentPoint()->getZ() );
+	//Vector3D Point = Vector3D(OwnPath.getCurrentPoint().getX() ,OwnPath.getCurrentPoint().getY() , OwnPath.getCurrentPoint()->getZ() );
 
-	Vector3D DistFromPoint =  Pos - Point  ;
+	Vector3D DistFromPoint =  Pos - OwnPath.getCurrentPoint()  ;
 		
 	//Direction toward target
 	Dir = DistFromPoint;
-	Dir.normalizeVector3D();
+	
 
-	if ( DistFromPoint.GetMagnitude2D() < 50 )
+	if ( DistFromPoint.GetMagnitude2D() < 1 )
 		OwnPath.IndexPlus();
 
 }

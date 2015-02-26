@@ -1,3 +1,4 @@
+#pragma once
 #include "Function.h"
 #include "Variable.h"
 #define SMALL_TEXT 10
