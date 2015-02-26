@@ -19,7 +19,7 @@ private:
 		EMPTY,
 		BANDAGES,				// CONSUMABLE
 		CLOTH,					// MATERIAL
-		ALCOHOL,				// MATERIAL + CONSUMABLE
+		ALCOHOL,				// CONSUMABLE + MATERIAL
 		MACHETE,				// EQUIPABLE
 		BROKEN_WOODEN_HANDLE,	// MATERIAL
 		BROKEN_BLADE			// MATERIAL
@@ -41,6 +41,8 @@ public:
 	void addItem(int item_no);
 	bool addItem(int set,int item_id);
 	void removeItem(int item_id);
+	bool findItem(int item_id);
+
 	void emptySlot(int slot_no);
 	int getSlotItem(int slot_no);
 	std::string getSlotItemName(int slot_no);

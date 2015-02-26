@@ -309,6 +309,24 @@ void Inventory::removeItem(int item_id)
 	}
 }
 
+bool Inventory::findItem(int item_id)
+{
+	int count = 0;
+
+	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+	{
+		if (item_id == slot[i].item_id)
+		{
+			count++;
+		}
+	}
+
+	if (count > 0)
+		return true;
+	else
+		return false;
+}
+
 void Inventory::emptySlot(int slot_no)
 {
 	slot[slot_no].item_id = EMPTY;
@@ -344,22 +362,19 @@ void Inventory::useSlotItem(int slot_no)
 {
 	switch (slot[slot_no].item_id)
 	{
-	// BANDAGES (CONSUMABLE)
-	case BANDAGES:
-		// Add 15HP
+	case BANDAGES:	// CONSUMABLE
+		CPlayerInfo::getInstance()->setHP(CPlayerInfo::getInstance()->getHP() + 15);
 
 		emptySlot(slot_no);
 		break;
 
-	// ALCOHOL (CONSUMABLE) (MATERIAL)
-	case ALCOHOL:
-		// Add 5HP
+	case ALCOHOL:	// CONSUMABLE + MATERIAL
+		CPlayerInfo::getInstance()->setHP(CPlayerInfo::getInstance()->getHP() + 5);
 
 		emptySlot(slot_no);
 		break;
 
-	// MACHETE (EQUIPABLE)
-	case MACHETE:
+	case MACHETE:	// EQUIPABLE
 		CPlayerInfo::getInstance()->setCurrAmmo(1);
 		CPlayerInfo::getInstance()->setCurrEquipped("Machete");
 		break;
