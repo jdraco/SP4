@@ -9,7 +9,7 @@ CGlobal::CGlobal(void)
 		myKeys[i] = false;
 	}
 	InGameTime = new CGameTime;
-
+	lock = new CLock;
 	RG.Init(CRandomGenerator::RNG_NON_DETERMINISTIC,CRandomGenerator::RNG_RANDOM_TWISTER);
 }
 
@@ -314,6 +314,35 @@ bool CGlobal::CheckTreasure(Vector3D pos, CMap *map, int x_offset, int y_offset)
 		}
 	}
 
+	if(map->theScreenMap[y+1][x] == CMap::CHEST_LOCKED)
+	{
+		//gettreasurefunc
+		if(!lock->active)
+			lock->active = true;
+		return true;
+	}
+	if(map->theScreenMap[y-1][x] == CMap::CHEST_LOCKED)
+	{
+		//gettreasurefunc
+		if(!lock->active)
+			lock->active = true;
+		return true;
+	}
+	if(map->theScreenMap[y][x+1] == CMap::CHEST_LOCKED)
+	{
+		//gettreasurefunc
+		if(!lock->active)
+			lock->active = true;
+		return true;
+	}
+	if(map->theScreenMap[y][x-1] == CMap::CHEST_LOCKED)
+	{
+		//gettreasurefunc
+		if(!lock->active)
+			lock->active = true;
+		return true;
+	}
+
 	return false;
 }
 
@@ -323,7 +352,8 @@ bool CGlobal::CheckDoor(Vector3D pos , Vector3D dir, CMap *map, int x_offset, in
 	int x = (int)floor((float)(x_offset+pos.x-LEFT_BORDER) / TILE_SIZE);
 	int y = (int)floor((float)(y_offset+pos.y-BOTTOM_BORDER) / TILE_SIZE);
 
-
+	if(dir.y > 0)
+		dir.y = 2;
 	if(map->theScreenMap[y+dir.y][x+dir.x] == CMap::DOOR_LEFT && map->theScreenMap[y+dir.y][x+dir.x+1] == CMap::DOOR_RIGHT)
 	{
 		//gettreasurefunc
@@ -341,6 +371,65 @@ bool CGlobal::CheckDoor(Vector3D pos , Vector3D dir, CMap *map, int x_offset, in
 		map->theScreenMap[y+dir.y][x+dir.x-2] = CMap::DOOR_LEFT;
 		map->theScreenMap[y+dir.y][x+dir.x+1] = CMap::DOOR_RIGHT;
 		return true;
+	}
+	if(map->theScreenMap[y+dir.y][x+dir.x] == CMap::DOOR_LEFT_L && map->theScreenMap[y+dir.y][x+dir.x+1] == CMap::DOOR_RIGHT_L)
+	{
+		//gettreasurefunc
+		if(!lock->active)
+			lock->active = true;
+		return true;
+	}
+	if(map->theScreenMap[y+dir.y][x+dir.x] == CMap::DOOR_RIGHT_L && map->theScreenMap[y+dir.y][x+dir.x-1] == CMap::DOOR_LEFT_L)
+	{
+		//gettreasurefunc
+		if(!lock->active)
+			lock->active = true;
+		return true;
+	}
+	return false;
+}
+
+bool CGlobal::Unlock(Vector3D pos , Vector3D dir, CMap *map, int x_offset, int y_offset,int lockpick)//check if there is door
+{
+	int x = (int)floor((float)(x_offset+pos.x-LEFT_BORDER) / TILE_SIZE);
+	int y = (int)floor((float)(y_offset+pos.y-BOTTOM_BORDER) / TILE_SIZE);
+
+	if(dir.y > 0)
+		dir.y = 2;
+	if(map->theScreenMap[y+dir.y][x+dir.x] == CMap::CHEST_LOCKED)
+	{
+		//gettreasurefunc
+		map->theScreenMap[y+dir.y][x+dir.x] = CMap::CHEST_OPENED;
+		lock->active = false;
+
+		return true;
+	}
+	if(map->theScreenMap[y+dir.y][x+dir.x] == CMap::DOOR_LEFT_L && map->theScreenMap[y+dir.y][x+dir.x+1] == CMap::DOOR_RIGHT_L)
+	{
+		//gettreasurefunc
+
+		if(lockpick == 1)
+		{
+			map->theScreenMap[y+dir.y][x+dir.x] = CMap::TILE_NULL;
+			map->theScreenMap[y+dir.y][x+dir.x+1] = CMap::TILE_NULL;
+			map->theScreenMap[y+dir.y][x+dir.x-1] = CMap::DOOR_LEFT;
+			map->theScreenMap[y+dir.y][x+dir.x+2] = CMap::DOOR_RIGHT;
+			lock->active = false;
+		}
+		return false;
+	}
+	if(map->theScreenMap[y+dir.y][x+dir.x] == CMap::DOOR_RIGHT_L && map->theScreenMap[y+dir.y][x+dir.x-1] == CMap::DOOR_LEFT_L)
+	{
+
+		if(lockpick == 1)
+		{
+			map->theScreenMap[y+dir.y][x+dir.x] = CMap::TILE_NULL;
+			map->theScreenMap[y+dir.y][x+dir.x-1] = CMap::TILE_NULL;
+			map->theScreenMap[y+dir.y][x+dir.x-2] = CMap::DOOR_LEFT;
+			map->theScreenMap[y+dir.y][x+dir.x+1] = CMap::DOOR_RIGHT;
+			lock->active = false;
+		}
+		return false;
 	}
 	return false;
 }

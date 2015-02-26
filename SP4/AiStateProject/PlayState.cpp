@@ -18,7 +18,7 @@ void CPlayState::Init()
 	theNpc->init();
 	font = new CFont();
 	hud = new HUD();
-	lock = new CLock();
+	//theGlobal->lock = new CLock();
 	//weapManager = new CweaponManager();
 	//weapManager->InitDB();
 
@@ -119,26 +119,37 @@ void CPlayState::Update(CGameStateManager* theGSM)
 	*/
 	//theCamera->SetPlayerInfo(thePlayer->GetPos(), thePlayer->GetRot());
 	thePlayer->SetGuardList(GuardList);
-	if(!lock->active)
+	if(!theGlobal->lock->active)
 	thePlayer->Update();
 	theNpc->Update();
-	if(theGlobal->myKeys['p'] || theGlobal->myKeys['P'])
-		lock->active = !lock->active;
-	if(lock->active)//inventory add item type lockpick
+	if(theGlobal->lock->active)//inventory add item type lockpick
 	{
 		bool movelock = false;
 		float dirV = 0;
 		if(theGlobal->myKeys[' '])
 			movelock = true;
+		if(theGlobal->myKeys[8])
+			theGlobal->lock->active = false;
 		if(theGlobal->myKeys['a'] || theGlobal->myKeys['A'])
 			dirV = -1;
 		if(theGlobal->myKeys['d'] || theGlobal->myKeys['D'] )
 			dirV = 1;
 
-		if(lock->Update(dirV,movelock))
+		int lockReturn = theGlobal->lock->Update(dirV,movelock);
+		if(lockReturn == 1)
 		{	
-			lock->active = false;
-			lock->Reset();
+			theGlobal->lock->active = false;
+			theGlobal->lock->Reset(true, 30, 100);
+			if(theGlobal->Unlock(thePlayer->GetPos() , thePlayer->GetDir(), theGlobal->theMap, 
+			theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y,lockReturn))
+			{
+				int random_loot = rand()%6+1;
+				thePlayer->myInventory.addItem(random_loot);
+			}
+		}
+		if(lockReturn == -1)
+		{	
+			theGlobal->lock->Reset(false, 0 ,0);
 		}
 	}
 	//cout << "CPlayState::Update\n" << endl;
@@ -167,8 +178,8 @@ void CPlayState::Draw(CGameStateManager* theGSM)
 	theNpc->Popup();
 	theNpc->render();
 	thePlayer->Render();
-	if(lock->active)
-		lock->Render();
+	if(theGlobal->lock->active)
+		theGlobal->lock->Render();
 	for(unsigned a = 0; a < GuardList.size(); ++a)
 	{
 		CGuard *guard = GuardList[a];

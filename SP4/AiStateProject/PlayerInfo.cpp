@@ -41,11 +41,7 @@ void CPlayerInfo::Init(void)
 	//Init Position (Can be Lua-ed)
 	//Pos = Vector3D(200,310,0);
 
-
-	damage = 1;
-	skillLevel = 1;
-	debt = 0;
-
+	Money = 0;
 	HP = 100;
 
 	weapon = new CWeapon();
@@ -295,11 +291,10 @@ void CPlayerInfo::keyboardUpdate()
 
 	if ((theGlobal->myKeys['e'] || theGlobal->myKeys['E']))
 	{
-		int random_loot = rand()%2+1;
+		int random_loot = rand()%5+1;
 		Rot.x+=1;
 		if (theGlobal->CheckDoor(Pos,Dir,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
 		{
-			
 		}
 		else if(!theGlobal->CheckTreasure(Pos,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
 			weapon->Attack(Dir,Pos);
@@ -443,6 +438,14 @@ void CPlayerInfo::setHP(int h){
 	else if (HP < 0)
 		HP = 0;
 }
+
+int CPlayerInfo::getMoney(){
+	return Money;
+}
+void CPlayerInfo::setMoney(int m){
+	Money = m;
+}
+
 string CPlayerInfo::getState()
 {
 	return state;

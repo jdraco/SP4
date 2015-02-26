@@ -54,8 +54,6 @@ public:
 	//NPC
 	CNpc *theNpc;
 
-	CLock *lock;
-
 	//Path List
 	CWayPoint Paths[ CMap::PATH_END - CMap::PATH_START -1 ];
 
