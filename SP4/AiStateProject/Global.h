@@ -13,7 +13,6 @@
 
 //Map
 #include "Map.h"
-#include "Lock.h"
 
 class CGlobal
 {
@@ -38,10 +37,7 @@ public:
 	
 	//game map
 	CMap* theMap;
-
-	//lock
-	CLock* lock;
-
+	
 	bool chestlocked;
 		
 	bool Collided(Vector3D pos, 
@@ -51,7 +47,6 @@ public:
 	bool FreeTiles(Vector3D pos, CMap *map, int x_offset, int y_offset, bool start, short UDLR);
 	bool CheckTreasure(Vector3D pos, CMap *map, int x_offset, int y_offset);
 	bool CheckDoor(Vector3D pos, Vector3D dir, CMap *map, int x_offset, int y_offset);
-	bool Unlock(Vector3D pos,Vector3D dir, CMap *map, int x_offset, int y_offset,int lockpick);
 };
 
 #endif

@@ -23,16 +23,15 @@ private:
 
 	int HP;
 	
-	int Money;
 	//string inventory[INVENTORY_SIZE];
 
 	//int inventAmt[INVENTORY_SIZE];
 
-	//string currEquippedArm;//armor
+	string currEquipped;
 
 	int currEqAmmo;
 
-	CWeapon *weapon;//weap
+	CWeapon *weapon;
 
 	CGlobal* theGlobal;
 
@@ -62,6 +61,11 @@ public:
 
 	//check for initialisation
 	bool IsPos;
+
+
+	int damage;
+	int skillLevel;
+	int debt;
 
 	void keyboardUpdate();
 	bool Update();
@@ -94,21 +98,13 @@ public:
 
 	bool CPlayerInfo::setWInventory(int set[INVENTORY_SIZE]);
 
-	string getCurrEquipped();//weap
+	string getCurrEquipped();
 
 	void setCurrEquipped(string weap);
-
-	//string getCurrEquippedArmor();//armor
-
-	//void setCurrEquippedArmor(string arm);
 
 	int getCurrAmmo();
 
 	void setCurrAmmo(int ammo);
-
-	int getMoney();//get money
-
-	void setMoney(int m);//set money
 
 	Bullet * GetBullet(int bullet);//calls GetBullet from weapon.cpp
 	int GetBulletListSize();//Get bullet list size
