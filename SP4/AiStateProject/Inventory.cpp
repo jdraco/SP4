@@ -20,6 +20,9 @@ Inventory::Inventory(void)
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
 	{
 		slot[i].item_id = EMPTY;
+		slot[i].is_a_material = false;
+		slot[i].is_useable = false;
+		slot[i].is_discardable = false;
 		slot[i].has_been_rendered = false;
 	}
 }
@@ -78,6 +81,8 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BANDAGES;
 				slot[i].is_a_material = false;
+				slot[i].is_useable = true;
+				slot[i].is_discardable = true;
 
 				item_added = true;
 			}
@@ -93,6 +98,8 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = CLOTH;
 				slot[i].is_a_material = true;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = true;
 				
 				item_added = true;
 			}
@@ -108,6 +115,8 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = ALCOHOL;
 				slot[i].is_a_material = true;
+				slot[i].is_useable = true;
+				slot[i].is_discardable = true;
 
 				item_added = true;
 			}
@@ -123,6 +132,8 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = MACHETE;
 				slot[i].is_a_material = false;
+				slot[i].is_useable = true;
+				slot[i].is_discardable = true;
 
 				item_added = true;
 			}
@@ -138,6 +149,8 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BROKEN_WOODEN_HANDLE;
 				slot[i].is_a_material = true;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = true;
 
 				item_added = true;
 			}
@@ -153,6 +166,8 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BROKEN_BLADE;
 				slot[i].is_a_material = true;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = true;
 
 				item_added = true;
 			}
@@ -187,6 +202,11 @@ void Inventory::removeItem(int item_id)
 			if (slot[i].item_id == BANDAGES && item_removed == false)
 			{
 				slot[i].item_id = EMPTY;
+				slot[i].has_been_rendered = false;
+				slot[i].is_a_material = false;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = false;
+
 				item_removed = true;
 			}
 		}
@@ -200,6 +220,11 @@ void Inventory::removeItem(int item_id)
 			if (slot[i].item_id == CLOTH && item_removed == false)
 			{
 				slot[i].item_id = EMPTY;
+				slot[i].has_been_rendered = false;
+				slot[i].is_a_material = false;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = false;
+
 				item_removed = true;
 			}
 		}
@@ -213,6 +238,11 @@ void Inventory::removeItem(int item_id)
 			if (slot[i].item_id == ALCOHOL && item_removed == false)
 			{
 				slot[i].item_id = EMPTY;
+				slot[i].has_been_rendered = false;
+				slot[i].is_a_material = false;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = false;
+
 				item_removed = true;
 			}
 		}
@@ -226,6 +256,11 @@ void Inventory::removeItem(int item_id)
 			if (slot[i].item_id == MACHETE && item_removed == false)
 			{
 				slot[i].item_id = EMPTY;
+				slot[i].has_been_rendered = false;
+				slot[i].is_a_material = false;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = false;
+
 				item_removed = true;
 			}
 		}
@@ -239,6 +274,11 @@ void Inventory::removeItem(int item_id)
 			if (slot[i].item_id == BROKEN_WOODEN_HANDLE && item_removed == false)
 			{
 				slot[i].item_id = EMPTY;
+				slot[i].has_been_rendered = false;
+				slot[i].is_a_material = false;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = false;
+
 				item_removed = true;
 			}
 		}
@@ -252,6 +292,11 @@ void Inventory::removeItem(int item_id)
 			if (slot[i].item_id == BROKEN_BLADE && item_removed == false)
 			{
 				slot[i].item_id = EMPTY;
+				slot[i].has_been_rendered = false;
+				slot[i].is_a_material = false;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = false;
+
 				item_removed = true;
 			}
 		}
@@ -267,6 +312,11 @@ void Inventory::removeItem(int item_id)
 void Inventory::emptySlot(int slot_no)
 {
 	slot[slot_no].item_id = EMPTY;
+	slot[slot_no].has_been_rendered = false;
+	slot[slot_no].is_a_material = false;
+	slot[slot_no].is_useable = false;
+	slot[slot_no].is_discardable = false;
+
 	num_of_items--;
 }
 
@@ -275,17 +325,19 @@ int Inventory::getSlotItem(int slot_no)
 	return slot[slot_no].item_id;
 }
 
-void Inventory::setSlotItem(int slot_no, int item_id)
-{
-	if (item_id == EMPTY)
-		num_of_items--;
-
-	this->slot[slot_no].item_id = item_id;
-}
-
 std::string Inventory::getSlotItemName(int slot_no)
 {
 	return slot[slot_no].item_name;
+}
+ 
+bool Inventory::getSlotItemUseableStatus(int slot_no)
+{
+	return slot[slot_no].is_useable;
+}
+
+bool Inventory::getSlotItemDiscardableStatus(int slot_no)
+{
+	return slot[slot_no].is_discardable;
 }
 
 void Inventory::useSlotItem(int slot_no)
@@ -299,10 +351,6 @@ void Inventory::useSlotItem(int slot_no)
 		emptySlot(slot_no);
 		break;
 
-	// CLOTH (MATERIAL)
-	case CLOTH:
-		break;
-
 	// ALCOHOL (CONSUMABLE) (MATERIAL)
 	case ALCOHOL:
 		// Add 5HP
@@ -314,14 +362,6 @@ void Inventory::useSlotItem(int slot_no)
 	case MACHETE:
 		CPlayerInfo::getInstance()->setCurrAmmo(1);
 		CPlayerInfo::getInstance()->setCurrEquipped("Machete");
-		break;
-
-	// BROKEN WOODEN HANDLE (MATERIAL)
-	case BROKEN_WOODEN_HANDLE:
-		break;
-
-	// BROKEN BLADE (MATERIAL)
-	case BROKEN_BLADE:
 		break;
 
 	default:

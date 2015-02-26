@@ -23,6 +23,7 @@ HUD::HUD(void)
 	LoadTGA( &HUDtex[ 11 ], "Texture/HUD/knife.tga");
 
 	font_style = GLUT_BITMAP_HELVETICA_18;
+
 	weapManager = new CweaponManager();
 	weapManager->Init();
 }
@@ -676,7 +677,7 @@ void HUD::InventoryScreen()
 
 void HUD::ConfirmUseScreen(std::string item_name, int slot_num)
 {
-	if (showConfirmUseScreen == true)
+	if (showConfirmUseScreen == true && CPlayState::Instance()->thePlayer->myInventory.getSlotItemUseableStatus(slot_num) == true)
 	{
 		showInventory = false;
 
@@ -795,11 +796,13 @@ void HUD::ConfirmUseScreen(std::string item_name, int slot_num)
 			glPopAttrib();
 		}
 	}
+	else
+		showConfirmUseScreen = false;
 }
 
 void HUD::ConfirmDiscardScreen(std::string item_name, int slot_num)
 {
-	if (showConfirmDiscardScreen == true)
+	if (showConfirmDiscardScreen == true && CPlayState::Instance()->thePlayer->myInventory.getSlotItemDiscardableStatus(slot_num) == true)
 	{
 		showInventory = false;
 
@@ -918,6 +921,8 @@ void HUD::ConfirmDiscardScreen(std::string item_name, int slot_num)
 			glPopAttrib();
 		}
 	}
+	else
+		showConfirmDiscardScreen = false;
 }
 
 void HUD::CraftingScreen()
