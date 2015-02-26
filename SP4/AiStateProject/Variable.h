@@ -102,6 +102,7 @@ public:
 	//Get/Set function
 	void SetPos(Vector3D tempPos);
 	Vector3D GetPos(void);
+	Vector3D GetDir(void);
 	void SetPos_x(float pos_x);
 	void SetPos_y(float pos_y);
 	

@@ -46,6 +46,7 @@ public:
 	void CheckCollision(Vector3D pos, CMap *map, int x_offset, int y_offset);
 	bool FreeTiles(Vector3D pos, CMap *map, int x_offset, int y_offset, bool start, short UDLR);
 	bool CheckTreasure(Vector3D pos, CMap *map, int x_offset, int y_offset);
+	bool CheckDoor(Vector3D pos, Vector3D dir, CMap *map, int x_offset, int y_offset);
 };
 
 #endif

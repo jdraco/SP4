@@ -108,6 +108,15 @@
     <ClCompile Include="GameMenu.cpp">
       <Filter>Source Files\Game Object</Filter>
     </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Npc.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Lock.cpp">
+      <Filter>Source Files\Game Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vector3D.h">
@@ -198,6 +207,18 @@
       <Filter>Header Files\Game Object</Filter>
     </ClInclude>
     <ClInclude Include="Detect.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Npc.h">
+      <Filter>Header Files\Game Object</Filter>
+    </ClInclude>
+    <ClInclude Include="WayPoint.h">
+      <Filter>Header Files\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Lock.h">
       <Filter>Header Files\Game Object</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include "Weapon.h"
 #include "Inventory.h"
 #include <string>
+#include "Lock.h"
 
 #define INVENTORY_SIZE 5
 

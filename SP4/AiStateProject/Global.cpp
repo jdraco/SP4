@@ -316,3 +316,31 @@ bool CGlobal::CheckTreasure(Vector3D pos, CMap *map, int x_offset, int y_offset)
 
 	return false;
 }
+
+bool CGlobal::CheckDoor(Vector3D pos , Vector3D dir, CMap *map, int x_offset, int y_offset)//check if there is door
+{
+	//The pos.x and pos.y are the top left corner of the hero, so we find the tile which this position occupies.
+	int x = (int)floor((float)(x_offset+pos.x-LEFT_BORDER) / TILE_SIZE);
+	int y = (int)floor((float)(y_offset+pos.y-BOTTOM_BORDER) / TILE_SIZE);
+
+
+	if(map->theScreenMap[y+dir.y][x+dir.x] == CMap::DOOR_LEFT && map->theScreenMap[y+dir.y][x+dir.x+1] == CMap::DOOR_RIGHT)
+	{
+		//gettreasurefunc
+		map->theScreenMap[y+dir.y][x+dir.x] = CMap::TILE_NULL;
+		map->theScreenMap[y+dir.y][x+dir.x+1] = CMap::TILE_NULL;
+		map->theScreenMap[y+dir.y][x+dir.x-1] = CMap::DOOR_LEFT;
+		map->theScreenMap[y+dir.y][x+dir.x+2] = CMap::DOOR_RIGHT;
+		return true;
+	}
+	if(map->theScreenMap[y+dir.y][x+dir.x] == CMap::DOOR_RIGHT && map->theScreenMap[y+dir.y][x+dir.x-1] == CMap::DOOR_LEFT)
+	{
+		//gettreasurefunc
+		map->theScreenMap[y+dir.y][x+dir.x] = CMap::TILE_NULL;
+		map->theScreenMap[y+dir.y][x+dir.x-1] = CMap::TILE_NULL;
+		map->theScreenMap[y+dir.y][x+dir.x-2] = CMap::DOOR_LEFT;
+		map->theScreenMap[y+dir.y][x+dir.x+1] = CMap::DOOR_RIGHT;
+		return true;
+	}
+	return false;
+}

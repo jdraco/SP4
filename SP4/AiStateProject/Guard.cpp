@@ -47,11 +47,6 @@ void CGuard::SelfInit(void)
 
 bool CGuard::Update(void)
 {
-	//Direction toward target
-	/*
-	Dir = ( Pos - Target->GetPos() ) * 0.1 ;
-	Dir.normalizeVector3D();
-	*/
 	
 	float dt = CGameTime::GetDelta();
 	//cout << dt << endl;
@@ -84,7 +79,11 @@ bool CGuard::Update(void)
 		}
 	}
 
+	//temp movement
+	Movement();
 	IndividualAction();
+
+	Pos = Pos - Vel * Dir * 0.3; //* dt; 
 	//TeamAction();
 
 	//Act on the current state
@@ -346,4 +345,19 @@ int CGuard::GetItem(ITEM_ID item_id)
 	}
 	*/
 	return 0;
+}
+
+void CGuard::Movement()
+{
+	Vector3D Point = Vector3D(OwnPath.getCurrentPoint()->getX() ,OwnPath.getCurrentPoint()->getY() , OwnPath.getCurrentPoint()->getZ() );
+
+	Vector3D DistFromPoint =  Pos - Point  ;
+		
+	//Direction toward target
+	Dir = DistFromPoint;
+	Dir.normalizeVector3D();
+
+	if ( DistFromPoint.GetMagnitude2D() < 50 )
+		OwnPath.IndexPlus();
+
 }

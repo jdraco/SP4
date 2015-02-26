@@ -9,6 +9,8 @@ using namespace std;
 
 #include "Define.h"
 #include "Sprite.h"
+//Waypoint
+#include "WayPoint.h"
 #define TILESET_X 30.05f
 #define TILESET_Y 15.99f
 #define LITTLEROOT_X 7.98f
@@ -45,6 +47,7 @@ public:
 		HOLE,
 		CHEST_CLOSED, CHEST_OPENED, CHEST_LOCKED,
 		GRASS,
+		DOOR_LEFT,DOOR_RIGHT,
 		TILE_TOTAL
 	};
 
@@ -65,6 +68,11 @@ public:
 		SPAWN_PLAYER,
 		SPAWN_MONSTER,
 		INVERSE_END_POINT,
+
+		PATH_START = -100,
+		PATH_ONE,
+		PATH_TWO,
+		PATH_END,
 	};
 
 	//Starting Map

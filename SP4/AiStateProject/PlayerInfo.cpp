@@ -56,15 +56,16 @@ void CPlayerInfo::Init(void)
 	myInventory.addItem(1);
 	myInventory.addItem(2);
 	myInventory.addItem(3);
-	//myInventory.addItem(4);
+	myInventory.addItem(4);
 	myInventory.addItem(5);
 	myInventory.addItem(6);
+
+
 }
 /****************************************************************************************************
 Draw the hero
 ****************************************************************************************************/
 void CPlayerInfo::Render(void) {
-
 	if (isMoving == false)
 	{
 		if (GetAnimationCounter() != 0)
@@ -182,9 +183,9 @@ void CPlayerInfo::keyboardUpdate()
 			SetAnimationCounter( 3 );
 
 		//Do not allow movement when stopMovement is true
-		if (!theGlobal->myKeys['d'] && !theGlobal->myKeys['D']  && 
+		/*if (!theGlobal->myKeys['d'] && !theGlobal->myKeys['D']  && 
 			!theGlobal->myKeys['a'] && !theGlobal->myKeys['A'])
-		{
+		{*/
 			//Check if Collision is detected
 			if (!theGlobal->Collided(Pos-Vector3D(0,5,0), true, false, false, false, 
 				theGlobal->theMap,theGlobal->theMap->mapOffset_x, theGlobal->theMap->mapOffset_y)
@@ -193,7 +194,7 @@ void CPlayerInfo::keyboardUpdate()
 				Pos.y =  Pos.y - (int) (5.0f *  1.0f) ;
 				bMoving = true;
 			}
-		}
+		//}
 	}
 
 	//Check Collision of the player before moving down
@@ -295,8 +296,12 @@ void CPlayerInfo::keyboardUpdate()
 	if ((theGlobal->myKeys['e'] || theGlobal->myKeys['E']))
 	{
 		int random_loot = rand()%2+1;
-
-		if(!theGlobal->CheckTreasure(Pos,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+		Rot.x+=1;
+		if (theGlobal->CheckDoor(Pos,Dir,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
+		{
+			
+		}
+		else if(!theGlobal->CheckTreasure(Pos,theGlobal->theMap,theGlobal->theMap->mapOffset_x,theGlobal->theMap->mapOffset_y))
 			weapon->Attack(Dir,Pos);
 		else
 		{

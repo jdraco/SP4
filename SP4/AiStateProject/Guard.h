@@ -14,6 +14,8 @@ private:
 	CPlayerInfo* Player;
 	CSprite* GuardSprite;
 
+
+
 	bool isMoving;
 	bool NeedRender;
 
@@ -22,6 +24,10 @@ private:
 public:
 	CGuard(void);
 	~CGuard(void);
+
+	//path point;
+	CWayPoint OwnPath;
+	void Movement();
 
 	short CurrentState;
 
@@ -48,6 +54,9 @@ public:
 
 	 //Get player info over
 	 void SetTarget(CPlayerInfo* thePlayer);
+	  //set path for guard to walk
+	 void SetPath(CWayPoint ownpath) { OwnPath = ownpath; } ;
+
 	 // CPlayerInfo GetTarget();
 };
 

@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
@@ -89,11 +90,13 @@
     <ClCompile Include="Guard.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Inventory.cpp" />
+    <ClCompile Include="Lock.cpp" />
     <ClCompile Include="LuaReading.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="myapplication.cpp" />
+    <ClCompile Include="Npc.cpp" />
     <ClCompile Include="PlayerInfo.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="RandomGenerator.cpp" />
@@ -108,6 +111,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Detect.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="Function.h" />
     <ClInclude Include="GameMenu.h" />
@@ -120,10 +124,12 @@
     <ClInclude Include="Guard.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Inventory.h" />
+    <ClInclude Include="Lock.h" />
     <ClInclude Include="LuaReading.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="myapplication.h" />
+    <ClInclude Include="Npc.h" />
     <ClInclude Include="PlayerInfo.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="RandomGenerator.h" />
@@ -131,6 +137,7 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Variable.h" />
     <ClInclude Include="vector3D.h" />
+    <ClInclude Include="WayPoint.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponDB.h" />
     <ClInclude Include="weaponManager.h" />

@@ -5,6 +5,7 @@
 
 #include "PlayerInfo.h"
 #include "Guard.h"
+#include "Npc.h"
 #include "Shots.h"
 
 class CGoodiesFactory

@@ -5,7 +5,7 @@
 #include "GameState.h"
 #include "GoodiesFactory.h"
 #include "HUD.h"
-
+#include "Font.h"
 
 class CPlayer;
 class CGuard;
@@ -26,12 +26,44 @@ public:
 	static CPlayState* Instance() {
 		return &thePlayState;
 	}
+	
+	
+	
+	// Goodies and Goodies Factory
+	
+	CGoodiesFactory* theGoodFactory;
+
+	//Player
 	CPlayerInfo *thePlayer;
+	CweaponManager *weapManager;
+	//vector<CGoodies*> GameObjList;
+
+	//Guards
+	vector<CGuard*> GuardList;
+	
+
+	//Dispaly HUD
+	HUD* hud;
+	
+	//Camera (not in use)
+	Camera* theCamera;
+
+	//global variable class
+	CGlobal* theGlobal;
+
+	//NPC
+	CNpc *theNpc;
+
+	CLock *lock;
+
+	//Path List
+	CWayPoint Paths[ CMap::PATH_END - CMap::PATH_START -1 ];
 
 protected:
 	CPlayState() { }
 
 private:
+	CFont *font;
 	static CPlayState thePlayState;
 	
 	enum TEXTURES {
@@ -44,29 +76,6 @@ private:
 		NUM_TEXTURES
 	};
 	
-	//int counter;
-
-	// Goodies and Goodies Factory
-	
-	CGoodiesFactory theGoodFactory;
-
-	enum OBJ{
-		MAIN,
-		CHAR,
-		TOTAL
-	};
-
-	
-
-	CweaponManager *weapManager;
-
-	HUD* hud;
-	Camera* theCamera;
-
-	//global variable class
-	CGlobal* theGlobal;
-
-	std::vector<CGuard*> GuardList;
 	//map rendering
 
 	void LoadLevel(short level);

@@ -658,7 +658,26 @@ void CMap::RenderTileMap(CMap* map) {
 					IndoorMap->render(IndoorTex[0]);
 				glPopMatrix();
 				break;
+			case DOOR_LEFT:
+				IndoorMap->changeSubImage(24); 
+				IndoorMap->changeVariation(0);
 
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
+			case DOOR_RIGHT:
+				IndoorMap->changeSubImage(25); 
+				IndoorMap->changeVariation(0);
+
+				//Render Tile
+				glPushMatrix();
+					glTranslatef((float)(k*TILE_SIZE-mapFineOffset_x+LEFT_BORDER+TILE_SIZE*0.5), (float)(i*TILE_SIZE-mapFineOffset_y+BOTTOM_BORDER+TILE_SIZE*0.5), 0);
+					IndoorMap->render(IndoorTex[0]);
+				glPopMatrix();
+				break;
 			default: //Ground
 				IndoorMap->changeSubImage(2); 
 				IndoorMap->changeVariation(9); 

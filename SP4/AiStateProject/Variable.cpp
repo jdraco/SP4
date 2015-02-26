@@ -55,6 +55,10 @@ Vector3D CVariable::GetPos(void){
 	return Pos;
 }
 
+Vector3D CVariable::GetDir(void){
+	return Dir;
+}
+
 // Set position x of the player
 void CVariable::SetPos_x(float pos_x)
 {
