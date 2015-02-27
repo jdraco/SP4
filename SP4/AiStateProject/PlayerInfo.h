@@ -44,6 +44,8 @@ private:
 	bool UD, LR;
 	bool bLeft, bRight, bMoving, stopMovement;
 
+	string curr_inv_weap;
+
 public:
 
 	static CPlayerInfo*getInstance();
@@ -97,6 +99,10 @@ public:
 	string getCurrEquipped();//weap
 
 	void setCurrEquipped(string weap);
+
+	void setCurrEquippedFromInv(string weap);
+
+	void handleCurrEquipped();
 
 	//string getCurrEquippedArmor();//armor
 

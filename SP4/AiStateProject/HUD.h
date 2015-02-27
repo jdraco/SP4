@@ -19,9 +19,10 @@ private:
 	Inventory HUDInventory;
 	int current_weapon;
 	
-	TextureImage HUDtex[20];
+	TextureImage HUDtex[11];
 	CweaponManager* weapManager;
 	string currEquipped;
+
 public:
 	HUD(void);
 	~HUD(void);

@@ -15,11 +15,15 @@ Inventory::Inventory(void)
 	LoadTGA( &item_tex[ 4 ], "Texture/Inventory/machete.tga");
 	LoadTGA( &item_tex[ 5 ], "Texture/Inventory/broken_wooden_handle.tga");
 	LoadTGA( &item_tex[ 6 ], "Texture/Inventory/broken_blade.tga");
+	LoadTGA( &item_tex[ 7 ], "Texture/Inventory/lockpick.tga");
+	LoadTGA( &item_tex[ 8 ], "Texture/pistol.tga");
+	LoadTGA( &item_tex[ 9 ], "Texture/ak.tga");
 
 
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
 	{
 		slot[i].item_id = EMPTY;
+		slot[i].item_name = "";
 		slot[i].is_a_material = false;
 		slot[i].is_useable = false;
 		slot[i].is_discardable = false;
@@ -80,15 +84,15 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = BANDAGES;
+				slot[i].item_name = "Bandages";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
 
+				num_of_items++;
 				item_added = true;
 			}
 		}
-
-		num_of_items++;
 		break;
 
 		case CLOTH:
@@ -97,15 +101,15 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = CLOTH;
+				slot[i].item_name = "Cloth";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
 				
+				num_of_items++;
 				item_added = true;
 			}
 		}
-
-		num_of_items++;
 		break;
 
 		case ALCOHOL:
@@ -114,15 +118,15 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = ALCOHOL;
+				slot[i].item_name = "Alcohol";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
 
+				num_of_items++;
 				item_added = true;
 			}
 		}
-
-		num_of_items++;
 		break;
 
 		case MACHETE:
@@ -131,15 +135,15 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = MACHETE;
+				slot[i].item_name = "Machete";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
 
+				num_of_items++;
 				item_added = true;
 			}
 		}
-
-		num_of_items++;
 		break;
 
 		case BROKEN_WOODEN_HANDLE:
@@ -148,15 +152,15 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = BROKEN_WOODEN_HANDLE;
+				slot[i].item_name = "Broken wooden handle";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
 
+				num_of_items++;
 				item_added = true;
 			}
 		}
-
-		num_of_items++;
 		break;
 
 		case BROKEN_BLADE:
@@ -165,15 +169,66 @@ void Inventory::addItem(int item_id)
 			if (slot[i].item_id == EMPTY && item_added == false)
 			{
 				slot[i].item_id = BROKEN_BLADE;
+				slot[i].item_name = "Broken blade";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
 
+				num_of_items++;
 				item_added = true;
 			}
 		}
+		break;
 
-		num_of_items++;
+		case LOCKPICK:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == EMPTY && item_added == false)
+			{
+				slot[i].item_id = LOCKPICK;
+				slot[i].item_name = "Lockpick";
+				slot[i].is_a_material = false;
+				slot[i].is_useable = false;
+				slot[i].is_discardable = true;
+
+				num_of_items++;
+				item_added = true;
+			}
+		}
+		break;
+
+		case PISTOL:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == EMPTY && item_added == false)
+			{
+				slot[i].item_id = PISTOL;
+				slot[i].item_name = "Pistol";
+				slot[i].is_a_material = false;
+				slot[i].is_useable = true;
+				slot[i].is_discardable = true;
+
+				num_of_items++;
+				item_added = true;
+			}
+		}
+		break;
+
+		case RIFLE:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == EMPTY && item_added == false)
+			{
+				slot[i].item_id = RIFLE;
+				slot[i].item_name = "Rifle";
+				slot[i].is_a_material = false;
+				slot[i].is_useable = true;
+				slot[i].is_discardable = true;
+
+				num_of_items++;
+				item_added = true;
+			}
+		}
 		break;
 
 		default:
@@ -201,17 +256,11 @@ void Inventory::removeItem(int item_id)
 		{
 			if (slot[i].item_id == BANDAGES && item_removed == false)
 			{
-				slot[i].item_id = EMPTY;
-				slot[i].has_been_rendered = false;
-				slot[i].is_a_material = false;
-				slot[i].is_useable = false;
-				slot[i].is_discardable = false;
+				emptySlot(i);
 
 				item_removed = true;
 			}
 		}
-
-		num_of_items--;
 		break;
 
 		case CLOTH:
@@ -219,17 +268,11 @@ void Inventory::removeItem(int item_id)
 		{
 			if (slot[i].item_id == CLOTH && item_removed == false)
 			{
-				slot[i].item_id = EMPTY;
-				slot[i].has_been_rendered = false;
-				slot[i].is_a_material = false;
-				slot[i].is_useable = false;
-				slot[i].is_discardable = false;
+				emptySlot(i);
 
 				item_removed = true;
 			}
 		}
-
-		num_of_items--;
 		break;
 
 		case ALCOHOL:
@@ -237,17 +280,11 @@ void Inventory::removeItem(int item_id)
 		{
 			if (slot[i].item_id == ALCOHOL && item_removed == false)
 			{
-				slot[i].item_id = EMPTY;
-				slot[i].has_been_rendered = false;
-				slot[i].is_a_material = false;
-				slot[i].is_useable = false;
-				slot[i].is_discardable = false;
+				emptySlot(i);
 
 				item_removed = true;
 			}
 		}
-
-		num_of_items--;
 		break;
 
 		case MACHETE:
@@ -255,17 +292,11 @@ void Inventory::removeItem(int item_id)
 		{
 			if (slot[i].item_id == MACHETE && item_removed == false)
 			{
-				slot[i].item_id = EMPTY;
-				slot[i].has_been_rendered = false;
-				slot[i].is_a_material = false;
-				slot[i].is_useable = false;
-				slot[i].is_discardable = false;
+				emptySlot(i);
 
 				item_removed = true;
 			}
 		}
-
-		num_of_items--;
 		break;
 
 		case BROKEN_WOODEN_HANDLE:
@@ -273,17 +304,11 @@ void Inventory::removeItem(int item_id)
 		{
 			if (slot[i].item_id == BROKEN_WOODEN_HANDLE && item_removed == false)
 			{
-				slot[i].item_id = EMPTY;
-				slot[i].has_been_rendered = false;
-				slot[i].is_a_material = false;
-				slot[i].is_useable = false;
-				slot[i].is_discardable = false;
+				emptySlot(i);
 
 				item_removed = true;
 			}
 		}
-
-		num_of_items--;
 		break;
 
 		case BROKEN_BLADE:
@@ -291,17 +316,47 @@ void Inventory::removeItem(int item_id)
 		{
 			if (slot[i].item_id == BROKEN_BLADE && item_removed == false)
 			{
-				slot[i].item_id = EMPTY;
-				slot[i].has_been_rendered = false;
-				slot[i].is_a_material = false;
-				slot[i].is_useable = false;
-				slot[i].is_discardable = false;
+				emptySlot(i);
 
 				item_removed = true;
 			}
 		}
+		break;
 
-		num_of_items--;
+		case LOCKPICK:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == LOCKPICK && item_removed == false)
+			{
+				emptySlot(i);
+
+				item_removed = true;
+			}
+		}
+		break;
+
+		case PISTOL:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == PISTOL && item_removed == false)
+			{
+				emptySlot(i);
+
+				item_removed = true;
+			}
+		}
+		break;
+
+		case RIFLE:
+		for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+		{
+			if (slot[i].item_id == RIFLE && item_removed == false)
+			{
+				emptySlot(i);
+
+				item_removed = true;
+			}
+		}
 		break;
 
 		default:
@@ -312,10 +367,28 @@ void Inventory::removeItem(int item_id)
 bool Inventory::findItem(int item_id)
 {
 	int count = 0;
-
+	
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
 	{
-		if (item_id == slot[i].item_id)
+		if (slot[i].item_id == item_id)
+		{
+			count++;
+		}
+	}
+
+	if (count > 0)
+		return true;
+	else
+		return false;
+}
+
+bool Inventory::findItem(string item_name)
+{
+	int count = 0;
+	
+	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+	{
+		if (slot[i].item_name == item_name)
 		{
 			count++;
 		}
@@ -330,6 +403,7 @@ bool Inventory::findItem(int item_id)
 void Inventory::emptySlot(int slot_no)
 {
 	slot[slot_no].item_id = EMPTY;
+	slot[slot_no].item_name = "";
 	slot[slot_no].has_been_rendered = false;
 	slot[slot_no].is_a_material = false;
 	slot[slot_no].is_useable = false;
@@ -376,7 +450,17 @@ void Inventory::useSlotItem(int slot_no)
 
 	case MACHETE:	// EQUIPABLE
 		CPlayerInfo::getInstance()->setCurrAmmo(1);
-		CPlayerInfo::getInstance()->setCurrEquipped("Machete");
+		CPlayerInfo::getInstance()->setCurrEquippedFromInv("Machete");
+		break;
+
+	case PISTOL:	// EQUIPABLE
+		CPlayerInfo::getInstance()->setCurrAmmo(20);
+		CPlayerInfo::getInstance()->setCurrEquippedFromInv("Pistol");
+		break;
+
+	case RIFLE:	// EQUIPABLE
+		CPlayerInfo::getInstance()->setCurrAmmo(20);
+		CPlayerInfo::getInstance()->setCurrEquippedFromInv("Rifle");
 		break;
 
 	default:
@@ -473,40 +557,6 @@ void Inventory::renderInventorySlot(int slot_no)
 		glPopMatrix();
 
 		slot[slot_no].has_been_rendered = true;
-	}
-
-	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
-	{
-		switch (slot[i].item_id)
-		{
-
-		case BANDAGES:
-			slot[i].item_name = "Bandages";
-			break;
-			
-		case CLOTH:
-			slot[i].item_name = "Cloth";
-			break;
-
-		case ALCOHOL:
-			slot[i].item_name = "Alcohol";
-			break;
-
-		case MACHETE:
-			slot[i].item_name = "Machete";
-			break;
-
-		case BROKEN_WOODEN_HANDLE:
-			slot[i].item_name = "Broken handle";
-			break;
-
-		case BROKEN_BLADE:
-			slot[i].item_name = "Broken blade";
-			break;
-
-		default:
-			break;
-		}
 	}
 }
 

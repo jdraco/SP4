@@ -60,8 +60,9 @@ void CPlayerInfo::Init(void)
 	myInventory.addItem(4);
 	myInventory.addItem(5);
 	myInventory.addItem(6);
+	myInventory.addItem(7);
 
-
+	curr_inv_weap = "NIL";
 }
 /****************************************************************************************************
 Draw the hero
@@ -418,6 +419,9 @@ void CPlayerInfo::keyboardUpdate()
 
 bool CPlayerInfo::Update(){
 	keyboardUpdate();
+
+	handleCurrEquipped();
+
 	return true;
 
 }
@@ -547,6 +551,20 @@ string CPlayerInfo::getCurrEquipped()
 void CPlayerInfo::setCurrEquipped(string weap)
 {
 	weapon->setCurrEquipped(weap);
+}
+void CPlayerInfo::setCurrEquippedFromInv(string weap)
+{
+	curr_inv_weap = weap;
+}
+void CPlayerInfo::handleCurrEquipped()
+{
+	if (myInventory.findItem(curr_inv_weap) == true)
+		setCurrEquipped(curr_inv_weap);
+	else
+	{
+		curr_inv_weap = "NIL";
+		setCurrEquipped(curr_inv_weap);
+	}
 }
 int CPlayerInfo::getCurrAmmo()
 {

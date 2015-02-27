@@ -20,7 +20,6 @@ HUD::HUD(void)
 	LoadTGA( &HUDtex[ 8 ], "Texture/HUD/mutedbutton.tga");
 	LoadTGA( &HUDtex[ 9 ], "Texture/HUD/inventorybutton.tga");
 	LoadTGA( &HUDtex[ 10 ], "Texture/HUD/inventorybuttonMO.tga");
-	LoadTGA( &HUDtex[ 11 ], "Texture/HUD/knife.tga");
 
 	font_style = GLUT_BITMAP_HELVETICA_18;
 
@@ -723,7 +722,7 @@ void HUD::ConfirmUseScreen(std::string item_name, int slot_num)
 		glLoadIdentity ();
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 			glColor3f(1.0f, 1.0f, 1.0f);
-			printw (415, 320, 0, "Use item '%s'?", item_name.c_str());
+			printw (455 - (5 * item_name.length()), 320, 0, "Use item '%s'?", item_name.c_str());
 		glPopAttrib();
 
 		if(mouseX > 415 * w / 1024 && mouseX < 475 * w / 1024 && mouseY > 355 * h / 745 && mouseY < 390 * h / 745)
@@ -848,7 +847,7 @@ void HUD::ConfirmDiscardScreen(std::string item_name, int slot_num)
 		glLoadIdentity ();
 		glPushAttrib(GL_ALL_ATTRIB_BITS);
 			glColor3f(1.0f, 1.0f, 1.0f);
-			printw (415, 320, 0, "Discard item '%s'?", item_name.c_str());
+			printw (455 - (5 * item_name.length()), 320, 0, "Discard item '%s'?", item_name.c_str());
 		glPopAttrib();
 
 		if(mouseX > 415 * w / 1024 && mouseX < 475 * w / 1024 && mouseY > 355 * h / 745 && mouseY < 390 * h / 745)

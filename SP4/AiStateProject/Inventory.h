@@ -22,14 +22,17 @@ private:
 		ALCOHOL,				// CONSUMABLE + MATERIAL
 		MACHETE,				// EQUIPABLE
 		BROKEN_WOODEN_HANDLE,	// MATERIAL
-		BROKEN_BLADE			// MATERIAL
+		BROKEN_BLADE,			// MATERIAL
+		LOCKPICK,				// CONSUMABLE
+		PISTOL,					// EQUIPABLE
+		RIFLE					// EQUIPABLE
 	};
 
 	int num_of_items;
 	item slot[MAX_ITEM_SLOTS];
 	item crafting_slot[3];		// Crafting-slot 3 is a product slot (DO NOT ALLOW USER TO PLACE ANYTHING INSIDE)
 
-	TextureImage item_tex[10];
+	TextureImage item_tex[11];
 	void *font_style;
 
 public:
@@ -42,6 +45,7 @@ public:
 	bool addItem(int set,int item_id);
 	void removeItem(int item_id);
 	bool findItem(int item_id);
+	bool findItem(string item_name);
 
 	void emptySlot(int slot_no);
 	int getSlotItem(int slot_no);
