@@ -24,10 +24,13 @@ Inventory::Inventory(void)
 	{
 		slot[i].item_id = EMPTY;
 		slot[i].item_name = "";
+		slot[i].item_description = "";
+		slot[i].item_description2 = "";
 		slot[i].is_a_material = false;
 		slot[i].is_useable = false;
 		slot[i].is_discardable = false;
 		slot[i].has_been_rendered = false;
+		slot[i].is_equipped = false;
 	}
 }
 
@@ -85,9 +88,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BANDAGES;
 				slot[i].item_name = "Bandages";
+				slot[i].item_description = "Healing item";
+				slot[i].item_description2 = "Heals 15HP.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 
 				num_of_items++;
 				item_added = true;
@@ -102,9 +108,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = CLOTH;
 				slot[i].item_name = "Cloth";
+				slot[i].item_description = "Crafting material";
+				slot[i].item_description2 = "";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 				
 				num_of_items++;
 				item_added = true;
@@ -119,9 +128,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = ALCOHOL;
 				slot[i].item_name = "Alcohol";
+				slot[i].item_description = "Crafting material/Healing item";
+				slot[i].item_description2 = "Heals 5HP.";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 
 				num_of_items++;
 				item_added = true;
@@ -136,9 +148,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = MACHETE;
 				slot[i].item_name = "Machete";
+				slot[i].item_description = "Weapon";
+				slot[i].item_description2 = "A melee weapon.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 
 				num_of_items++;
 				item_added = true;
@@ -153,9 +168,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BROKEN_WOODEN_HANDLE;
 				slot[i].item_name = "Broken wooden handle";
+				slot[i].item_description = "Crafting material";
+				slot[i].item_description2 = "";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 
 				num_of_items++;
 				item_added = true;
@@ -170,9 +188,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BROKEN_BLADE;
 				slot[i].item_name = "Broken blade";
+				slot[i].item_description = "Crafting material";
+				slot[i].item_description2 = "";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 
 				num_of_items++;
 				item_added = true;
@@ -187,9 +208,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = LOCKPICK;
 				slot[i].item_name = "Lockpick";
+				slot[i].item_description = "Tool";
+				slot[i].item_description2 = "For picklocking locked doors.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 
 				num_of_items++;
 				item_added = true;
@@ -204,9 +228,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = PISTOL;
 				slot[i].item_name = "Pistol";
+				slot[i].item_description = "Weapon";
+				slot[i].item_description2 = "A slow-firing ranged weapon.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 
 				num_of_items++;
 				item_added = true;
@@ -221,9 +248,12 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = RIFLE;
 				slot[i].item_name = "Rifle";
+				slot[i].item_description = "Weapon";
+				slot[i].item_description2 = "A fast-firing ranged weapon.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
+				slot[i].is_equipped = false;
 
 				num_of_items++;
 				item_added = true;
@@ -404,10 +434,13 @@ void Inventory::emptySlot(int slot_no)
 {
 	slot[slot_no].item_id = EMPTY;
 	slot[slot_no].item_name = "";
+	slot[slot_no].item_description = "";
+	slot[slot_no].item_description2 = "";
 	slot[slot_no].has_been_rendered = false;
 	slot[slot_no].is_a_material = false;
 	slot[slot_no].is_useable = false;
 	slot[slot_no].is_discardable = false;
+	slot[slot_no].is_equipped = false;
 
 	num_of_items--;
 }
@@ -417,9 +450,19 @@ int Inventory::getSlotItem(int slot_no)
 	return slot[slot_no].item_id;
 }
 
-std::string Inventory::getSlotItemName(int slot_no)
+string Inventory::getSlotItemName(int slot_no)
 {
 	return slot[slot_no].item_name;
+}
+
+string Inventory::getSlotItemDescription(int slot_no)
+{
+	return slot[slot_no].item_description;
+}
+
+string Inventory::getSlotItemDescription2(int slot_no)
+{
+	return slot[slot_no].item_description2;
 }
  
 bool Inventory::getSlotItemUseableStatus(int slot_no)
@@ -430,6 +473,42 @@ bool Inventory::getSlotItemUseableStatus(int slot_no)
 bool Inventory::getSlotItemDiscardableStatus(int slot_no)
 {
 	return slot[slot_no].is_discardable;
+}
+
+bool Inventory::getSlotItemEquippedStatus(int slot_no)
+{
+	return slot[slot_no].is_equipped;
+}
+
+void Inventory::clearAllEquippedStatus()
+{
+	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+	{
+		slot[i].is_equipped = false;
+	}
+}
+
+void Inventory::setNextSameItemToBeEquipped(string item_name)
+{
+	bool other_same_weapon_equipped = false, has_set_to_equipped = false;
+
+	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+	{
+		if (slot[i].is_equipped == true)
+		{
+			other_same_weapon_equipped = true;
+		}
+	}
+
+	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+	{
+		if (slot[i].item_name == item_name && other_same_weapon_equipped == false && has_set_to_equipped == false)
+		{
+			slot[i].is_equipped = true;
+
+			has_set_to_equipped = true;
+		}
+	}
 }
 
 void Inventory::useSlotItem(int slot_no)
@@ -449,18 +528,30 @@ void Inventory::useSlotItem(int slot_no)
 		break;
 
 	case MACHETE:	// EQUIPABLE
+		clearAllEquippedStatus();
+
 		CPlayerInfo::getInstance()->setCurrAmmo(1);
 		CPlayerInfo::getInstance()->setCurrEquippedFromInv("Machete");
+
+		slot[slot_no].is_equipped = true;
 		break;
 
 	case PISTOL:	// EQUIPABLE
+		clearAllEquippedStatus();
+
 		CPlayerInfo::getInstance()->setCurrAmmo(20);
 		CPlayerInfo::getInstance()->setCurrEquippedFromInv("Pistol");
+
+		slot[slot_no].is_equipped = true;
 		break;
 
 	case RIFLE:	// EQUIPABLE
+		clearAllEquippedStatus();
+
 		CPlayerInfo::getInstance()->setCurrAmmo(20);
 		CPlayerInfo::getInstance()->setCurrEquippedFromInv("Rifle");
+
+		slot[slot_no].is_equipped = true;
 		break;
 
 	default:

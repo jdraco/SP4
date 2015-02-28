@@ -45,8 +45,8 @@ public:
 	void HelpScreen();
 	void OptionsScreen();
 	void InventoryScreen();
-	void ConfirmUseScreen(std::string item_name, int slot_num);
-	void ConfirmDiscardScreen(std::string item_name, int slot_num);
+	void ConfirmUseScreen(string item_name, int slot_num);
+	void ConfirmDiscardScreen(string item_name, int slot_num);
 	void CraftingScreen();
 };
 

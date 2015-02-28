@@ -61,6 +61,8 @@ void CPlayerInfo::Init(void)
 	myInventory.addItem(5);
 	myInventory.addItem(6);
 	myInventory.addItem(7);
+	myInventory.addItem(8);
+	myInventory.addItem(9);
 
 	curr_inv_weap = "NIL";
 }
@@ -559,7 +561,10 @@ void CPlayerInfo::setCurrEquippedFromInv(string weap)
 void CPlayerInfo::handleCurrEquipped()
 {
 	if (myInventory.findItem(curr_inv_weap) == true)
+	{
+		myInventory.setNextSameItemToBeEquipped(curr_inv_weap);
 		setCurrEquipped(curr_inv_weap);
+	}
 	else
 	{
 		curr_inv_weap = "NIL";

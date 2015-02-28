@@ -1,5 +1,6 @@
 #include "HUD.h"
 #include "PlayState.h"
+#include <time.h>
 
 HUD::HUD(void)
 	:	showHelp(false)
@@ -505,7 +506,7 @@ void HUD::InventoryScreen()
 		glColor4f(0.2f, 0.2f, 0.2f, 0.95f);
 		glPushMatrix();
 		glTranslatef(240, 200, 0);
-		glScalef(9, 8.75, 1);
+		glScalef(9, 9.5, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -580,6 +581,26 @@ void HUD::InventoryScreen()
 		{
 			for (int j = 0; j < 5; ++j)
 			{
+				if (CPlayState::Instance()->thePlayer->myInventory.getSlotItemEquippedStatus(slot_itr) == true)
+				{
+					glColor4f(1.0f, 1.0f, 0.0f, 0.75f);
+					glPushMatrix();
+					glTranslatef(265 + (65 * j), 255 + (65 * i), 0);
+					glEnable(GL_TEXTURE_2D);
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+						glBegin(GL_QUADS);
+						glTexCoord2f(0, 1); glVertex2f(0, 0);
+						glTexCoord2f(0, 0); glVertex2f(0, 50);
+						glTexCoord2f(1, 0); glVertex2f(50, 50);
+						glTexCoord2f(1, 1); glVertex2f(50, 0);
+						glEnd();
+					glDisable(GL_BLEND);
+					glDisable(GL_TEXTURE_2D);
+					glPopMatrix();
+				}
+
 				glColor4f(0.35f, 0.35f, 0.35f, 0.4525f);
 				glPushMatrix();
 				glTranslatef(265 + (65 * j), 255 + (65 * i), 0);
@@ -606,13 +627,15 @@ void HUD::InventoryScreen()
 					float mouseX_new = (float) mouseX * (1024 / (float) w);
 					float mouseY_new = (float) mouseY * (745 / (float) h);
 
-					std::string item_name;
+					std::string item_name, item_description, item_description2;
 					item_name = HUDInventory.getSlotItemName(slot_itr);
+					item_description = HUDInventory.getSlotItemDescription(slot_itr);
+					item_description2 = HUDInventory.getSlotItemDescription2(slot_itr);
 					int text_box_width = item_name.size();
 
 					glColor4f(0.025f, 0.025f, 0.025f, 1);
 					glPushMatrix();
-					glTranslatef(mouseX_new + 10, mouseY_new + 40, 0);
+					glTranslatef(mouseX_new - 40, mouseY_new - 25, 0);
 					glEnable( GL_TEXTURE_2D );
 					glEnable( GL_BLEND );
 						glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -627,10 +650,25 @@ void HUD::InventoryScreen()
 					glDisable( GL_TEXTURE_2D );
 					glPopMatrix();
 
+					// Item name
 					glLoadIdentity();
 					glPushAttrib(GL_ALL_ATTRIB_BITS);
 						glColor3f(1, 1, 1);
-						printw(mouseX_new + 14, mouseY_new + 60, 0, "%s", item_name.c_str());
+						printw(mouseX_new - 36, mouseY_new - 5, 0, "%s", item_name.c_str());
+					glPopAttrib();
+
+					// Item description
+					glLoadIdentity();
+					glPushAttrib(GL_ALL_ATTRIB_BITS);
+						glColor3f(1, 1, 1);
+						printw(265, 532.5, 0, "%s", item_description.c_str());
+					glPopAttrib();
+
+					// Item description2
+					glLoadIdentity();
+					glPushAttrib(GL_ALL_ATTRIB_BITS);
+						glColor3f(1, 1, 1);
+						printw(265, 557.5, 0, "%s", item_description2.c_str());
 					glPopAttrib();
 					
 
@@ -674,7 +712,7 @@ void HUD::InventoryScreen()
 	}
 }
 
-void HUD::ConfirmUseScreen(std::string item_name, int slot_num)
+void HUD::ConfirmUseScreen(string item_name, int slot_num)
 {
 	if (showConfirmUseScreen == true && CPlayState::Instance()->thePlayer->myInventory.getSlotItemUseableStatus(slot_num) == true)
 	{
@@ -734,13 +772,17 @@ void HUD::ConfirmUseScreen(std::string item_name, int slot_num)
 			glPopAttrib();
 
 			// When clicked
-			if (mouseState == false && mouseType == 0)
+			if (mouseState == false && mouseType == 0 && LMouse_down_boolean == false)
 			{
 				showConfirmUseScreen = false;
 				showInventory = true;
 
 				CPlayState::Instance()->thePlayer->myInventory.useSlotItem(slot_num);
+
+				LMouse_down_boolean = true;
 			}
+			else
+				LMouse_down_boolean = false;
 		}
 		else
 		{
@@ -780,11 +822,15 @@ void HUD::ConfirmUseScreen(std::string item_name, int slot_num)
 			glPopAttrib();
 
 			// When clicked
-			if (mouseState == false && mouseType == 0)
+			if (mouseState == false && mouseType == 0 && LMouse_down_boolean == false)
 			{
 				showConfirmUseScreen = false;
 				showInventory = true;
+
+				LMouse_down_boolean = true;
 			}
+			else
+				LMouse_down_boolean = false;
 		}
 		else
 		{
@@ -799,7 +845,7 @@ void HUD::ConfirmUseScreen(std::string item_name, int slot_num)
 		showConfirmUseScreen = false;
 }
 
-void HUD::ConfirmDiscardScreen(std::string item_name, int slot_num)
+void HUD::ConfirmDiscardScreen(string item_name, int slot_num)
 {
 	if (showConfirmDiscardScreen == true && CPlayState::Instance()->thePlayer->myInventory.getSlotItemDiscardableStatus(slot_num) == true)
 	{
@@ -859,13 +905,17 @@ void HUD::ConfirmDiscardScreen(std::string item_name, int slot_num)
 			glPopAttrib();
 
 			// When clicked
-			if (mouseState == false && mouseType == 0)
+			if (mouseState == false && mouseType == 0 && LMouse_down_boolean == false)
 			{
 				showConfirmDiscardScreen = false;
 				showInventory = true;
 
 				CPlayState::Instance()->thePlayer->myInventory.emptySlot(slot_num);
+
+				LMouse_down_boolean = true;
 			}
+			else
+				LMouse_down_boolean = false;
 		}
 		else
 		{
@@ -905,11 +955,15 @@ void HUD::ConfirmDiscardScreen(std::string item_name, int slot_num)
 			glPopAttrib();
 
 			// When clicked
-			if (mouseState == false && mouseType == 0)
+			if (mouseState == false && mouseType == 0 && LMouse_down_boolean == false)
 			{
 				showConfirmDiscardScreen = false;
 				showInventory = true;
+
+				LMouse_down_boolean = true;
 			}
+			else
+				LMouse_down_boolean = false;
 		}
 		else
 		{
@@ -1514,11 +1568,17 @@ void HUD::renderHUD (int health, int detection_state, int level, int mouseX, int
 
 	HUDInventory = theInventory;
 
+
 	HelpScreen();
 	OptionsScreen();
 	InventoryScreen();
-	ConfirmUseScreen(confirm_temp_item_name, confirm_temp_item_id);
-	ConfirmDiscardScreen(confirm_temp_item_name, confirm_temp_item_id);
+
+	if (LMouse_down_boolean == false)
+	{
+		ConfirmUseScreen(confirm_temp_item_name, confirm_temp_item_id);
+		ConfirmDiscardScreen(confirm_temp_item_name, confirm_temp_item_id);
+	}
+
 
 	if (showOptions != true)
 	{

@@ -7,8 +7,8 @@
 struct item
 {
 	int item_id;
-	std::string item_name;
-	bool has_been_rendered, is_a_material, is_useable, is_discardable;
+	std::string item_name, item_description, item_description2;
+	bool has_been_rendered, is_a_material, is_useable, is_discardable, is_equipped;
 };
 
 class Inventory
@@ -49,9 +49,15 @@ public:
 
 	void emptySlot(int slot_no);
 	int getSlotItem(int slot_no);
-	std::string getSlotItemName(int slot_no);
+	string getSlotItemName(int slot_no);
+	string getSlotItemDescription(int slot_no);
+	string getSlotItemDescription2(int slot_no);
 	bool getSlotItemUseableStatus(int slot_no);
 	bool getSlotItemDiscardableStatus(int slot_no);
+	bool getSlotItemEquippedStatus(int slot_no);
+
+	void clearAllEquippedStatus();
+	void setNextSameItemToBeEquipped(string item_name);
 
 	void useSlotItem(int slot_no);
 
