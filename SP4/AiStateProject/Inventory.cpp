@@ -18,6 +18,7 @@ Inventory::Inventory(void)
 	LoadTGA( &item_tex[ 7 ], "Texture/Inventory/lockpick.tga");
 	LoadTGA( &item_tex[ 8 ], "Texture/pistol.tga");
 	LoadTGA( &item_tex[ 9 ], "Texture/ak.tga");
+	LoadTGA( &item_tex[ 10 ], "Texture/Inventory/new.tga");
 
 
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
@@ -31,6 +32,7 @@ Inventory::Inventory(void)
 		slot[i].is_discardable = false;
 		slot[i].has_been_rendered = false;
 		slot[i].is_equipped = false;
+		slot[i].is_new = false;
 	}
 }
 
@@ -88,12 +90,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BANDAGES;
 				slot[i].item_name = "Bandages";
-				slot[i].item_description = "Healing item";
+				slot[i].item_description = "[Consumable]";
 				slot[i].item_description2 = "Heals 15HP.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 
 				num_of_items++;
 				item_added = true;
@@ -108,12 +111,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = CLOTH;
 				slot[i].item_name = "Cloth";
-				slot[i].item_description = "Crafting material";
+				slot[i].item_description = "[Crafting material]";
 				slot[i].item_description2 = "";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 				
 				num_of_items++;
 				item_added = true;
@@ -128,12 +132,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = ALCOHOL;
 				slot[i].item_name = "Alcohol";
-				slot[i].item_description = "Crafting material/Healing item";
+				slot[i].item_description = "[Crafting material]/[Consumable]";
 				slot[i].item_description2 = "Heals 5HP.";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 
 				num_of_items++;
 				item_added = true;
@@ -148,12 +153,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = MACHETE;
 				slot[i].item_name = "Machete";
-				slot[i].item_description = "Weapon";
+				slot[i].item_description = "[Equipable]";
 				slot[i].item_description2 = "A melee weapon.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 
 				num_of_items++;
 				item_added = true;
@@ -168,12 +174,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BROKEN_WOODEN_HANDLE;
 				slot[i].item_name = "Broken wooden handle";
-				slot[i].item_description = "Crafting material";
+				slot[i].item_description = "[Crafting material]";
 				slot[i].item_description2 = "";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 
 				num_of_items++;
 				item_added = true;
@@ -188,12 +195,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = BROKEN_BLADE;
 				slot[i].item_name = "Broken blade";
-				slot[i].item_description = "Crafting material";
+				slot[i].item_description = "[Crafting material]";
 				slot[i].item_description2 = "";
 				slot[i].is_a_material = true;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 
 				num_of_items++;
 				item_added = true;
@@ -208,12 +216,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = LOCKPICK;
 				slot[i].item_name = "Lockpick";
-				slot[i].item_description = "Tool";
-				slot[i].item_description2 = "For picklocking locked doors.";
+				slot[i].item_description = "[Tool]";
+				slot[i].item_description2 = "For picklocking locked doors/chests.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = false;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 
 				num_of_items++;
 				item_added = true;
@@ -228,12 +237,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = PISTOL;
 				slot[i].item_name = "Pistol";
-				slot[i].item_description = "Weapon";
+				slot[i].item_description = "[Equipable]";
 				slot[i].item_description2 = "A slow-firing ranged weapon.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 
 				num_of_items++;
 				item_added = true;
@@ -248,12 +258,13 @@ void Inventory::addItem(int item_id)
 			{
 				slot[i].item_id = RIFLE;
 				slot[i].item_name = "Rifle";
-				slot[i].item_description = "Weapon";
+				slot[i].item_description = "[Equipable]";
 				slot[i].item_description2 = "A fast-firing ranged weapon.";
 				slot[i].is_a_material = false;
 				slot[i].is_useable = true;
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
+				slot[i].is_new = true;
 
 				num_of_items++;
 				item_added = true;
@@ -441,6 +452,7 @@ void Inventory::emptySlot(int slot_no)
 	slot[slot_no].is_useable = false;
 	slot[slot_no].is_discardable = false;
 	slot[slot_no].is_equipped = false;
+	slot[slot_no].is_new = false;
 
 	num_of_items--;
 }
@@ -508,6 +520,14 @@ void Inventory::setNextSameItemToBeEquipped(string item_name)
 
 			has_set_to_equipped = true;
 		}
+	}
+}
+
+void Inventory::setAllItemsToBeOld()
+{
+	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+	{
+		slot[i].is_new = false;
 	}
 }
 
@@ -629,7 +649,42 @@ void Inventory::attemptCrafting()
 
 void Inventory::renderInventorySlot(int slot_no)
 {
-	if (slot[slot_no].has_been_rendered == false)
+	if (slot[slot_no].has_been_rendered == false && slot[slot_no].is_new == true)
+	{
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		//glPushMatrix();
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture(GL_TEXTURE_2D, item_tex[getSlotItem(slot_no)].texID);
+			glBegin(GL_QUADS);
+			glTexCoord2f(0, 1); glVertex2f(0, 0);
+			glTexCoord2f(0, 0); glVertex2f(0, 50);
+			glTexCoord2f(1, 0); glVertex2f(50, 50);
+			glTexCoord2f(1, 1); glVertex2f(50, 0);
+			glEnd();
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		//glPopMatrix();
+
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture(GL_TEXTURE_2D, item_tex[10].texID);
+			glBegin(GL_QUADS);
+			glTexCoord2f(0, 1); glVertex2f(0, 0);
+			glTexCoord2f(0, 0); glVertex2f(0, 50);
+			glTexCoord2f(1, 0); glVertex2f(50, 50);
+			glTexCoord2f(1, 1); glVertex2f(50, 0);
+			glEnd();
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
+
+		slot[slot_no].has_been_rendered = true;
+	}
+	else if (slot[slot_no].has_been_rendered == false && slot[slot_no].is_new == false)
 	{
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		//glPushMatrix();

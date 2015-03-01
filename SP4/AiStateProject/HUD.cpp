@@ -559,6 +559,7 @@ void HUD::InventoryScreen()
 			{
 				showInventory = false;
 				CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
+				CPlayState::Instance()->thePlayer->myInventory.setAllItemsToBeOld();
 			}
 		}
 		else
@@ -1454,6 +1455,7 @@ void HUD::renderInventoryButton()
 			else
 			{
 				CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
+				CPlayState::Instance()->thePlayer->myInventory.setAllItemsToBeOld();
 
 				showInventory = false;
 			}

@@ -8,7 +8,7 @@ struct item
 {
 	int item_id;
 	std::string item_name, item_description, item_description2;
-	bool has_been_rendered, is_a_material, is_useable, is_discardable, is_equipped;
+	bool has_been_rendered, is_a_material, is_useable, is_discardable, is_equipped, is_new;
 };
 
 class Inventory
@@ -58,6 +58,7 @@ public:
 
 	void clearAllEquippedStatus();
 	void setNextSameItemToBeEquipped(string item_name);
+	void setAllItemsToBeOld();
 
 	void useSlotItem(int slot_no);
 
