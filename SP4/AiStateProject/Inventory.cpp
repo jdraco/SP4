@@ -18,7 +18,8 @@ Inventory::Inventory(void)
 	LoadTGA( &item_tex[ 7 ], "Texture/Inventory/lockpick.tga");
 	LoadTGA( &item_tex[ 8 ], "Texture/pistol.tga");
 	LoadTGA( &item_tex[ 9 ], "Texture/ak.tga");
-	LoadTGA( &item_tex[ 10 ], "Texture/Inventory/new.tga");
+
+	LoadTGA( &other_tex[ 0 ], "Texture/Inventory/new.tga");
 
 
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
@@ -33,6 +34,7 @@ Inventory::Inventory(void)
 		slot[i].has_been_rendered = false;
 		slot[i].is_equipped = false;
 		slot[i].is_new = false;
+		slot[i].is_selected_for_crafting = false;
 	}
 }
 
@@ -97,6 +99,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 
 				num_of_items++;
 				item_added = true;
@@ -118,6 +121,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 				
 				num_of_items++;
 				item_added = true;
@@ -139,6 +143,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 
 				num_of_items++;
 				item_added = true;
@@ -160,6 +165,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 
 				num_of_items++;
 				item_added = true;
@@ -181,6 +187,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 
 				num_of_items++;
 				item_added = true;
@@ -202,6 +209,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 
 				num_of_items++;
 				item_added = true;
@@ -223,6 +231,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 
 				num_of_items++;
 				item_added = true;
@@ -244,6 +253,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 
 				num_of_items++;
 				item_added = true;
@@ -265,6 +275,7 @@ void Inventory::addItem(int item_id)
 				slot[i].is_discardable = true;
 				slot[i].is_equipped = false;
 				slot[i].is_new = true;
+				slot[i].is_selected_for_crafting = false;
 
 				num_of_items++;
 				item_added = true;
@@ -453,6 +464,7 @@ void Inventory::emptySlot(int slot_no)
 	slot[slot_no].is_discardable = false;
 	slot[slot_no].is_equipped = false;
 	slot[slot_no].is_new = false;
+	slot[slot_no].is_selected_for_crafting = false;
 
 	num_of_items--;
 }
@@ -492,6 +504,11 @@ bool Inventory::getSlotItemEquippedStatus(int slot_no)
 	return slot[slot_no].is_equipped;
 }
 
+bool Inventory::getSlotItemSelectedForCraftingStatus(int slot_no)
+{
+	return slot[slot_no].is_selected_for_crafting;
+}
+
 void Inventory::clearAllEquippedStatus()
 {
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
@@ -528,6 +545,14 @@ void Inventory::setAllItemsToBeOld()
 	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
 	{
 		slot[i].is_new = false;
+	}
+}
+
+void Inventory::resetAllItemsSelectedForCrafting()
+{
+	for (int i = 0; i < MAX_ITEM_SLOTS; i++)
+	{
+		slot[i].is_selected_for_crafting = false;
 	}
 }
 
@@ -583,13 +608,16 @@ void Inventory::craftWithSlotItem(int slot_no)
 {
 	if (craft_in_first_slot == true && slot[slot_no].is_a_material == true)
 	{
+		resetAllItemsSelectedForCrafting();
 		resetCraftingSlots();
 
+		slot[slot_no].is_selected_for_crafting = true;
 		crafting_slot[0].item_id = slot[slot_no].item_id;
 		craft_in_first_slot = false;
 	}
 	else if (craft_in_first_slot == false && slot[slot_no].is_a_material == true && crafting_slot[0].item_id != slot[slot_no].item_id)
 	{
+		slot[slot_no].is_selected_for_crafting = true;
 		crafting_slot[1].item_id = slot[slot_no].item_id;
 		craft_in_first_slot = true;
 	}
@@ -671,7 +699,7 @@ void Inventory::renderInventorySlot(int slot_no)
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture(GL_TEXTURE_2D, item_tex[10].texID);
+			glBindTexture(GL_TEXTURE_2D, other_tex[0].texID);
 			glBegin(GL_QUADS);
 			glTexCoord2f(0, 1); glVertex2f(0, 0);
 			glTexCoord2f(0, 0); glVertex2f(0, 50);

@@ -560,6 +560,7 @@ void HUD::InventoryScreen()
 				showInventory = false;
 				CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
 				CPlayState::Instance()->thePlayer->myInventory.setAllItemsToBeOld();
+				CPlayState::Instance()->thePlayer->myInventory.resetAllItemsSelectedForCrafting();
 			}
 		}
 		else
@@ -582,9 +583,31 @@ void HUD::InventoryScreen()
 		{
 			for (int j = 0; j < 5; ++j)
 			{
+				// Render yellow-highlight for inventory slot (slot item equipped)
 				if (CPlayState::Instance()->thePlayer->myInventory.getSlotItemEquippedStatus(slot_itr) == true)
 				{
 					glColor4f(1.0f, 1.0f, 0.0f, 0.75f);
+					glPushMatrix();
+					glTranslatef(265 + (65 * j), 255 + (65 * i), 0);
+					glEnable(GL_TEXTURE_2D);
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+						glBegin(GL_QUADS);
+						glTexCoord2f(0, 1); glVertex2f(0, 0);
+						glTexCoord2f(0, 0); glVertex2f(0, 50);
+						glTexCoord2f(1, 0); glVertex2f(50, 50);
+						glTexCoord2f(1, 1); glVertex2f(50, 0);
+						glEnd();
+					glDisable(GL_BLEND);
+					glDisable(GL_TEXTURE_2D);
+					glPopMatrix();
+				}
+
+				// Render red-highlight for inventory slot (slot item selected for crafting)
+				if (CPlayState::Instance()->thePlayer->myInventory.getSlotItemSelectedForCraftingStatus(slot_itr) == true)
+				{
+					glColor4f(1.0f, 0.0f, 0.0f, 0.75f);
 					glPushMatrix();
 					glTranslatef(265 + (65 * j), 255 + (65 * i), 0);
 					glEnable(GL_TEXTURE_2D);
@@ -1132,6 +1155,7 @@ void HUD::CraftingScreen()
 			if (mouseState == false && (mouseType == 0 || mouseType == 1 || mouseType == 2))
 			{	
 				CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
+				CPlayState::Instance()->thePlayer->myInventory.resetAllItemsSelectedForCrafting();
 			}
 		}
 
@@ -1456,6 +1480,7 @@ void HUD::renderInventoryButton()
 			{
 				CPlayState::Instance()->thePlayer->myInventory.resetCraftingSlots();
 				CPlayState::Instance()->thePlayer->myInventory.setAllItemsToBeOld();
+				CPlayState::Instance()->thePlayer->myInventory.resetAllItemsSelectedForCrafting();
 
 				showInventory = false;
 			}
@@ -1549,7 +1574,6 @@ void HUD::renderMisc(void)
 
 void HUD::renderHUD (int health, int detection_state, int level, int mouseX, int mouseY, bool mouseState, int mouseType, int w, int h, Inventory& theInventory, string equipped)
 {
-	currEquipped = equipped;
 	if (health <= 100 && health >= 0)
 		this->health = health;
 	else if (health > 100) 
@@ -1569,7 +1593,7 @@ void HUD::renderHUD (int health, int detection_state, int level, int mouseX, int
 	this->h = h;
 
 	HUDInventory = theInventory;
-
+	currEquipped = equipped;
 
 	HelpScreen();
 	OptionsScreen();

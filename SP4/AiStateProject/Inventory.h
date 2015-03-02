@@ -8,7 +8,7 @@ struct item
 {
 	int item_id;
 	std::string item_name, item_description, item_description2;
-	bool has_been_rendered, is_a_material, is_useable, is_discardable, is_equipped, is_new;
+	bool has_been_rendered, is_a_material, is_useable, is_discardable, is_equipped, is_new, is_selected_for_crafting;
 };
 
 class Inventory
@@ -32,7 +32,7 @@ private:
 	item slot[MAX_ITEM_SLOTS];
 	item crafting_slot[3];		// Crafting-slot 3 is a product slot (DO NOT ALLOW USER TO PLACE ANYTHING INSIDE)
 
-	TextureImage item_tex[11];
+	TextureImage item_tex[11], other_tex[1];
 	void *font_style;
 
 public:
@@ -55,10 +55,12 @@ public:
 	bool getSlotItemUseableStatus(int slot_no);
 	bool getSlotItemDiscardableStatus(int slot_no);
 	bool getSlotItemEquippedStatus(int slot_no);
+	bool getSlotItemSelectedForCraftingStatus(int slot_no);
 
 	void clearAllEquippedStatus();
 	void setNextSameItemToBeEquipped(string item_name);
 	void setAllItemsToBeOld();
+	void resetAllItemsSelectedForCrafting();
 
 	void useSlotItem(int slot_no);
 
