@@ -1,6 +1,5 @@
 #include "HUD.h"
 #include "PlayState.h"
-#include <time.h>
 
 HUD::HUD(void)
 	:	showHelp(false)
@@ -21,6 +20,7 @@ HUD::HUD(void)
 	LoadTGA( &HUDtex[ 8 ], "Texture/HUD/mutedbutton.tga");
 	LoadTGA( &HUDtex[ 9 ], "Texture/HUD/inventorybutton.tga");
 	LoadTGA( &HUDtex[ 10 ], "Texture/HUD/inventorybuttonMO.tga");
+	LoadTGA( &HUDtex[ 11 ], "Texture/HUD/help.tga");
 
 	font_style = GLUT_BITMAP_HELVETICA_18;
 
@@ -75,11 +75,11 @@ void HUD::HelpScreen()
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		glPushMatrix();
 		glTranslatef(0, 62.5, 0);
-		glScalef(25.6/* * w / 1024*/, 15.35/* * h / 745*/, 1);
+		glScalef(25.6, 15.35, 1);
 		glEnable( GL_TEXTURE_2D );
 		glEnable( GL_BLEND );
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture( GL_TEXTURE_2D, HUDtex[0].texID );
+			glBindTexture( GL_TEXTURE_2D, HUDtex[11].texID );
 			glBegin(GL_QUADS);
 				glTexCoord2f(0,1); glVertex2f(0,0);
 				glTexCoord2f(0,0); glVertex2f(0,40);
